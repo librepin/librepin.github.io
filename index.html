@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>LibrePin</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/bV3drrr.png">
+    <!-- Favicon -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -158,7 +159,7 @@
         }
         .top-bar .search-wrapper input {
             width: 100%;
-            padding: 10px 40px 10px 40px;
+            padding: 10px 16px 10px 40px;
             border-radius: 40px;
             border: 1px solid var(--md-outline);
             background: var(--md-surface-dim);
@@ -180,7 +181,7 @@
             color: var(--md-on-surface-variant);
             font-size: 16px;
         }
-        .top-bar .search-wrapper .clear-search-input {
+        .top-bar .search-wrapper .clear-search {
             position: absolute;
             right: 14px;
             top: 50%;
@@ -191,6 +192,7 @@
             cursor: pointer;
             font-size: 16px;
             display: none;
+            padding: 4px;
         }
         .top-bar .profile-icon {
             width: 40px;
@@ -526,29 +528,31 @@
             color: var(--md-on-surface-variant);
             margin-top: 4px;
         }
+        /* Group buttons - below description, not below all pins */
         .group-card .group-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 8px;
             justify-content: flex-end;
-            border-top: 1px solid rgba(128,128,128,0.08);
-            padding-top: 10px;
         }
         .group-card .group-actions button {
             background: none;
             border: none;
-            color: var(--md-on-surface-variant);
             cursor: pointer;
-            font-size: 18px;
             padding: 4px 8px;
-            border-radius: 40px;
-            transition: all 0.2s ease;
+            border-radius: 30px;
+            color: var(--md-on-surface-variant);
+            font-size: 16px;
+            transition: background 0.2s ease;
         }
         .group-card .group-actions button:hover {
             background: var(--md-surface-dim);
         }
         .group-card .group-actions button:active {
             transform: scale(0.9);
+        }
+        .group-card .group-actions .close-btn {
+            color: var(--md-primary);
         }
 
         /* --- RECENTS (settings) --- */
@@ -844,13 +848,8 @@
             opacity: 0;
             transition: 0.3s ease;
             padding: 16px;
-            pointer-events: none;
         }
-        .dialog-overlay.active {
-            visibility: visible;
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .dialog-overlay.active { visibility: visible; opacity: 1; }
         .dialog-card {
             background: var(--md-surface);
             width: 100%;
@@ -1558,7 +1557,7 @@
             .data-actions-grid { grid-template-columns: 1fr; }
             .top-bar .app-title { font-size: 15px; }
             .top-bar .app-title i { font-size: 17px; }
-            .top-bar .search-wrapper input { font-size: 13px; padding: 8px 34px 8px 34px; }
+            .top-bar .search-wrapper input { font-size: 13px; padding: 8px 12px 8px 34px; }
             .top-bar .search-wrapper .search-icon { font-size: 14px; left: 10px; }
             .group-card { padding: 12px 10px; }
             .group-card .group-name { font-size: 12px; }
@@ -1581,13 +1580,14 @@
             from { transform: translateX(-50%) translateY(20px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
-
-        /* --- PWA INSTALL BUTTON --- */
-        #installPwaBtn {
-            margin-top: 8px;
+        .group-actions .close-group-btn {
+            display: none;
         }
-        #installPwaBtn.hidden {
-            display: none !important;
+        #detailTitle {
+            color: transparent !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
         }
     </style>
 </head>
@@ -1607,7 +1607,7 @@
             <div class="search-wrapper">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" id="globalSearchInput" placeholder="">
-                <button class="clear-search-input" id="clearSearchBtn"><i class="fas fa-times-circle"></i></button>
+                <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
             </div>
             <button class="profile-icon" id="profileIconBtn" title="Perfil">
                 <i class="fas fa-user"></i>
@@ -1707,7 +1707,6 @@
                     <button class="fab-btn secondary" id="profileDataImportBtn" style="justify-content:center;"><i class="fas fa-upload"></i> <span id="profileDataImportLabel">Importar grups</span></button>
                     <input type="file" id="profileDataImportInput" accept=".json" style="display:none;">
                     <button class="fab-btn secondary" id="profileDataClearBtn" style="justify-content:center; color:#E30613;"><i class="fas fa-trash"></i> <span id="profileDataClearLabel">Esborrar totes les dades</span></button>
-                    <button class="fab-btn secondary" id="installPwaBtn" style="justify-content:center; margin-top:4px;" hidden><i class="fas fa-mobile"></i> <span id="installPwaLabel">Install PWA</span></button>
                 </div>
             </div>
 
@@ -1719,8 +1718,8 @@
                 <div class="card">
                     <label style="font-size:15px; font-weight:500;" id="mapStartLabel">Posició inicial del mapa</label>
                     <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
-                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" style="justify-content:center;">Barcelona (per defecte)</button>
-                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" id="gpsStartOption" style="justify-content:center;">Usar ubicació del GPS</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" style="justify-content:center;">Barcelona (Default)</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" id="gpsStartOption" style="justify-content:center;">System GPS</button>
                     </div>
                 </div>
             </div>
@@ -1767,7 +1766,7 @@
                     <div id="servicesList"></div>
                     <div style="display:flex; gap:6px; margin-top:12px; flex-wrap:wrap;">
                         <input type="text" id="newServiceName" placeholder="Name" style="flex:1; min-width:80px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
-                        <input type="text" id="newServiceIcon" placeholder="Icon (URL)" style="flex:2; min-width:100px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
+                        <input type="text" id="newServiceIcon" placeholder="Icon (Image URL)" style="flex:2; min-width:100px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
                         <button id="addServiceBtn" class="fab-btn small" style="flex:0; padding:10px 16px;"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
@@ -1813,7 +1812,7 @@
                     <h3 id="uploadPinTitle">Carregar un pin</h3>
                 </div>
                 <div class="card">
-                    <label style="font-size:15px; font-weight:500;">Paste here:</label>
+                    <label style="font-size:15px; font-weight:500;">Paste here or upload:</label>
                     <textarea id="uploadPinTextarea" rows="6" style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; font-family:monospace; resize:vertical; margin:8px 0;"></textarea>
                     <div style="display:flex; gap:8px;">
                         <button id="uploadPinFromTextBtn" class="fab-btn glow" style="flex:1;"><i class="fas fa-upload"></i> <span id="uploadFromTextLabel">Carregar des de text</span></button>
@@ -1829,8 +1828,8 @@
                     <h3 id="reloadTitle">Recarregar app</h3>
                 </div>
                 <div class="card" style="text-align:center;">
-                    <p style="margin:12px 0; font-size:16px;">Recarrega l'aplicació per aplicar canvis o netejar l'estat. No es perdran les dades.</p>
-                    <button id="reloadAppBtn2" class="fab-btn glow" style="width:100%;"><i class="fas fa-sync-alt"></i> Recarregar</button>
+                    <p style="margin:12px 0; font-size:16px;">Reload the app to apply changes or clear the state. No data will be lost.</p>
+                    <button id="reloadAppBtn2" class="fab-btn glow" style="width:100%;"><i class="fas fa-sync-alt"></i> Reload</button>
                 </div>
             </div>
 
@@ -1841,10 +1840,9 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.3.2</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.2</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
-                    <button class="fab-btn secondary" id="installPwaBtnAbout" style="margin-top:16px; justify-content:center;" hidden><i class="fas fa-download"></i> <span id="installPwaAboutLabel">Instal·lar app</span></button>
                 </div>
             </div>
 
@@ -1901,13 +1899,13 @@
         <div class="dialog-card">
             <h3 id="pinDialogTitle">Afegir pin</h3>
             <label id="nameLabel">Nom *</label>
-            <input type="text" id="pinNameInput" placeholder="...">
+            <input type="text" id="pinNameInput" placeholder="Name">
 
             <label id="subtitleLabel">Subtítol (màx 100 caràcters)</label>
-            <input type="text" id="pinSubtitleInput" placeholder="..." maxlength="100">
+            <input type="text" id="pinSubtitleInput" placeholder="Subtitle" maxlength="100">
 
             <label id="descLabel">Descripció</label>
-            <textarea id="pinDescInput" placeholder="..."></textarea>
+            <textarea id="pinDescInput" placeholder="Description"></textarea>
 
             <label id="imageLabel">URL de la imatge</label>
             <div style="display:flex; gap:6px;">
@@ -1917,8 +1915,8 @@
 
             <label id="coordsLabel">Coordenades (lat, lng)</label>
             <div class="coords-row">
-                <input type="text" id="pinLatInput" placeholder="Lat">
-                <input type="text" id="pinLngInput" placeholder="Lng">
+                <input type="text" id="pinLatInput" placeholder="lat">
+                <input type="text" id="pinLngInput" placeholder="lng">
             </div>
 
             <label id="ratingLabel">Valoració (1-5 estrelles)</label>
@@ -1928,7 +1926,7 @@
                 <span class="star" data-value="3">★</span>
                 <span class="star" data-value="4">★</span>
                 <span class="star" data-value="5">★</span>
-                <button class="clear-stars" id="clearStarsBtn" title="Delete rate"><i class="fas fa-times-circle"></i></button>
+                <button class="clear-stars" id="clearStarsBtn" title="Delete rating"><i class="fas fa-times-circle"></i></button>
             </div>
 
             <label id="buttonsLabel">Botons personalitzats</label>
@@ -1989,7 +1987,7 @@
             <input type="text" id="groupIconInput" placeholder="https://example.com/icon.png">
 
             <label id="groupDescLabel">Descripció</label>
-            <textarea id="groupDescInput" placeholder="Optional..."></textarea>
+            <textarea id="groupDescInput" placeholder="Optional"></textarea>
 
             <label id="groupPinsLabel">Pins que en formen part</label>
             <input type="text" id="groupPinsSearchInput" placeholder="Cercar pins..." style="width:100%; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; margin-bottom:6px;">
@@ -2007,7 +2005,7 @@
         <div class="dialog-card">
             <h3 id="servicesSelectorTitle">🚌 Seleccionar serveis</h3>
             <div class="service-search-container">
-                <input type="text" id="servicesSearchInput" placeholder="..." style="padding-right:40px;">
+                <input type="text" id="servicesSearchInput" placeholder="Cercar serveis..." style="padding-right:40px;">
                 <button class="clear-search" id="clearServicesSearch" style="display:none;"><i class="fas fa-times"></i></button>
             </div>
             <div class="service-selector-grid" id="servicesSelectorGrid"></div>
@@ -2022,7 +2020,7 @@
     <div id="relatedPinsDialog" class="dialog-overlay">
         <div class="dialog-card">
             <h3 id="relatedPinsSelectorTitle">🔗 Seleccionar pins relacionats</h3>
-            <input type="text" id="relatedPinsSearchInput" placeholder="..." style="width:100%; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; margin-bottom:10px;">
+            <input type="text" id="relatedPinsSearchInput" placeholder="Search..." style="width:100%; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; margin-bottom:10px;">
             <div class="related-pins-selector-grid" id="relatedPinsSelectorGrid"></div>
             <div class="dialog-actions">
                 <button id="relatedPinsDialogCancel" class="fab-btn secondary"><span id="relatedPinsCancelLabel">Cancel·lar</span></button>
@@ -2048,9 +2046,9 @@
         <div class="dialog-card">
             <h3 id="editServiceTitle">Editar servei</h3>
             <label id="editServiceNameLabel">Nom</label>
-            <input type="text" id="editServiceNameInput" placeholder="Nom del servei">
+            <input type="text" id="editServiceNameInput" placeholder="Name">
             <label id="editServiceIconLabel">URL icona</label>
-            <input type="text" id="editServiceIconInput" placeholder="https://exemple.com/icon.png">
+            <input type="text" id="editServiceIconInput" placeholder="https://example.com/icon.png">
             <div class="dialog-actions">
                 <button id="editServiceCancel" class="fab-btn secondary"><span id="editServiceCancelLabel">Cancel·lar</span></button>
                 <button id="editServiceSave" class="fab-btn glow"><span id="editServiceSaveLabel">Guardar</span></button>
@@ -2082,9 +2080,9 @@
             </div>
             <div id="groupDetailPins" class="pin-grid" style="padding:0; margin-top:8px;"></div>
             <div class="dialog-actions" style="margin-top:12px;">
-                <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1; gap:4px;"><i class="fas fa-edit"></i> <span id="groupDetailEditLabel">Editar</span></button>
-                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; gap:4px; color:#E30613;"><i class="fas fa-trash"></i> <span id="groupDetailDeleteLabel">Eliminar</span></button>
-                <button id="groupDetailCloseBtn" class="fab-btn secondary" style="flex:1; gap:4px;"><i class="fas fa-times"></i> <span id="groupDetailCloseLabel">Tancar</span></button>
+                <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1;"><i class="fas fa-edit"></i> <span id="groupDetailEditLabel">Editar</span></button>
+                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; color:#E30613;"><i class="fas fa-trash"></i> <span id="groupDetailDeleteLabel">Eliminar</span></button>
+                <button id="groupDetailCloseBtn" class="fab-btn secondary" style="flex:1;"><i class="fas fa-times"></i> <span id="groupDetailCloseLabel">Tancar</span></button>
             </div>
         </div>
     </div>
@@ -2095,15 +2093,35 @@
     <script>
         // ---------- CONFIG ----------
         const ACCENT_COLORS = [
-            '#df2937', '#f88d00', '#c19100', '#626f2f', '#38a33c', '#008974',
-            '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
+            '#df2937',
+            '#f88d00',
+            '#c19100',
+            '#626f2f',
+            '#38a33c',
+            '#008974',
+            '#089bde',
+            '#0173b6',
+            '#6f82b6',
+            '#bbb3d7',
+            '#9a398d',
+            '#c454a7'
         ];
         const GROUP_COLORS = [
-            '#df2937', '#f88d00', '#c19100', '#626f2f', '#38a33c', '#008974',
-            '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
+            '#df2937',
+            '#f88d00',
+            '#c19100',
+            '#626f2f',
+            '#38a33c',
+            '#008974',
+            '#089bde',
+            '#0173b6',
+            '#6f82b6',
+            '#bbb3d7',
+            '#9a398d',
+            '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.3.1';
+        const APP_VERSION = '1.3.3';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2141,9 +2159,9 @@
                 subtitle: ''
             },
             profileLoaded: false,
-            userLocation: null, // [lat, lng] or null
+            userLocation: null, // [lat, lng] o null
             watchId: null,
-            pwaDeferredPrompt: null
+            userMarker: null
         };
 
         const translations = {
@@ -2173,11 +2191,11 @@
                 selectImage: "Selecciona una imatge",
                 addHere: "Aquí?",
                 viewOnMap: "Veure al mapa",
-                go: "Ves-hi",
+                go: "Vés-hi",
                 noResults: "No s'han trobat resultats",
                 searchPlaceholder: "Cercar pins...",
                 scheduleBtn: "Consultar horari",
-                searchServices: "Cercar...",
+                searchServices: "Cercar serveis...",
                 appearance: "Aparença",
                 theme: "Tema",
                 about: "Quant a",
@@ -2278,10 +2296,17 @@
                 recentCleared: "Historial esborrat",
                 groupsSearch: "Cercar grups...",
                 groupPinCount: " pins",
+                groupPinsPreview: "Pins del grup",
                 close: "Tancar",
                 gpsPermissionDenied: "Permís de geolocalització denegat. No es pot usar la ubicació del GPS.",
                 gpsUnavailable: "No s'ha pogut obtenir la ubicació GPS.",
-                installPwa: "Instal·lar app"
+                groupActions: "Accions del grup",
+                editGroupAction: "Editar grup",
+                deleteGroupAction: "Eliminar grup",
+                closeGroupAction: "Tancar",
+                arrangePosition: "Arranjament de posició",
+                mapPosition: "Posició del mapa",
+                gpsPosition: "Utilitzar ubicació del GPS"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2305,7 +2330,7 @@
                 pinUpdated: "Pin actualizado",
                 pinDeleted: "Pin eliminado",
                 serviceAdded: "Servicio añadido",
-                serviceRemoved: "Eliminar servicio",
+                serviceRemoved: "Eiminar servicio",
                 selectImage: "Selecciona una imagen",
                 addHere: "¿Añadir aquí?",
                 viewOnMap: "Ver en el mapa",
@@ -2313,7 +2338,7 @@
                 noResults: "No se encontraron resultados",
                 searchPlaceholder: "Buscar pins...",
                 scheduleBtn: "Consultar horario",
-                searchServices: "Buscar...",
+                searchServices: "Buscar servicios...",
                 appearance: "Apariencia",
                 theme: "Tema",
                 about: "Acerca de",
@@ -2414,10 +2439,17 @@
                 recentCleared: "Historial borrado",
                 groupsSearch: "Buscar grupos...",
                 groupPinCount: " pins",
+                groupPinsPreview: "Pins del grupo",
                 close: "Cerrar",
                 gpsPermissionDenied: "Permiso de geolocalización denegado. No se puede usar la ubicación del GPS.",
                 gpsUnavailable: "No se ha podido obtener la ubicación GPS.",
-                installPwa: "Instalar app"
+                groupActions: "Acciones del grupo",
+                editGroupAction: "Editar grupo",
+                deleteGroupAction: "Eliminar grupo",
+                closeGroupAction: "Cerrar",
+                arrangePosition: "Arreglo de posición",
+                mapPosition: "Posición del mapa",
+                gpsPosition: "Usar ubicación del GPS"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2449,7 +2481,7 @@
                 noResults: "No results found",
                 searchPlaceholder: "Search pins...",
                 scheduleBtn: "Check schedule",
-                searchServices: "Search...",
+                searchServices: "Search services...",
                 appearance: "Appearance",
                 theme: "Theme",
                 about: "About",
@@ -2550,10 +2582,17 @@
                 recentCleared: "History cleared",
                 groupsSearch: "Search groups...",
                 groupPinCount: " pins",
+                groupPinsPreview: "Group pins",
                 close: "Close",
                 gpsPermissionDenied: "Geolocation permission denied. GPS location cannot be used.",
                 gpsUnavailable: "Could not get GPS location.",
-                installPwa: "Install app"
+                groupActions: "Group actions",
+                editGroupAction: "Edit group",
+                deleteGroupAction: "Delete group",
+                closeGroupAction: "Close",
+                arrangePosition: "Position arrangement",
+                mapPosition: "Map position",
+                gpsPosition: "Use GPS location"
             }
         };
 
@@ -3027,7 +3066,7 @@
                 const color = group.color || state.accentColor;
                 return `
                     <div class="group-card" data-id="${group.id}" style="border-top-color:${color};">
-                        <div class="group-header" style="cursor:pointer;">
+                        <div class="group-header">
                             ${group.icon ? `<img class="group-icon" src="${group.icon}" onerror="this.style.display='none'">` : `<div class="group-icon" style="background:${color}20;color:${color};"><i class="fas fa-layer-group"></i></div>`}
                             <div style="flex:1; min-width:0;">
                                 <div class="group-name" style="color:${color};">${escapeHtml(group.name)}</div>
@@ -3035,40 +3074,55 @@
                                 <div class="group-pin-count">${pinCount}${t('groupPinCount')}</div>
                             </div>
                         </div>
+                        <!-- Group action buttons below description, not below all pins -->
                         <div class="group-actions">
-                            <button class="edit-group-btn" data-id="${group.id}" title="Editar"><i class="fas fa-edit"></i></button>
-                            <button class="delete-group-btn" data-id="${group.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                            <button class="edit-group-btn" data-id="${group.id}" title="${t('editGroupAction')}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-group-btn" data-id="${group.id}" title="${t('deleteGroupAction')}"><i class="fas fa-trash"></i></button>
+                            <button class="close-group-btn" data-id="${group.id}" title="${t('closeGroupAction')}"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            container.querySelectorAll('.group-header').forEach(el => {
+            container.querySelectorAll('.group-card').forEach(el => {
                 el.onclick = (e) => {
                     if (e.target.closest('.group-actions')) return;
-                    const id = el.closest('.group-card').dataset.id;
+                    const id = el.dataset.id;
                     openGroupDetail(id);
                 };
             });
 
-            container.querySelectorAll('.edit-group-btn').forEach(el => {
-                el.onclick = (e) => {
+            // Edit group button
+            container.querySelectorAll('.edit-group-btn').forEach(btn => {
+                btn.onclick = (e) => {
                     e.stopPropagation();
-                    const id = el.dataset.id;
+                    const id = btn.dataset.id;
                     openGroupDialog(id);
                 };
             });
 
-            container.querySelectorAll('.delete-group-btn').forEach(el => {
-                el.onclick = async (e) => {
+            // Delete group button
+            container.querySelectorAll('.delete-group-btn').forEach(async btn => {
+                btn.onclick = async (e) => {
                     e.stopPropagation();
-                    const id = el.dataset.id;
+                    const id = btn.dataset.id;
                     const confirmed = await showConfirmDialog(t('confirmDeleteGroup'));
                     if (confirmed) {
                         state.groups = state.groups.filter(g => g.id !== id);
                         saveData();
                         renderGroups(document.getElementById('groupsSearchInput')?.value || '');
                         showToast(t('groupDeleted'));
+                    }
+                };
+            });
+
+            // Close group detail button
+            container.querySelectorAll('.close-group-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    const group = state.groups.find(g => g.id === id);
+                    if (group) {
                     }
                 };
             });
@@ -3117,7 +3171,7 @@
                 filtered = allPins.filter(p => p.name.toLowerCase().includes(f));
             }
 
-            // Order by last accessed (most recent first)
+            // Sort by last access (most recent first)
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3223,6 +3277,13 @@
             };
 
             const pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id)) : [];
+            // Sort pins by last access (most recent first)
+            pins.sort((a, b) => {
+                const aTime = a.lastAccessed || 0;
+                const bTime = b.lastAccessed || 0;
+                return bTime - aTime;
+            });
+
             const grid = document.getElementById('groupDetailPins');
 
             if (pins.length === 0) {
@@ -3415,7 +3476,7 @@
             const currentPinId = state.editingPinId;
             let allPins = state.pins.filter(p => p.id !== currentPinId);
 
-            // Order by last accessed (most recent first)
+            // Sort by last access (most recent first)
             allPins.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3625,7 +3686,6 @@
             function renderGoFromList(filter = '') {
                 const f = filter.toLowerCase().trim();
 
-                // Order: favorites first, then by last accessed
                 let sortedPins = [...state.pins].sort((a, b) => {
                     const aFav = isFavorite(a.id) ? 0 : 1;
                     const bFav = isFavorite(b.id) ? 0 : 1;
@@ -3805,7 +3865,6 @@
                 (p.subtitle && p.subtitle.toLowerCase().includes(f))
             );
 
-            // Order by last accessed (most recent first)
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3871,9 +3930,9 @@
         function escapeHtml(str) {
             if (!str) return '';
             return String(str).replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&';
-                if (m === '<') return '<';
-                if (m === '>') return '>';
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
                 return m;
             });
         }
@@ -4029,11 +4088,11 @@
             }
 
             if (!isEditing && isPinDuplicate(name, lat, lng, null)) {
-                showToast('Ja existeix un pin amb aquest nom i coordenades', true);
+                showToast('A pin with this name and coordinates already exists.', true);
                 return;
             }
             if (isEditing && isPinDuplicate(name, lat, lng, state.editingPinId)) {
-                showToast('Ja existeix un pin amb aquest nom i coordenades', true);
+                showToast('A pin with this name and coordinates already exists.', true);
                 return;
             }
 
@@ -4217,7 +4276,7 @@
                 renderFavorites();
                 renderRecentPins();
                 renderSelectedServicesTags();
-                showToast('Servei actualitzat');
+                showToast('Changes saved!');
             }
             closeEditServiceDialog();
         }
@@ -4394,14 +4453,13 @@
             const container = document.getElementById('downloadPinList');
             if (!container) return;
 
-            let filtered = state.pins.filter(p => {
+            const filtered = state.pins.filter(p => {
                 const search = filter.toLowerCase().trim();
                 if (!search) return true;
                 return p.name.toLowerCase().includes(search) ||
                        (p.subtitle && p.subtitle.toLowerCase().includes(search));
             });
 
-            // Order by last accessed (most recent first)
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -4472,12 +4530,12 @@
             try {
                 const data = JSON.parse(jsonStr);
                 if (!data.name || data.lat === undefined || data.lng === undefined) {
-                    showToast('JSON invàlid: falta nom o coordenades', true);
+                    showToast('JSON unvalid', true);
                     return;
                 }
 
                 if (isPinDuplicate(data.name, data.lat, data.lng, null)) {
-                    showToast('Ja existeix un pin amb aquest nom i coordenades', true);
+                    showToast('A pin with this name and coordinates already exists.', true);
                     return;
                 }
 
@@ -4509,7 +4567,7 @@
                     window.location.reload();
                 }, 500);
             } catch (e) {
-                showToast('Error: JSON invàlid', true);
+                showToast('Error: JSON unvalid', true);
             }
         }
 
@@ -4524,7 +4582,7 @@
                 state.groups = [];
                 state.accentColor = '#7C4DFF';
                 state.darkMode = false;
-                state.lang = 'ca';
+                state.lang = 'en';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
                 state.profile = { name: 'Usuari', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
@@ -4582,7 +4640,7 @@
                     </div>
                     <div class="form-group">
                         <label>${t('profilePronouns')}</label>
-                        <input type="text" id="editProfilePronouns" value="${escapeHtml(p.pronouns || '')}" placeholder="Custom entry" maxlength="50">
+                        <input type="text" id="editProfilePronouns" value="${escapeHtml(p.pronouns || '')}" placeholder="Custom entry!" maxlength="50">
                     </div>
                     <div class="form-group">
                         <label>${t('profileSubtitle')}</label>
@@ -4874,7 +4932,7 @@
             if (state.map) {
                 state.map.setView([lat, lng], 13);
             }
-            showToast('Posició del mapa actualitzada');
+            showToast('Map updated');
         }
 
         // ---------- GPS ----------
@@ -4904,7 +4962,6 @@
                         });
                         state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                     }
-                    showToast('📍 Ubicació GPS activada');
                 },
                 (error) => {
                     console.warn('GPS error:', error);
@@ -4928,56 +4985,32 @@
             }
         }
 
-        // ---------- PWA INSTALL ----------
-        function setupPwaInstall() {
-            // Check if the app is already installed
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                document.querySelectorAll('#installPwaBtn, #installPwaBtnAbout').forEach(el => {
-                    el.classList.add('hidden');
-                });
-                return;
-            }
+        // ---------- SEARCH CLEAR BUTTON ----------
+        function setupSearchClear() {
+            const input = document.getElementById('globalSearchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
 
-            // Listen for the beforeinstallprompt event
-            window.addEventListener('beforeinstallprompt', (e) => {
-                // Prevent Chrome 67 and earlier from automatically showing the prompt
-                e.preventDefault();
-                // Stash the event so it can be triggered later
-                state.pwaDeferredPrompt = e;
-                // Show the install button
-                document.querySelectorAll('#installPwaBtn, #installPwaBtnAbout').forEach(el => {
-                    el.classList.remove('hidden');
-                });
+            input.addEventListener('focus', () => {
+                // If there's text already, select it all for quick replacement
+                if (input.value.length > 0) {
+                    input.select();
+                }
             });
 
-            // Install button click handler
-            document.querySelectorAll('#installPwaBtn, #installPwaBtnAbout').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    if (state.pwaDeferredPrompt) {
-                        // Show the install prompt
-                        state.pwaDeferredPrompt.prompt();
-                        // Wait for the user to respond to the prompt
-                        const result = await state.pwaDeferredPrompt.userChoice;
-                        if (result.outcome === 'accepted') {
-                            showToast('App installed!');
-                            document.querySelectorAll('#installPwaBtn, #installPwaBtnAbout').forEach(el => {
-                                el.classList.add('hidden');
-                            });
-                        } else {
-                            showToast('Installation cancelled');
-                        }
-                        // Clear the deferred prompt
-                        state.pwaDeferredPrompt = null;
-                    }
-                });
+            input.addEventListener('input', () => {
+                clearBtn.style.display = input.value.length > 0 ? 'block' : 'none';
+                state.searchLimit = 25;
+                const val = input.value;
+                renderSearchResults(val);
+                if (val.trim().length >= 2) {
+                    switchTab('search');
+                }
             });
 
-            // Handle app installed event
-            window.addEventListener('appinstalled', () => {
-                document.querySelectorAll('#installPwaBtn, #installPwaBtnAbout').forEach(el => {
-                    el.classList.add('hidden');
-                });
-                showToast('App installed successfully!');
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                clearBtn.style.display = 'none';
+                renderSearchResults('');
             });
         }
 
@@ -5002,10 +5035,13 @@
             initMap();
             updateAllTexts();
 
+            // Setup search clear button
+            setupSearchClear();
+
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
-            // Reposition on button click
+            // Reposition when clicking the button
             document.getElementById('recenterMapBtn').addEventListener('click', recenterMap);
 
             document.getElementById('appTitleClick').addEventListener('click', () => {
@@ -5051,31 +5087,8 @@
                 };
             });
 
-            // Search input with clear button
-            const searchInput = document.getElementById('globalSearchInput');
-            const clearSearchBtn = document.getElementById('clearSearchBtn');
-
-            searchInput.addEventListener('input', (e) => {
-                const val = e.target.value;
-                state.searchLimit = 25;
-                renderSearchResults(val);
-                if (val.trim().length >= 2) {
-                    switchTab('search');
-                }
-                clearSearchBtn.style.display = val ? 'block' : 'none';
-            });
-
-            clearSearchBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                searchInput.dispatchEvent(new Event('input'));
-                searchInput.focus();
-                clearSearchBtn.style.display = 'none';
-            });
-
-            // On focus, select all text
-            searchInput.addEventListener('focus', function() {
-                this.select();
-            });
+            // Remove the old globalSearchInput listener and use the one in setupSearchClear
+            // But we already have the input listener there
 
             document.getElementById('groupsSearchInput').addEventListener('input', (e) => {
                 renderGroups(e.target.value);
@@ -5242,12 +5255,18 @@
 
             document.querySelectorAll('.dialog-overlay').forEach(dialog => {
                 dialog.addEventListener('click', (e) => {
-                    if (e.target === dialog) dialog.classList.remove('active');
+                    // Only close if clicking the overlay itself, not the card
+                    if (e.target === dialog) {
+                        // But we don't want to close all dialogs by clicking outside
+                        // Only close specific dialogs that should be closable by clicking outside
+                        const id = dialog.id;
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog') {
+                            dialog.classList.remove('active');
+                        }
+                        // For other dialogs, we keep them open
+                    }
                 });
             });
-
-            // Setup PWA install
-            setupPwaInstall();
 
             // If user already granted permission, get location automatically
             if (navigator.geolocation) {
