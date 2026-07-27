@@ -1718,8 +1718,17 @@
                 <div class="card">
                     <label style="font-size:15px; font-weight:500;" id="mapStartLabel">Posició inicial del mapa</label>
                     <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
-                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" style="justify-content:center;">Barcelona (Default)</button>
-                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" id="gpsStartOption" style="justify-content:center;">System GPS</button>
+                        <button class="fab-btn secondary map-start-option" id="gpsStartOption" style="justify-content:center;">System GPS</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" data-zoom="13" style="justify-content:center;">Barcelona (Default)</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="44.4949" data-lng="11.3426" data-zoom="13" style="justify-content:center;">Bologna</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.8252" data-lng="1.4683" data-zoom="9" style="justify-content:center;">Catalunya</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="40.4168" data-lng="-3.7038" data-zoom="6" style="justify-content:center;">España</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="46.6034" data-lng="1.8883" data-zoom="6" style="justify-content:center;">France</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.9028" data-lng="12.4964" data-zoom="6" style="justify-content:center;">Italia</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="40.4168" data-lng="-3.7038" data-zoom="12" style="justify-content:center;">Madrid</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.4918" data-lng="2.3618" data-zoom="14" style="justify-content:center;">Premià de Mar</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="41.9028" data-lng="12.4964" data-zoom="12" style="justify-content:center;">Roma</button>
+                        <button class="fab-btn secondary map-start-option" data-lat="39.4699" data-lng="-0.3763" data-zoom="13" style="justify-content:center;">València</button>
                     </div>
                 </div>
             </div>
@@ -2121,7 +2130,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.4 Hotfix Mobile';
+        const APP_VERSION = '1.4.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -4990,12 +4999,12 @@
         }
 
         // ---------- MAP START LOCATION ----------
-        function setMapStartLocation(lat, lng) {
+        function setMapStartLocation(lat, lng, zoom = 13) {
             state.mapStartLocation = [lat, lng];
             state.currentLocation = [lat, lng];
             saveData();
             if (state.map) {
-                state.map.setView([lat, lng], 13);
+                state.map.setView([lat, lng], zoom);
             }
             showToast('Map updated');
         }
@@ -5323,7 +5332,8 @@
                 btn.onclick = () => {
                     const lat = parseFloat(btn.dataset.lat);
                     const lng = parseFloat(btn.dataset.lng);
-                    setMapStartLocation(lat, lng);
+                    const zoom = parseInt(btn.dataset.zoom) || 13;
+                    setMapStartLocation(lat, lng, zoom);
                 };
             });
 
