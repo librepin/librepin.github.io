@@ -2121,7 +2121,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.3.3';
+        const APP_VERSION = '1.4 Hotfix Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2161,7 +2161,8 @@
             profileLoaded: false,
             userLocation: null, // [lat, lng] o null
             watchId: null,
-            userMarker: null
+            userMarker: null,
+            history: ['map']
         };
 
         const translations = {
@@ -2682,6 +2683,58 @@
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
             }));
+        }
+
+        // ---------- NAVIGATION HISTORY ----------
+        function pushHistory(page, data = {}) {
+            const stateObj = { page, data };
+            const url = '#' + page;
+            window.history.pushState(stateObj, '', url);
+        }
+
+        function handlePopState(event) {
+            const stateObj = event.state;
+            if (!stateObj) {
+                // Si no hi ha estat, tornem a la pàgina principal (mapa)
+                switchTab('map');
+                return;
+            }
+
+            const page = stateObj.page;
+            const data = stateObj.data || {};
+
+            // Determinar quina acció fer segons la pàgina
+            switch (page) {
+                case 'map':
+                    switchTab('map');
+                    break;
+                case 'search':
+                    switchTab('search');
+                    if (data.query) {
+                        document.getElementById('globalSearchInput').value = data.query;
+                        renderSearchResults(data.query);
+                    }
+                    break;
+                case 'groups':
+                    switchTab('groups');
+                    break;
+                case 'favorites':
+                    switchTab('favorites');
+                    break;
+                case 'settings':
+                    switchTab('settings');
+                    if (data.subpage) {
+                        showSettingsSubpage(data.subpage);
+                    }
+                    break;
+                case 'detail':
+                    if (data.pinId) {
+                        openPinDetail(data.pinId);
+                    }
+                    break;
+                default:
+                    switchTab('map');
+            }
         }
 
         // ---------- ACCENT COLOR ----------
@@ -3762,6 +3815,9 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('pinDetailPage').classList.add('active');
 
+            // Afegir a l'historial
+            pushHistory('detail', { pinId: pinId });
+
             document.getElementById('detailImage').src = pin.imageUrl || 'https://via.placeholder.com/80/7C4DFF/FFFFFF?text=📍';
             document.getElementById('detailImage').style.display = 'block';
             document.getElementById('detailName').innerText = pin.name;
@@ -3843,6 +3899,9 @@
             if (state.map) setTimeout(() => state.map.invalidateSize(), 200);
             state.detailPinId = null;
             state.servicesViewExpanded = false;
+            
+            // Afegir a l'historial
+            pushHistory('map');
         }
 
         // ---------- SEARCH ----------
@@ -4678,6 +4737,9 @@
             document.getElementById('settingsPage').classList.remove('active');
             const target = document.getElementById('settings' + subpageId.charAt(0).toUpperCase() + subpageId.slice(1));
             if (target) target.classList.add('active');
+            
+            // Afegir a l'historial
+            pushHistory('settings', { subpage: subpageId });
         }
 
         function hideSettingsSubpage() {
@@ -4913,6 +4975,9 @@
             }
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'settings') hideSettingsSubpage();
+            
+            // Afegir a l'historial
+            pushHistory(tabId);
         }
 
         // ---------- RELOAD APP ----------
@@ -5038,6 +5103,31 @@
             // Setup search clear button
             setupSearchClear();
 
+            // Setup navigation history
+            window.addEventListener('popstate', handlePopState);
+
+            // Inicialitzar l'historial amb la pàgina actual
+            if (!window.location.hash || window.location.hash === '#') {
+                pushHistory('map');
+            } else {
+                // Si hi ha un hash, intentar restaurar l'estat
+                const hash = window.location.hash.slice(1);
+                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail'];
+                if (knownPages.includes(hash)) {
+                    // Intentar extreure paràmetres del hash
+                    const parts = hash.split('?');
+                    const page = parts[0];
+                    const params = new URLSearchParams(parts[1] || '');
+                    if (page === 'detail' && params.has('pinId')) {
+                        openPinDetail(params.get('pinId'));
+                    } else {
+                        switchTab(page);
+                    }
+                } else {
+                    pushHistory('map');
+                }
+            }
+
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
@@ -5084,6 +5174,8 @@
             document.querySelectorAll('.settings-back').forEach(btn => {
                 btn.onclick = () => {
                     hideSettingsSubpage();
+                    // Afegir a l'historial
+                    pushHistory('settings');
                 };
             });
 
