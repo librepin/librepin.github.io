@@ -2322,18 +2322,27 @@
                     </div>
 
                     <div id="settingsMap" class="settings-subpage">
-                        <div class="sub-header">
-                            <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
-                            <h3 id="mapSettingsTitle">Posició</h3>
-                        </div>
-                        <div class="card">
-                            <label id="mapStartLabel">Posició inicial del mapa</label>
-                            <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
-                                <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" style="justify-content:center;">Barcelona (per defecte)</button>
-                                <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" id="gpsStartOption" style="justify-content:center;">📍 GPS</button>
-                            </div>
+                    <div class="sub-header">
+                        <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
+                        <h3 id="mapSettingsTitle">Posició</h3>
+                    </div>
+                    <div class="card">
+                        <label style="font-size:15px; font-weight:500;" id="mapStartLabel">Posició inicial del mapa</label>
+                        <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                            <button class="fab-btn secondary map-start-option" id="gpsStartOption" style="justify-content:center;">System GPS</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="41.3851" data-lng="2.1734" data-zoom="13" style="justify-content:center;">Barcelona (Default)</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="44.4949" data-lng="11.3426" data-zoom="13" style="justify-content:center;">Bologna</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="41.8252" data-lng="1.4683" data-zoom="9" style="justify-content:center;">Catalunya</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="40.4168" data-lng="-3.7038" data-zoom="6" style="justify-content:center;">España</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="46.6034" data-lng="1.8883" data-zoom="6" style="justify-content:center;">France</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="41.9028" data-lng="12.4964" data-zoom="6" style="justify-content:center;">Italia</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="40.4168" data-lng="-3.7038" data-zoom="12" style="justify-content:center;">Madrid</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="41.4918" data-lng="2.3618" data-zoom="14" style="justify-content:center;">Premià de Mar</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="41.9028" data-lng="12.4964" data-zoom="12" style="justify-content:center;">Roma</button>
+                            <button class="fab-btn secondary map-start-option" data-lat="39.4699" data-lng="-0.3763" data-zoom="13" style="justify-content:center;">València</button>
                         </div>
                     </div>
+                </div>
 
                     <div id="settingsAppearance" class="settings-subpage">
                         <div class="sub-header">
@@ -2448,7 +2457,7 @@
                         </div>
                         <div class="card" style="text-align:center; padding:24px 16px;">
                             <div style="font-size:44px; margin-bottom:10px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                            <p><strong style="font-size:18px;">LibrePin</strong> v1.3</p>
+                            <p><strong style="font-size:18px;">LibrePin</strong> v1.4.1 Desktop</p>
                             <p class="text-muted" style="margin-top:6px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                             <p class="text-muted text-sm" style="margin-top:4px;">© 2026</p>
                         </div>
@@ -5081,11 +5090,13 @@
             }
 
             // ─── MAP START LOCATION ───
-            function setMapStartLocation(lat, lng) {
+            function setMapStartLocation(lat, lng, zoom = 13) {
                 state.mapStartLocation = [lat, lng];
                 state.currentLocation = [lat, lng];
                 saveData();
-                if (state.map) state.map.setView([lat, lng], 13);
+                if (state.map) {
+                    state.map.setView([lat, lng], zoom);
+                }
                 showToast('Map updated');
             }
 
@@ -5319,11 +5330,13 @@
 
                 document.querySelectorAll('.map-start-option').forEach(btn => {
                     btn.onclick = () => {
-                        const lat = parseFloat(btn.dataset.lat),
-                            lng = parseFloat(btn.dataset.lng);
-                        setMapStartLocation(lat, lng);
+                        const lat = parseFloat(btn.dataset.lat);
+                        const lng = parseFloat(btn.dataset.lng);
+                        const zoom = parseInt(btn.dataset.zoom) || 13;
+                        setMapStartLocation(lat, lng, zoom);
                     };
                 });
+
                 document.getElementById('gpsStartOption').onclick = e => { e.preventDefault();
                     requestGpsLocation(); };
 
