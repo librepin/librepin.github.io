@@ -1589,6 +1589,65 @@
             pointer-events: none !important;
             user-select: none !important;
         }
+        /* Splash d'ubicació - transicions suaus */
+        #splashScreen {
+            transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease;
+            transform: scale(1);
+        }
+
+        #splashScreen.splash-hide {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        #splashScreen.splash-show {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        /* Animació d'entrada dels elements del splash */
+        #splashScreen .splash-icon {
+            animation: splashPulse 1.5s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+
+        #splashScreen .splash-title {
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        #splashScreen .splash-sub {
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        #splashScreen .splash-cancel-btn {
+            animation: fadeInUp 0.6s ease 0.6s both;
+        }
+
+        /* Nova animació fadeInUp si no existeix */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animació de rotació pel crosshair */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fa-crosshairs.fa-spin {
+            animation: spin 1.5s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -2130,7 +2189,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.4.1 Mobile';
+        const APP_VERSION = '1.5 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2171,7 +2230,9 @@
             userLocation: null, // [lat, lng] o null
             watchId: null,
             userMarker: null,
-            history: ['map']
+            history: ['map'],
+            gpsSplashVisible: false,
+            gpsSplashResolve: null
         };
 
         const translations = {
@@ -2316,7 +2377,10 @@
                 closeGroupAction: "Tancar",
                 arrangePosition: "Arranjament de posició",
                 mapPosition: "Posició del mapa",
-                gpsPosition: "Utilitzar ubicació del GPS"
+                gpsPosition: "Utilitzar ubicació del GPS",
+                gpsSplashTitle: "Obtenint ubicació...",
+                gpsSplashSub: "Si us plau, esperi...",
+                gpsCancel: "Cancel·lar"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2459,7 +2523,10 @@
                 closeGroupAction: "Cerrar",
                 arrangePosition: "Arreglo de posición",
                 mapPosition: "Posición del mapa",
-                gpsPosition: "Usar ubicación del GPS"
+                gpsPosition: "Usar ubicación del GPS",
+                gpsSplashTitle: "Obteniendo ubicación...",
+                gpsSplashSub: "Por favor, espere...",
+                gpsCancel: "Cancelar"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2602,7 +2669,10 @@
                 closeGroupAction: "Close",
                 arrangePosition: "Position arrangement",
                 mapPosition: "Map position",
-                gpsPosition: "Use GPS location"
+                gpsPosition: "Use GPS location",
+                gpsSplashTitle: "Getting location...",
+                gpsSplashSub: "Please wait...",
+                gpsCancel: "Cancel"
             }
         };
 
@@ -5006,7 +5076,17 @@
             if (state.map) {
                 state.map.setView([lat, lng], zoom);
             }
-            showToast('Map updated');
+            // Actualitzar l'indicador visual a la llista d'opcions
+            document.querySelectorAll('.map-start-option').forEach(btn => {
+                const btnLat = parseFloat(btn.dataset.lat);
+                const btnLng = parseFloat(btn.dataset.lng);
+                if (btnLat === lat && btnLng === lng) {
+                    btn.innerHTML = btn.innerHTML.replace(' ✓', '') + ' ✓';
+                } else {
+                    btn.innerHTML = btn.innerHTML.replace(' ✓', '');
+                }
+            });
+            // Mostrar només errors, no l'èxit
         }
 
         // ---------- GPS ----------
@@ -5016,30 +5096,110 @@
                 return;
             }
 
+            // Mostrar splash personalitzat amb transicions
+            const splash = document.getElementById('splashScreen');
+
+            // Restablir estils
+            splash.style.display = 'flex';
+            splash.style.position = 'fixed';
+            splash.style.top = '0';
+            splash.style.left = '0';
+            splash.style.width = '100%';
+            splash.style.height = '100%';
+            splash.style.background = state.accentColor;
+            splash.style.zIndex = '9999';
+
+            // Contingut del splash
+            splash.innerHTML = `
+                <div class="splash-icon"><i class="fas fa-crosshairs fa-spin"></i></div>
+                <div class="splash-title">${t('gpsSplashTitle')}</div>
+                <div class="splash-sub">${t('gpsSplashSub')}</div>
+                <button id="gpsCancelBtn" class="fab-btn secondary splash-cancel-btn" style="margin-top:30px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.3); padding:12px 32px; font-size:16px; border-radius:60px;">
+                    <i class="fas fa-times"></i> ${t('gpsCancel')}
+                </button>
+            `;
+
+            // Aplicar transició d'entrada
+            splash.className = 'splash-hide';
+            // Forçar reflow per reiniciar l'animació
+            void splash.offsetWidth;
+            splash.className = 'splash-show';
+
+            let cancelled = false;
+            const cancelBtn = document.getElementById('gpsCancelBtn');
+            if (cancelBtn) {
+                cancelBtn.onclick = () => {
+                    cancelled = true;
+                    // Transició de sortida
+                    splash.className = 'splash-hide';
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                        splash.innerHTML = `
+                            <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
+                            <div class="splash-title">LibrePin</div>
+                            <div class="splash-sub">Loading...</div>
+                        `;
+                        splash.className = '';
+                    }, 500);
+                    state.gpsSplashResolve && state.gpsSplashResolve('cancel');
+                };
+            }
+
+            // Sol·licitar ubicació
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    state.userLocation = [lat, lng];
-                    setMapStartLocation(lat, lng);
-                    // Add user location marker
-                    if (state.map) {
-                        // Remove previous marker
-                        if (state.userMarker) {
-                            state.map.removeLayer(state.userMarker);
+                    if (!cancelled) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        state.userLocation = [lat, lng];
+                        setMapStartLocation(lat, lng);
+
+                        // Afegir marcador d'usuari
+                        if (state.map) {
+                            if (state.userMarker) {
+                                state.map.removeLayer(state.userMarker);
+                            }
+                            const userIcon = L.divIcon({
+                                html: `<div style="background-color:#2196F3;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 2px #2196F3;"></div>`,
+                                className: '',
+                                iconSize: [16, 16],
+                                iconAnchor: [8, 8]
+                            });
+                            state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
-                        const userIcon = L.divIcon({
-                            html: `<div style="background-color:#2196F3;width:16px;height:16px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 2px #2196F3;"></div>`,
-                            className: '',
-                            iconSize: [16, 16],
-                            iconAnchor: [8, 8]
-                        });
-                        state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
+
+                        // Transició de sortida
+                        splash.className = 'splash-hide';
+                        setTimeout(() => {
+                            splash.style.display = 'none';
+                            splash.innerHTML = `
+                                <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
+                                <div class="splash-title">LibrePin</div>
+                                <div class="splash-sub">Loading...</div>
+                            `;
+                            splash.className = '';
+                        }, 500);
+                        state.gpsSplashResolve && state.gpsSplashResolve('success');
                     }
                 },
                 (error) => {
-                    console.warn('GPS error:', error);
-                    showToast(t('gpsPermissionDenied'), true);
+                    if (!cancelled) {
+                        console.warn('GPS error:', error);
+                        showToast(t('gpsPermissionDenied'), true);
+
+                        // Transició de sortida
+                        splash.className = 'splash-hide';
+                        setTimeout(() => {
+                            splash.style.display = 'none';
+                            splash.innerHTML = `
+                                <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
+                                <div class="splash-title">LibrePin</div>
+                                <div class="splash-sub">Loading...</div>
+                            `;
+                            splash.className = '';
+                        }, 500);
+                        state.gpsSplashResolve && state.gpsSplashResolve('error');
+                    }
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
             );
@@ -5048,15 +5208,7 @@
         // ---------- RECENTER MAP ----------
         function recenterMap() {
             if (!state.map) return;
-            if (state.userLocation) {
-                state.map.setView(state.userLocation, 16);
-                if (state.userMarker) {
-                    state.userMarker.openPopup();
-                }
-            } else {
-                // If we don't have GPS, ask for permission and try to get location
-                requestGpsLocation();
-            }
+            requestGpsLocation();
         }
 
         // ---------- SEARCH CLEAR BUTTON ----------
@@ -5095,6 +5247,24 @@
             setTimeout(() => {
                 splash.style.display = 'none';
             }, 700);
+        }
+
+        // ---------- UPDATE MAP START INDICATOR ----------
+        function updateMapStartIndicator() {
+            const [lat, lng] = state.mapStartLocation;
+            document.querySelectorAll('.map-start-option').forEach(btn => {
+                const btnLat = parseFloat(btn.dataset.lat);
+                const btnLng = parseFloat(btn.dataset.lng);
+                let label = btn.textContent.trim();
+                if (label.endsWith(' ✓')) {
+                    label = label.slice(0, -2);
+                }
+                if (btnLat === lat && btnLng === lng) {
+                    btn.textContent = label + ' ✓';
+                } else {
+                    btn.textContent = label;
+                }
+            });
         }
 
         // ---------- INIT ----------
@@ -5334,12 +5504,14 @@
                     const lng = parseFloat(btn.dataset.lng);
                     const zoom = parseInt(btn.dataset.zoom) || 13;
                     setMapStartLocation(lat, lng, zoom);
+                    updateMapStartIndicator();
                 };
             });
 
             document.getElementById('gpsStartOption').onclick = (e) => {
                 e.preventDefault();
                 requestGpsLocation();
+                // L'indicador visual s'actualitzarà quan es rebi la ubicació
             };
 
             document.querySelectorAll('.lang-option').forEach(btn => {
@@ -5369,6 +5541,9 @@
                     }
                 });
             });
+
+            // Inicialitzar l'indicador de la posició del mapa
+            updateMapStartIndicator();
 
             // If user already granted permission, get location automatically
             if (navigator.geolocation) {
