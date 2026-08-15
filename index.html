@@ -42,6 +42,8 @@
             --nav-active-bg: rgba(124,77,255,0.08);
             --pin-icon-size: 38px;
             --splash-color: var(--md-primary);
+            --map-style: light;
+            --map-tiles: light;
         }
 
         [data-theme="dark"] {
@@ -217,6 +219,144 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        /* Mode selector button */
+        .top-bar .mode-selector-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--md-primary-container);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--md-primary);
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .top-bar .mode-selector-btn:active {
+            transform: scale(0.9);
+        }
+        .top-bar .mode-selector-btn .mode-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--md-surface);
+            transition: all 0.3s ease;
+        }
+        .top-bar .mode-selector-btn .mode-indicator.home {
+            background: #4CAF50;
+        }
+        .top-bar .mode-selector-btn .mode-indicator.away {
+            background: #FF9800;
+        }
+
+        /* Mode selector popup */
+        .mode-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s ease;
+        }
+        .mode-popup-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .mode-popup {
+            background: var(--md-surface);
+            border-radius: var(--radius-lg);
+            padding: 24px 20px 28px;
+            max-width: 340px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--md-elevation-3);
+        }
+        .mode-popup-overlay.active .mode-popup {
+            transform: scale(1);
+        }
+        .mode-popup h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            text-align: center;
+            color: var(--md-on-surface);
+        }
+        .mode-popup .mode-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        .mode-popup .mode-option:active {
+            transform: scale(0.97);
+        }
+        .mode-popup .mode-option.active {
+            border-color: var(--md-primary);
+            background: var(--md-primary-container);
+        }
+        .mode-popup .mode-option .mode-icon {
+            font-size: 28px;
+            width: 44px;
+            text-align: center;
+        }
+        .mode-popup .mode-option .mode-info {
+            flex: 1;
+        }
+        .mode-popup .mode-option .mode-info .mode-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .mode-popup .mode-option .mode-info .mode-desc {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+        }
+        .mode-popup .mode-option .mode-check {
+            font-size: 20px;
+            color: var(--md-primary);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .mode-popup .mode-option.active .mode-check {
+            opacity: 1;
+        }
+        .mode-popup .mode-close-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 4px;
+        }
+        .mode-popup .mode-close-btn:active {
+            transform: scale(0.95);
         }
 
         /* --- BOTTOM NAV --- */
@@ -527,32 +667,6 @@
             font-size: 11px;
             color: var(--md-on-surface-variant);
             margin-top: 4px;
-        }
-        /* Group buttons - below description, not below all pins */
-        .group-card .group-actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-            justify-content: flex-end;
-        }
-        .group-card .group-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 30px;
-            color: var(--md-on-surface-variant);
-            font-size: 16px;
-            transition: background 0.2s ease;
-        }
-        .group-card .group-actions button:hover {
-            background: var(--md-surface-dim);
-        }
-        .group-card .group-actions button:active {
-            transform: scale(0.9);
-        }
-        .group-card .group-actions .close-btn {
-            color: var(--md-primary);
         }
 
         /* --- RECENTS (settings) --- */
@@ -886,25 +1000,65 @@
             box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
         }
         .dialog-card textarea { border-radius: var(--radius-sm); min-height: 60px; resize: vertical; }
-        .dialog-card .checkbox-row {
+
+        /* --- CHECKBOXES MODERNITZATS --- */
+        .checkbox-row {
             display: flex;
             align-items: center;
             gap: 12px;
             margin: 8px 0;
             padding: 4px 0;
+            cursor: pointer;
         }
-        .dialog-card .checkbox-row input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--md-primary);
-            flex-shrink: 0;
+        .checkbox-row input[type="checkbox"] {
+            display: none;
         }
-        .dialog-actions {
+        .checkbox-row .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            border-radius: 6px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface-dim);
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        .dialog-actions .fab-btn { flex: 1; }
+        .checkbox-row .custom-checkbox .check-icon {
+            font-size: 14px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .checkbox-row input[type="checkbox"]:checked + .custom-checkbox {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+            animation: checkboxPop 0.3s ease;
+        }
+        .checkbox-row input[type="checkbox"]:checked + .custom-checkbox .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .checkbox-row .checkbox-label {
+            font-size: 15px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--md-on-surface);
+        }
+        .checkbox-row .checkbox-label .label-sub {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            display: block;
+        }
+
+        @keyframes checkboxPop {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
 
         .coords-row {
             display: flex;
@@ -934,10 +1088,34 @@
         }
         .service-selector-item:active { transform: scale(0.97); }
         .service-selector-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--md-primary);
-            flex-shrink: 0;
+            display: none;
+        }
+        .service-selector-item .custom-checkbox-sm {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-selector-item .custom-checkbox-sm .check-icon-sm {
+            font-size: 11px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .service-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm .check-icon-sm {
+            opacity: 1;
+            transform: scale(1);
         }
         .service-selector-item img {
             width: 28px;
@@ -984,10 +1162,34 @@
         }
         .related-pin-selector-item:active { transform: scale(0.97); }
         .related-pin-selector-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--md-primary);
-            flex-shrink: 0;
+            display: none;
+        }
+        .related-pin-selector-item .custom-checkbox-sm {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .related-pin-selector-item .custom-checkbox-sm .check-icon-sm {
+            font-size: 11px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .related-pin-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .related-pin-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm .check-icon-sm {
+            opacity: 1;
+            transform: scale(1);
         }
         .related-pin-selector-item img {
             width: 28px;
@@ -1259,6 +1461,31 @@
         }
         .theme-toggle-row .theme-btn:active { transform: scale(0.95); }
 
+        .map-style-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+        }
+        .map-style-row .map-style-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+        .map-style-row .map-style-btn.active {
+            border-color: var(--md-primary);
+            background: var(--md-primary-container);
+        }
+        .map-style-row .map-style-btn:active { transform: scale(0.95); }
+
         /* --- PROFILE --- */
         .profile-section {
             background: var(--md-surface);
@@ -1356,87 +1583,6 @@
             grid-column: 1 / -1;
         }
 
-        .download-pin-search {
-            position: relative;
-            margin-bottom: 12px;
-        }
-        .download-pin-search input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--md-outline);
-            background: var(--md-surface-dim);
-            color: var(--md-on-surface);
-            font-size: 16px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .download-pin-search input:focus {
-            border-color: var(--md-primary);
-            box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
-        }
-        .download-pin-search .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--md-on-surface-variant);
-        }
-        .download-pin-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-        }
-        .download-pin-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-        }
-        .download-pin-item:hover {
-            background: var(--md-surface-dim);
-        }
-        .download-pin-item.selected {
-            border-color: var(--md-primary);
-            background: var(--md-primary-container);
-        }
-        .download-pin-item img {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-            background: var(--md-surface-dim);
-        }
-        .download-pin-item .info {
-            flex: 1;
-        }
-        .download-pin-item .info .name {
-            font-weight: 500;
-            font-size: 15px;
-        }
-        .download-pin-item .info .subtitle {
-            font-size: 12px;
-            color: var(--md-on-surface-variant);
-        }
-        .download-pin-item .info .stars {
-            font-size: 12px;
-            color: #FFB300;
-        }
-        .download-pin-item .check {
-            color: var(--md-primary);
-            font-size: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        .download-pin-item.selected .check {
-            opacity: 1;
-        }
-
         /* --- GROUP DIALOG --- */
         .group-pins-selector-grid {
             display: flex;
@@ -1459,10 +1605,34 @@
         }
         .group-pin-selector-item:active { transform: scale(0.97); }
         .group-pin-selector-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--md-primary);
-            flex-shrink: 0;
+            display: none;
+        }
+        .group-pin-selector-item .custom-checkbox-sm {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .group-pin-selector-item .custom-checkbox-sm .check-icon-sm {
+            font-size: 11px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .group-pin-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .group-pin-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm .check-icon-sm {
+            opacity: 1;
+            transform: scale(1);
         }
         .group-pin-selector-item img {
             width: 28px;
@@ -1500,6 +1670,43 @@
             transform: scale(1.15);
         }
 
+        /* --- GROUP DETAIL DIALOG --- */
+        .group-detail-pins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .group-detail-pin-item {
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-sm);
+            padding: 10px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .group-detail-pin-item:active { transform: scale(0.95); }
+        .group-detail-pin-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            background: var(--md-surface);
+        }
+        .group-detail-pin-item .name {
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .group-detail-pin-item .subtitle {
+            font-size: 10px;
+            color: var(--md-on-surface-variant);
+            margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 500px) {
             .pin-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 14px; }
@@ -1509,6 +1716,8 @@
             .top-bar .app-title i { font-size: 20px; }
             .top-bar .profile-icon { width: 34px; height: 34px; font-size: 15px; }
             .top-bar .profile-icon img { width: 34px; height: 34px; }
+            .top-bar .mode-selector-btn { width: 34px; height: 34px; font-size: 17px; }
+            .top-bar .mode-selector-btn .mode-indicator { width: 10px; height: 10px; }
             .nav-item { padding: 4px 10px; font-size: 10px; }
             .nav-item i { font-size: 20px; }
             .dialog-card { padding: 18px 16px 24px; }
@@ -1548,6 +1757,9 @@
                 font-size: 18px;
                 left: 12px;
             }
+            .mode-popup { padding: 18px 16px 22px; }
+            .mode-popup .mode-option { padding: 10px 12px; }
+            .mode-popup .mode-option .mode-icon { font-size: 22px; width: 36px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -1579,9 +1791,6 @@
         @keyframes slideUp {
             from { transform: translateX(-50%) translateY(20px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-        .group-actions .close-group-btn {
-            display: none;
         }
         #detailTitle {
             color: transparent !important;
@@ -1668,9 +1877,38 @@
                 <input type="text" id="globalSearchInput" placeholder="">
                 <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
             </div>
+            <!-- Mode selector button -->
+            <button class="mode-selector-btn" id="modeSelectorBtn" title="Seleccionar mode">
+                <i class="fas fa-building" id="modeIcon"></i>
+                <span class="mode-indicator home" id="modeIndicator"></span>
+            </button>
             <button class="profile-icon" id="profileIconBtn" title="Perfil">
                 <i class="fas fa-user"></i>
             </button>
+        </div>
+
+        <!-- Mode selector popup -->
+        <div class="mode-popup-overlay" id="modePopupOverlay">
+            <div class="mode-popup">
+                <h3><i class="fas fa-globe" style="color:var(--md-primary);"></i> <span id="modePopupTitle">Mode de visualització</span></h3>
+                <div class="mode-option active" data-mode="home" id="modeHomeOption">
+                    <div class="mode-icon"><i class="fas fa-building"></i></div>
+                    <div class="mode-info">
+                        <div class="mode-name" id="modeHomeName">El meu entorn</div>
+                        <div class="mode-desc" id="modeHomeDesc">Mostra només pins del teu entorn</div>
+                    </div>
+                    <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="mode-option" data-mode="away" id="modeAwayOption">
+                    <div class="mode-icon"><i class="fas fa-umbrella-beach"></i></div>
+                    <div class="mode-info">
+                        <div class="mode-name" id="modeAwayName">Fora del meu entorn</div>
+                        <div class="mode-desc" id="modeAwayDesc">Mostra tots els pins, inclosos els de fora</div>
+                    </div>
+                    <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <button class="mode-close-btn" id="modeCloseBtn"><span id="modeCloseLabel">Tancar</span></button>
+            </div>
         </div>
 
         <!-- Pages -->
@@ -1805,6 +2043,14 @@
                     </div>
                 </div>
                 <div class="card">
+                    <label style="font-size:15px; font-weight:500;" id="mapStyleLabel">Estil del mapa</label>
+                    <div class="map-style-row">
+                        <button class="map-style-btn" id="mapStyleLightBtn"><i class="fas fa-sun"></i> <span id="mapStyleLightLabel">Clar</span></button>
+                        <button class="map-style-btn" id="mapStyleDarkBtn"><i class="fas fa-moon"></i> <span id="mapStyleDarkLabel">Fosc</span></button>
+                        <button class="map-style-btn" id="mapStyleColorBtn"><i class="fas fa-map"></i> <span id="mapStyleColorLabel">Color</span></button>
+                    </div>
+                </div>
+                <div class="card">
                     <label style="font-size:15px; font-weight:500;" id="accentLabel">Color d'accent</label>
                     <div class="color-options" id="accentColors"></div>
                 </div>
@@ -1853,39 +2099,6 @@
                         <i class="fas fa-clock"></i>
                         <h3 id="noRecentLabel">No hi ha pins recents</h3>
                         <p id="noRecentDesc">Els pins que visitis apareixeran aquí</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="settingsDownloadPin" class="settings-subpage">
-                <div class="sub-header">
-                    <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
-                    <h3 id="downloadPinTitle">Descarregar un pin</h3>
-                </div>
-                <div class="card">
-                    <div class="download-pin-search">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="downloadPinSearch" placeholder="Cercar pins...">
-                    </div>
-                    <div class="download-pin-list" id="downloadPinList"></div>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <button id="downloadPinBtn" class="fab-btn glow" style="flex:1;"><i class="fas fa-download"></i> <span id="downloadJsonLabel">Descarregar JSON</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="settingsUploadPin" class="settings-subpage">
-                <div class="sub-header">
-                    <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
-                    <h3 id="uploadPinTitle">Carregar un pin</h3>
-                </div>
-                <div class="card">
-                    <label style="font-size:15px; font-weight:500;">Paste here or upload:</label>
-                    <textarea id="uploadPinTextarea" rows="6" style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; font-family:monospace; resize:vertical; margin:8px 0;"></textarea>
-                    <div style="display:flex; gap:8px;">
-                        <button id="uploadPinFromTextBtn" class="fab-btn glow" style="flex:1;"><i class="fas fa-upload"></i> <span id="uploadFromTextLabel">Carregar des de text</span></button>
-                        <button id="uploadPinFileBtn" class="fab-btn secondary" style="flex:1;"><i class="fas fa-file-upload"></i> <span id="uploadFromFileLabel">Seleccionar fitxer</span></button>
-                        <input type="file" id="uploadPinFileInput" accept=".json" style="display:none;">
                     </div>
                 </div>
             </div>
@@ -2009,7 +2222,17 @@
 
             <div class="checkbox-row">
                 <input type="checkbox" id="isTransportStop">
-                <label for="isTransportStop" id="transportLabel" style="margin:0; font-size:15px;">És una parada de transport públic</label>
+                <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
+                <label for="isTransportStop" id="transportLabel" style="margin:0; font-size:15px; cursor:pointer;">És una parada de transport públic</label>
+            </div>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="isOutsideEnvironment">
+                <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
+                <label for="isOutsideEnvironment" id="outsideEnvLabel" style="margin:0; font-size:15px; cursor:pointer;">
+                    <span id="outsideEnvMain">Fora del teu entorn?</span>
+                    <span class="label-sub" id="outsideEnvSub">Només visible en mode "Fora del meu entorn"</span>
+                </label>
             </div>
 
             <div id="transportServicesContainer" style="display:none;">
@@ -2146,12 +2369,14 @@
                     <p id="groupDetailDesc" style="font-size:13px; color:var(--md-on-surface-variant); margin:0;">Descripció</p>
                 </div>
             </div>
-            <div id="groupDetailPins" class="pin-grid" style="padding:0; margin-top:8px;"></div>
-            <div class="dialog-actions" style="margin-top:12px;">
-                <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1;"><i class="fas fa-edit"></i> <span id="groupDetailEditLabel">Editar</span></button>
-                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; color:#E30613;"><i class="fas fa-trash"></i> <span id="groupDetailDeleteLabel">Eliminar</span></button>
-                <button id="groupDetailCloseBtn" class="fab-btn secondary" style="flex:1;"><i class="fas fa-times"></i> <span id="groupDetailCloseLabel">Tancar</span></button>
+            <!-- Acció buttons sota la descripció, abans dels pins -->
+            <div style="display:flex; gap:6px; margin:8px 0 12px;">
+                <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0;"><i class="fas fa-edit"></i></button>
+                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0; color:#E30613;"><i class="fas fa-trash"></i></button>
+                <button id="groupDetailCloseBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0;"><i class="fas fa-times"></i></button>
             </div>
+            <div id="groupDetailPins" class="group-detail-pins-grid"></div>
+            <div id="groupDetailPinsEmpty" style="display:none; text-align:center; color:var(--md-on-surface-variant); padding:12px;">No hi ha pins en aquest grup</div>
         </div>
     </div>
 
@@ -2189,7 +2414,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.5.1 Mobile';
+        const APP_VERSION = '1.6 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2200,7 +2425,9 @@
             groups: [],
             lang: 'en',
             darkMode: false,
+            mapStyle: 'light', // 'light', 'dark', 'color'
             accentColor: '#7C4DFF',
+            viewMode: 'home', // 'home' or 'away'
             map: null,
             markerCluster: null,
             markers: {},
@@ -2215,7 +2442,6 @@
             editingServiceId: null,
             tempRelatedPins: [],
             tempServices: [],
-            selectedDownloadPinId: null,
             servicesViewExpanded: false,
             searchLimit: 25,
             editingGroupId: null,
@@ -2227,7 +2453,7 @@
                 subtitle: ''
             },
             profileLoaded: false,
-            userLocation: null, // [lat, lng] o null
+            userLocation: null,
             watchId: null,
             userMarker: null,
             history: ['map'],
@@ -2306,14 +2532,9 @@
                 mapStart: "Posició inicial del mapa",
                 copyJson: "Copiar JSON",
                 jsonCopied: "JSON copiat al portapapers",
-                downloadPin: "Descarregar un pin",
-                uploadPin: "Carregar un pin",
                 selectPin: "Selecciona un pin",
-                downloadJson: "Descarregar JSON",
                 pinJsonCopied: "JSON del pin copiat",
                 pasteJson: "Enganxa el JSON d'un pin",
-                uploadFromText: "Carregar des de text",
-                uploadFromFile: "Carregar des de fitxer",
                 pinLoaded: "Pin carregat correctament",
                 showMore: "Mostrar més",
                 showLess: "Mostrar menys",
@@ -2380,7 +2601,19 @@
                 gpsPosition: "Utilitzar ubicació del GPS",
                 gpsSplashTitle: "Obtenint ubicació...",
                 gpsSplashSub: "Si us plau, esperi...",
-                gpsCancel: "Cancel·lar"
+                gpsCancel: "Cancel·lar",
+                mapStyleLabel: "Estil del mapa",
+                mapStyleLightLabel: "Clar",
+                mapStyleDarkLabel: "Fosc",
+                mapStyleColorLabel: "Color",
+                modePopupTitle: "Mode de visualització",
+                modeHomeName: "El meu entorn",
+                modeHomeDesc: "Mostra només pins del teu entorn",
+                modeAwayName: "Fora del meu entorn",
+                modeAwayDesc: "Mostra tots els pins, inclosos els de fora de la teva ciutat.",
+                modeCloseLabel: "Tancar",
+                outsideEnvLabel: "Fora del meu entorn",
+                outsideEnvSub: "­"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2452,14 +2685,9 @@
                 mapStart: "Posición inicial del mapa",
                 copyJson: "Copiar JSON",
                 jsonCopied: "JSON copiado al portapapeles",
-                downloadPin: "Descargar un pin",
-                uploadPin: "Cargar un pin",
                 selectPin: "Selecciona un pin",
-                downloadJson: "Descargar JSON",
                 pinJsonCopied: "JSON del pin copiado",
                 pasteJson: "Pega el JSON de un pin",
-                uploadFromText: "Cargar desde texto",
-                uploadFromFile: "Cargar desde archivo",
                 pinLoaded: "Pin cargado correctamente",
                 showMore: "Mostrar más",
                 showLess: "Mostrar menos",
@@ -2526,7 +2754,19 @@
                 gpsPosition: "Usar ubicación del GPS",
                 gpsSplashTitle: "Obteniendo ubicación...",
                 gpsSplashSub: "Por favor, espere...",
-                gpsCancel: "Cancelar"
+                gpsCancel: "Cancelar",
+                mapStyleLabel: "Estilo del mapa",
+                mapStyleLightLabel: "Claro",
+                mapStyleDarkLabel: "Oscuro",
+                mapStyleColorLabel: "Color",
+                modePopupTitle: "Modo de visualización",
+                modeHomeName: "Mi entorno",
+                modeHomeDesc: "Muestra solo pins de tu entorno",
+                modeAwayName: "Fuera de mi entorno",
+                modeAwayDesc: "Muestra todos los pins, incluidos los de fuera de tu ciudad.",
+                modeCloseLabel: "Cerrar",
+                outsideEnvLabel: "Fuera de tu entorno",
+                outsideEnvSub: "­"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2598,14 +2838,9 @@
                 mapStart: "Initial map position",
                 copyJson: "Copy JSON",
                 jsonCopied: "JSON copied to clipboard",
-                downloadPin: "Download a pin",
-                uploadPin: "Upload a pin",
                 selectPin: "Select a pin",
-                downloadJson: "Download JSON",
                 pinJsonCopied: "Pin JSON copied",
                 pasteJson: "Paste a pin JSON",
-                uploadFromText: "Upload from text",
-                uploadFromFile: "Upload from file",
                 pinLoaded: "Pin loaded successfully",
                 showMore: "Show more",
                 showLess: "Show less",
@@ -2672,7 +2907,19 @@
                 gpsPosition: "Use GPS location",
                 gpsSplashTitle: "Getting location...",
                 gpsSplashSub: "Please wait...",
-                gpsCancel: "Cancel"
+                gpsCancel: "Cancel",
+                mapStyleLabel: "Map style",
+                mapStyleLightLabel: "Light",
+                mapStyleDarkLabel: "Dark",
+                mapStyleColorLabel: "Color",
+                modePopupTitle: "View mode",
+                modeHomeName: "My environment",
+                modeHomeDesc: "Show only pins from your environment",
+                modeAwayName: "Outside my environment",
+                modeAwayDesc: "Show all pins, including those outside your city.",
+                modeCloseLabel: "Close",
+                outsideEnvLabel: "Outside your environment",
+                outsideEnvSub: "­"
             }
         };
 
@@ -2719,6 +2966,8 @@
                     state.groups = data.groups || [];
                     if (data.accentColor) state.accentColor = data.accentColor;
                     if (data.darkMode !== undefined) state.darkMode = data.darkMode;
+                    if (data.mapStyle) state.mapStyle = data.mapStyle;
+                    if (data.viewMode) state.viewMode = data.viewMode;
                     if (data.lang) state.lang = data.lang;
                     if (data.mapStartLocation) {
                         state.mapStartLocation = data.mapStartLocation;
@@ -2745,8 +2994,8 @@
             renderFavorites();
             renderGroups();
             renderRecentPins();
-            renderDownloadPinList('');
             renderProfile();
+            updateModeUI();
         }
 
         function saveData() {
@@ -2758,6 +3007,8 @@
                 groups: state.groups,
                 accentColor: state.accentColor,
                 darkMode: state.darkMode,
+                mapStyle: state.mapStyle,
+                viewMode: state.viewMode,
                 lang: state.lang,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
@@ -2774,7 +3025,6 @@
         function handlePopState(event) {
             const stateObj = event.state;
             if (!stateObj) {
-                // Si no hi ha estat, tornem a la pàgina principal (mapa)
                 switchTab('map');
                 return;
             }
@@ -2782,7 +3032,6 @@
             const page = stateObj.page;
             const data = stateObj.data || {};
 
-            // Determinar quina acció fer segons la pàgina
             switch (page) {
                 case 'map':
                     switchTab('map');
@@ -2865,8 +3114,11 @@
 
         // ---------- MAP ----------
         function getTileLayer() {
-            if (state.darkMode) {
+            if (state.mapStyle === 'dark') {
                 return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+            } else if (state.mapStyle === 'color') {
+                // Estil modern amb colors (estil de mapes de viatges)
+                return 'https://tile.openstreetmap.de/{z}/{x}/{y}.png';
             }
             return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
         }
@@ -2909,7 +3161,7 @@
             });
 
             L.tileLayer(getTileLayer(), {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © CartoDB',
+                attribution: state.mapStyle === 'color' ? '© <a href="https://www.openstreetmap.org/copyright">OSM</a>' : '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © CartoDB',
                 subdomains: 'abcd',
                 maxZoom: 19
             }).addTo(map);
@@ -2965,10 +3217,78 @@
                 }
             });
             L.tileLayer(getTileLayer(), {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © CartoDB',
+                attribution: state.mapStyle === 'color' ? '© <a href="https://www.openstreetmap.org/copyright">OSM</a>' : '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © CartoDB',
                 subdomains: 'abcd',
                 maxZoom: 19
             }).addTo(state.map);
+            updateMapStyleButtons();
+        }
+
+        function updateMapStyleButtons() {
+            document.querySelectorAll('.map-style-btn').forEach(btn => btn.classList.remove('active'));
+            if (state.mapStyle === 'dark') {
+                document.getElementById('mapStyleDarkBtn').classList.add('active');
+            } else if (state.mapStyle === 'color') {
+                document.getElementById('mapStyleColorBtn').classList.add('active');
+            } else {
+                document.getElementById('mapStyleLightBtn').classList.add('active');
+            }
+        }
+
+        // ---------- MODE SELECTOR ----------
+        function updateModeUI() {
+            const icon = document.getElementById('modeIcon');
+            const indicator = document.getElementById('modeIndicator');
+
+            if (state.viewMode === 'home') {
+                icon.className = 'fas fa-building';
+                indicator.className = 'mode-indicator home';
+                document.getElementById('modeHomeOption').classList.add('active');
+                document.getElementById('modeAwayOption').classList.remove('active');
+            } else {
+                icon.className = 'fas fa-umbrella-beach';
+                indicator.className = 'mode-indicator away';
+                document.getElementById('modeAwayOption').classList.add('active');
+                document.getElementById('modeHomeOption').classList.remove('active');
+            }
+
+            // Re-render all visible pins
+            renderAllPins();
+            renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
+            renderFavorites();
+            renderGroups(document.getElementById('groupsSearchInput')?.value || '');
+            renderRecentPins();
+            renderProfile();
+        }
+
+        function isPinVisible(pin) {
+            if (state.viewMode === 'home') {
+                return !pin.isOutsideEnvironment;
+            }
+            return true;
+        }
+
+        function getVisiblePins() {
+            return state.pins.filter(p => isPinVisible(p));
+        }
+
+        function toggleModePopup() {
+            const overlay = document.getElementById('modePopupOverlay');
+            overlay.classList.toggle('active');
+            updateAllTexts();
+        }
+
+        function setViewMode(mode) {
+            if (mode === state.viewMode) {
+                toggleModePopup();
+                return;
+            }
+            state.viewMode = mode;
+            saveData();
+            updateModeUI();
+            updateAllTexts();
+            toggleModePopup();
+            showToast(state.viewMode === 'home' ? t('modeHomeName') : t('modeAwayName'));
         }
 
         // ---------- PINS ----------
@@ -2977,7 +3297,9 @@
             state.markerCluster.clearLayers();
             state.markers = {};
 
-            state.pins.forEach(pin => {
+            const visiblePins = getVisiblePins();
+
+            visiblePins.forEach(pin => {
                 if (!pin.lat || !pin.lng) return;
                 const icon = getPinIcon(pin);
                 const marker = L.marker([pin.lat, pin.lng], { icon })
@@ -2994,6 +3316,7 @@
 
         function addPinToMap(pin) {
             if (!state.map || !state.markerCluster) return;
+            if (!isPinVisible(pin)) return;
             const icon = getPinIcon(pin);
             const marker = L.marker([pin.lat, pin.lng], { icon })
                 .on('click', () => {
@@ -3037,7 +3360,7 @@
         }
 
         function getFavoritesOrdered() {
-            const favPins = state.pins.filter(p => state.favorites.includes(p.id));
+            const favPins = state.pins.filter(p => state.favorites.includes(p.id) && isPinVisible(p));
             const orderMap = {};
             state.favoritesOrder.forEach((id, idx) => { orderMap[id] = idx; });
             favPins.sort((a, b) => {
@@ -3065,6 +3388,7 @@
             container.innerHTML = favPins.map((pin, index) => {
                 const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
+                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
                 return `
                 <div class="pin-card" data-id="${pin.id}" draggable="true" data-index="${index}">
                     <div class="fav-indicator"><i class="fas fa-heart"></i></div>
@@ -3073,6 +3397,7 @@
                     <div class="pin-name">${escapeHtml(pin.name)}</div>
                     ${subtitle}
                     ${stars ? `<div class="pin-stars">${stars}</div>` : ''}
+                    ${outsideBadge}
                     ${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => {
                         const svc = state.services.find(s => s.id === sid);
                         return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : '';
@@ -3127,7 +3452,8 @@
             const container = document.getElementById('recentPinsList');
             const empty = document.getElementById('recentEmptyMsg');
 
-            const sorted = [...state.pins].sort((a, b) => {
+            const visiblePins = getVisiblePins();
+            const sorted = [...visiblePins].sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
                 return bTime - aTime;
@@ -3194,7 +3520,9 @@
             empty.style.display = 'none';
 
             container.innerHTML = groups.map(group => {
-                const pinCount = group.pinIds ? group.pinIds.length : 0;
+                // Filter pins in group by visibility
+                const groupPins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
+                const pinCount = groupPins.length;
                 const color = group.color || state.accentColor;
                 return `
                     <div class="group-card" data-id="${group.id}" style="border-top-color:${color};">
@@ -3206,56 +3534,14 @@
                                 <div class="group-pin-count">${pinCount}${t('groupPinCount')}</div>
                             </div>
                         </div>
-                        <!-- Group action buttons below description, not below all pins -->
-                        <div class="group-actions">
-                            <button class="edit-group-btn" data-id="${group.id}" title="${t('editGroupAction')}"><i class="fas fa-edit"></i></button>
-                            <button class="delete-group-btn" data-id="${group.id}" title="${t('deleteGroupAction')}"><i class="fas fa-trash"></i></button>
-                            <button class="close-group-btn" data-id="${group.id}" title="${t('closeGroupAction')}"><i class="fas fa-times"></i></button>
-                        </div>
                     </div>
                 `;
             }).join('');
 
             container.querySelectorAll('.group-card').forEach(el => {
-                el.onclick = (e) => {
-                    if (e.target.closest('.group-actions')) return;
+                el.onclick = () => {
                     const id = el.dataset.id;
                     openGroupDetail(id);
-                };
-            });
-
-            // Edit group button
-            container.querySelectorAll('.edit-group-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const id = btn.dataset.id;
-                    openGroupDialog(id);
-                };
-            });
-
-            // Delete group button
-            container.querySelectorAll('.delete-group-btn').forEach(async btn => {
-                btn.onclick = async (e) => {
-                    e.stopPropagation();
-                    const id = btn.dataset.id;
-                    const confirmed = await showConfirmDialog(t('confirmDeleteGroup'));
-                    if (confirmed) {
-                        state.groups = state.groups.filter(g => g.id !== id);
-                        saveData();
-                        renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-                        showToast(t('groupDeleted'));
-                    }
-                };
-            });
-
-            // Close group detail button
-            container.querySelectorAll('.close-group-btn').forEach(btn => {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    const id = btn.dataset.id;
-                    const group = state.groups.find(g => g.id === id);
-                    if (group) {
-                    }
                 };
             });
         }
@@ -3303,7 +3589,6 @@
                 filtered = allPins.filter(p => p.name.toLowerCase().includes(f));
             }
 
-            // Sort by last access (most recent first)
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3317,11 +3602,39 @@
                 const checked = state.tempGroupPins.includes(p.id) ? 'checked' : '';
                 div.innerHTML = `
                     <input type="checkbox" class="group-pin-selector-checkbox" value="${p.id}" ${checked}>
+                    <span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>
                     <img src="${p.imageUrl || 'https://via.placeholder.com/28/7C4DFF/FFFFFF?text=📍'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/28/7C4DFF/FFFFFF?text=📍'">
                     <span class="name">${escapeHtml(p.name)}</span>
                     ${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}
                 `;
                 grid.appendChild(div);
+
+                // Setup checkbox toggle
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                const label = div.querySelector('.name');
+                const customCheck = div.querySelector('.custom-checkbox-sm');
+                div.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        customCheck.style.background = 'var(--md-primary)';
+                        customCheck.style.borderColor = 'var(--md-primary)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '1';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(1)';
+                    } else {
+                        customCheck.style.background = 'var(--md-surface)';
+                        customCheck.style.borderColor = 'var(--md-outline)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '0';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(0)';
+                    }
+                });
+                // Trigger initial state
+                if (checked) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
             });
 
             if (filtered.length === 0) {
@@ -3398,7 +3711,6 @@
 
             const dialog = document.getElementById('groupDetailDialog');
             const color = group.color || state.accentColor;
-            dialog.style.setProperty('--md-primary', color);
 
             document.getElementById('groupDetailName').innerText = group.name;
             document.getElementById('groupDetailName').style.color = color;
@@ -3408,8 +3720,7 @@
                 this.style.display = 'none';
             };
 
-            const pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id)) : [];
-            // Sort pins by last access (most recent first)
+            const pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
             pins.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3417,23 +3728,25 @@
             });
 
             const grid = document.getElementById('groupDetailPins');
+            const emptyMsg = document.getElementById('groupDetailPinsEmpty');
 
             if (pins.length === 0) {
-                grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--md-on-surface-variant);padding:20px;">${t('noPins')}</p>`;
+                grid.innerHTML = '';
+                emptyMsg.style.display = 'block';
             } else {
+                emptyMsg.style.display = 'none';
                 grid.innerHTML = pins.map(pin => {
                     const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
                     return `
-                        <div class="pin-card" data-id="${pin.id}" style="padding:12px 8px; border-top-color:${color};">
-                            <img src="${pin.imageUrl || 'https://via.placeholder.com/44/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/44/7C4DFF/FFFFFF?text=📍'" style="width:44px;height:44px;">
-                            <div class="pin-name" style="font-size:13px;">${escapeHtml(pin.name)}</div>
-                            ${pin.subtitle ? `<div class="pin-subtitle" style="font-size:11px;">${escapeHtml(pin.subtitle)}</div>` : ''}
-                            ${stars ? `<div class="pin-stars" style="font-size:12px;">${stars}</div>` : ''}
+                        <div class="group-detail-pin-item" data-id="${pin.id}">
+                            <img src="${pin.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
+                            <div class="name">${escapeHtml(pin.name)}</div>
+                            ${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
                         </div>
                     `;
                 }).join('');
 
-                grid.querySelectorAll('.pin-card').forEach(el => {
+                grid.querySelectorAll('.group-detail-pin-item').forEach(el => {
                     el.onclick = () => {
                         const id = el.dataset.id;
                         dialog.classList.remove('active');
@@ -3472,7 +3785,7 @@
         function getRelatedPins(pinId) {
             const pin = state.pins.find(p => p.id === pinId);
             if (!pin || !pin.relatedPins) return [];
-            return state.pins.filter(p => pin.relatedPins.includes(p.id));
+            return state.pins.filter(p => pin.relatedPins.includes(p.id) && isPinVisible(p));
         }
 
         function renderRelatedPins(pinId) {
@@ -3513,10 +3826,35 @@
                 const checked = state.tempServices.includes(svc.id) ? 'checked' : '';
                 div.innerHTML = `
                     <input type="checkbox" class="service-selector-checkbox" value="${svc.id}" ${checked}>
+                    <span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>
                     ${svc.icon ? `<img src="${svc.icon}">` : '<span style="width:28px;height:28px;border-radius:0px;background:var(--md-surface-dim);display:flex;align-items:center;justify-content:center;font-size:14px;">🚌</span>'}
                     <span class="name">${svc.name}</span>
                 `;
                 grid.appendChild(div);
+
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                const customCheck = div.querySelector('.custom-checkbox-sm');
+                div.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        customCheck.style.background = 'var(--md-primary)';
+                        customCheck.style.borderColor = 'var(--md-primary)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '1';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(1)';
+                    } else {
+                        customCheck.style.background = 'var(--md-surface)';
+                        customCheck.style.borderColor = 'var(--md-outline)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '0';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(0)';
+                    }
+                });
+                if (checked) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
             });
 
             if (state.services.length === 0) {
@@ -3608,7 +3946,6 @@
             const currentPinId = state.editingPinId;
             let allPins = state.pins.filter(p => p.id !== currentPinId);
 
-            // Sort by last access (most recent first)
             allPins.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
                 const bTime = b.lastAccessed || 0;
@@ -3622,11 +3959,36 @@
                 const checked = state.tempRelatedPins.includes(p.id) ? 'checked' : '';
                 div.innerHTML = `
                     <input type="checkbox" class="related-pin-selector-checkbox" value="${p.id}" ${checked}>
+                    <span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>
                     <img src="${p.imageUrl || 'https://via.placeholder.com/28/7C4DFF/FFFFFF?text=📍'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/28/7C4DFF/FFFFFF?text=📍'">
                     <span class="name">${escapeHtml(p.name)}</span>
                     ${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}
                 `;
                 grid.appendChild(div);
+
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                const customCheck = div.querySelector('.custom-checkbox-sm');
+                div.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        customCheck.style.background = 'var(--md-primary)';
+                        customCheck.style.borderColor = 'var(--md-primary)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '1';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(1)';
+                    } else {
+                        customCheck.style.background = 'var(--md-surface)';
+                        customCheck.style.borderColor = 'var(--md-outline)';
+                        customCheck.querySelector('.check-icon-sm').style.opacity = '0';
+                        customCheck.querySelector('.check-icon-sm').style.transform = 'scale(0)';
+                    }
+                });
+                if (checked) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
             });
 
             if (allPins.length === 0) {
@@ -3817,8 +4179,9 @@
 
             function renderGoFromList(filter = '') {
                 const f = filter.toLowerCase().trim();
+                const visiblePins = getVisiblePins();
 
-                let sortedPins = [...state.pins].sort((a, b) => {
+                let sortedPins = [...visiblePins].sort((a, b) => {
                     const aFav = isFavorite(a.id) ? 0 : 1;
                     const bFav = isFavorite(b.id) ? 0 : 1;
                     if (aFav !== bFav) return aFav - bFav;
@@ -3885,6 +4248,10 @@
         function openPinDetail(pinId) {
             const pin = state.pins.find(p => p.id === pinId);
             if (!pin) return;
+            if (!isPinVisible(pin)) {
+                showToast('Aquest pin no és visible en el mode actual', true);
+                return;
+            }
             state.detailPinId = pinId;
             state.selectedPinId = pinId;
 
@@ -3893,8 +4260,8 @@
 
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('pinDetailPage').classList.add('active');
+            document.getElementById('detailContent').scrollTop = 0;
 
-            // Afegir a l'historial
             pushHistory('detail', { pinId: pinId });
 
             document.getElementById('detailImage').src = pin.imageUrl || 'https://via.placeholder.com/80/7C4DFF/FFFFFF?text=📍';
@@ -3978,8 +4345,7 @@
             if (state.map) setTimeout(() => state.map.invalidateSize(), 200);
             state.detailPinId = null;
             state.servicesViewExpanded = false;
-            
-            // Afegir a l'historial
+
             pushHistory('map');
         }
 
@@ -3998,7 +4364,8 @@
             }
 
             const f = trimmedFilter.toLowerCase();
-            let filtered = state.pins.filter(p =>
+            const visiblePins = getVisiblePins();
+            let filtered = visiblePins.filter(p =>
                 p.name.toLowerCase().includes(f) ||
                 (p.subtitle && p.subtitle.toLowerCase().includes(f))
             );
@@ -4017,8 +4384,8 @@
             if (totalResults === 0) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
-                document.getElementById('noPinsLabel').innerText = state.pins.length === 0 ? t('noPins') : t('noResults');
-                document.getElementById('addFirstPinLabel').innerText = state.pins.length === 0 ? t('addFirstPin') : '';
+                document.getElementById('noPinsLabel').innerText = visiblePins.length === 0 ? t('noPins') : t('noResults');
+                document.getElementById('addFirstPinLabel').innerText = visiblePins.length === 0 ? t('addFirstPin') : '';
                 return;
             }
             empty.style.display = 'none';
@@ -4028,6 +4395,7 @@
                 const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
                 const isFav = isFavorite(pin.id);
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
+                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
                 return `
                 <div class="pin-card" data-id="${pin.id}">
                     ${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}
@@ -4035,6 +4403,7 @@
                     <div class="pin-name">${escapeHtml(pin.name)}</div>
                     ${subtitle}
                     ${stars ? `<div class="pin-stars">${stars}</div>` : ''}
+                    ${outsideBadge}
                     ${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => {
                         const svc = state.services.find(s => s.id === sid);
                         return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : '';
@@ -4093,9 +4462,11 @@
             document.getElementById('pinLatInput').value = pinData?.lat !== undefined ? pinData.lat : '';
             document.getElementById('pinLngInput').value = pinData?.lng !== undefined ? pinData.lng : '';
             document.getElementById('isTransportStop').checked = pinData?.isTransportStop || false;
+            document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
 
-            selectedRating = pinData?.rating || 0;
+            // Reset stars to grey (no memory from last edit)
+            selectedRating = 0;
             updateStarsUI();
 
             state.tempRelatedPins = pinData?.relatedPins || [];
@@ -4126,6 +4497,45 @@
 
             state.editingPinId = pinData?.id || null;
             document.getElementById('transportServicesContainer').style.display = document.getElementById('isTransportStop').checked ? 'block' : 'none';
+
+            // Setup checkbox UI for transport stop
+            const transportCheckbox = document.getElementById('isTransportStop');
+            const transportCustom = transportCheckbox.parentElement.querySelector('.custom-checkbox');
+            transportCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    transportCustom.style.background = 'var(--md-primary)';
+                    transportCustom.style.borderColor = 'var(--md-primary)';
+                    transportCustom.querySelector('.check-icon').style.opacity = '1';
+                    transportCustom.querySelector('.check-icon').style.transform = 'scale(1)';
+                } else {
+                    transportCustom.style.background = 'var(--md-surface-dim)';
+                    transportCustom.style.borderColor = 'var(--md-outline)';
+                    transportCustom.querySelector('.check-icon').style.opacity = '0';
+                    transportCustom.querySelector('.check-icon').style.transform = 'scale(0)';
+                }
+                document.getElementById('transportServicesContainer').style.display = this.checked ? 'block' : 'none';
+            });
+            // Trigger initial state
+            transportCheckbox.dispatchEvent(new Event('change'));
+
+            // Setup checkbox UI for outside environment
+            const outsideCheckbox = document.getElementById('isOutsideEnvironment');
+            const outsideCustom = outsideCheckbox.parentElement.querySelector('.custom-checkbox');
+            outsideCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    outsideCustom.style.background = 'var(--md-primary)';
+                    outsideCustom.style.borderColor = 'var(--md-primary)';
+                    outsideCustom.querySelector('.check-icon').style.opacity = '1';
+                    outsideCustom.querySelector('.check-icon').style.transform = 'scale(1)';
+                } else {
+                    outsideCustom.style.background = 'var(--md-surface-dim)';
+                    outsideCustom.style.borderColor = 'var(--md-outline)';
+                    outsideCustom.querySelector('.check-icon').style.opacity = '0';
+                    outsideCustom.querySelector('.check-icon').style.transform = 'scale(0)';
+                }
+            });
+            // Trigger initial state
+            outsideCheckbox.dispatchEvent(new Event('change'));
 
             document.getElementById('pinDialog').classList.add('active');
             updateAllTexts();
@@ -4161,6 +4571,7 @@
             document.querySelectorAll('.stars-selector .star').forEach(el => {
                 const val = parseInt(el.dataset.value);
                 el.classList.toggle('active', val <= selectedRating);
+                el.style.color = val <= selectedRating ? '#FFB300' : '#ddd';
             });
         }
 
@@ -4237,6 +4648,7 @@
             const isTransport = document.getElementById('isTransportStop').checked;
             const services = isTransport ? state.tempServices : [];
             const scheduleLinks = getScheduleLinks();
+            const isOutside = document.getElementById('isOutsideEnvironment').checked;
 
             const pinData = {
                 id: state.editingPinId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -4253,7 +4665,8 @@
                 lastAccessed: Date.now(),
                 relatedPins: state.tempRelatedPins,
                 lat: lat,
-                lng: lng
+                lng: lng,
+                isOutsideEnvironment: isOutside
             };
 
             if (isEditing) {
@@ -4275,7 +4688,6 @@
             renderFavorites();
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-            renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
             renderProfile();
             document.getElementById('mapAddOverlay').classList.remove('show');
 
@@ -4312,7 +4724,6 @@
                 renderFavorites();
                 renderRecentPins();
                 renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-                renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
                 renderProfile();
                 if (state.detailPinId === pinId) {
                     closePinDetail();
@@ -4515,6 +4926,8 @@
                 groups: state.groups,
                 accentColor: state.accentColor,
                 darkMode: state.darkMode,
+                mapStyle: state.mapStyle,
+                viewMode: state.viewMode,
                 lang: state.lang,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
@@ -4563,6 +4976,8 @@
             state.groups = data.groups || [];
             if (data.accentColor) state.accentColor = data.accentColor;
             if (data.darkMode !== undefined) state.darkMode = data.darkMode;
+            if (data.mapStyle) state.mapStyle = data.mapStyle;
+            if (data.viewMode) state.viewMode = data.viewMode;
             if (data.lang) state.lang = data.lang;
             if (data.mapStartLocation) {
                 state.mapStartLocation = data.mapStartLocation;
@@ -4581,132 +4996,9 @@
             renderFavorites();
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-            renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
             renderProfile();
+            updateModeUI();
             showToast(t('importSuccess'));
-        }
-
-        // ---------- DOWNLOAD PIN ----------
-        function renderDownloadPinList(filter = '') {
-            const container = document.getElementById('downloadPinList');
-            if (!container) return;
-
-            const filtered = state.pins.filter(p => {
-                const search = filter.toLowerCase().trim();
-                if (!search) return true;
-                return p.name.toLowerCase().includes(search) ||
-                       (p.subtitle && p.subtitle.toLowerCase().includes(search));
-            });
-
-            filtered.sort((a, b) => {
-                const aTime = a.lastAccessed || 0;
-                const bTime = b.lastAccessed || 0;
-                return bTime - aTime;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:var(--md-on-surface-variant); padding:16px;">${state.pins.length === 0 ? t('noPins') : t('noResults')}</p>`;
-                state.selectedDownloadPinId = null;
-                return;
-            }
-
-            container.innerHTML = filtered.map(pin => {
-                const isSelected = state.selectedDownloadPinId === pin.id;
-                const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) : '';
-                return `
-                    <div class="download-pin-item ${isSelected ? 'selected' : ''}" data-id="${pin.id}">
-                        <img src="${pin.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
-                        <div class="info">
-                            <div class="name">${escapeHtml(pin.name)}</div>
-                            ${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
-                            ${stars ? `<div class="stars">${stars}</div>` : ''}
-                        </div>
-                        <div class="check"><i class="fas fa-check-circle"></i></div>
-                    </div>
-                `;
-            }).join('');
-
-            container.querySelectorAll('.download-pin-item').forEach(el => {
-                el.onclick = () => {
-                    const id = el.dataset.id;
-                    state.selectedDownloadPinId = state.selectedDownloadPinId === id ? null : id;
-                    renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
-                };
-            });
-        }
-
-        function getPinJsonForExport(pinId) {
-            const pin = state.pins.find(p => p.id === pinId);
-            if (!pin) return null;
-            const { services, relatedPins, scheduleLinks, ...cleanPin } = pin;
-            return cleanPin;
-        }
-
-        function downloadPinJson() {
-            if (!state.selectedDownloadPinId) {
-                showToast(t('selectPin'), true);
-                return;
-            }
-            const cleanPin = getPinJsonForExport(state.selectedDownloadPinId);
-            if (!cleanPin) {
-                showToast('Pin no trobat', true);
-                return;
-            }
-            const jsonStr = JSON.stringify(cleanPin, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `pin_${cleanPin.name}_${new Date().toISOString().slice(0, 10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast(t('exportSuccess'));
-        }
-
-        // ---------- UPLOAD PIN ----------
-        function uploadPinFromJson(jsonStr) {
-            try {
-                const data = JSON.parse(jsonStr);
-                if (!data.name || data.lat === undefined || data.lng === undefined) {
-                    showToast('JSON unvalid', true);
-                    return;
-                }
-
-                if (isPinDuplicate(data.name, data.lat, data.lng, null)) {
-                    showToast('A pin with this name and coordinates already exists.', true);
-                    return;
-                }
-
-                data.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-                data.lastAccessed = Date.now();
-                data.services = [];
-                data.relatedPins = [];
-                data.scheduleLinks = null;
-                if (!data.customButtons) data.customButtons = [];
-                if (!data.subtitle) data.subtitle = '';
-                if (!data.description) data.description = '';
-                if (!data.imageUrl) data.imageUrl = '';
-                if (!data.rating) data.rating = null;
-                if (!data.mp3Url) data.mp3Url = null;
-                if (data.isTransportStop === undefined) data.isTransportStop = false;
-
-                state.pins.push(data);
-                addPinToMap(data);
-                saveData();
-                renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
-                renderFavorites();
-                renderRecentPins();
-                renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-                renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
-                renderProfile();
-                showToast(t('pinLoaded'));
-
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
-            } catch (e) {
-                showToast('Error: JSON unvalid', true);
-            }
         }
 
         // ---------- CLEAR DATA ----------
@@ -4720,6 +5012,8 @@
                 state.groups = [];
                 state.accentColor = '#7C4DFF';
                 state.darkMode = false;
+                state.mapStyle = 'light';
+                state.viewMode = 'home';
                 state.lang = 'en';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
@@ -4734,8 +5028,8 @@
                 renderFavorites();
                 renderRecentPins();
                 renderGroups('');
-                renderDownloadPinList('');
                 renderProfile();
+                updateModeUI();
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
@@ -4750,7 +5044,7 @@
             document.getElementById('profileName').innerText = p.name || 'Usuari';
             document.getElementById('profilePronouns').innerText = p.pronouns || '—';
             document.getElementById('profileSubtitle').innerText = p.subtitle || '—';
-            document.getElementById('pinCount').innerText = state.pins.length;
+            document.getElementById('pinCount').innerText = getVisiblePins().length;
 
             const iconEl = document.getElementById('profileIconBtn');
             if (p.avatar && p.avatar !== DEFAULT_AVATAR) {
@@ -4815,9 +5109,11 @@
             document.querySelectorAll('.settings-subpage').forEach(el => el.classList.remove('active'));
             document.getElementById('settingsPage').classList.remove('active');
             const target = document.getElementById('settings' + subpageId.charAt(0).toUpperCase() + subpageId.slice(1));
-            if (target) target.classList.add('active');
-            
-            // Afegir a l'historial
+            if (target) {
+                target.classList.add('active');
+                target.scrollTop = 0;
+            }
+
             pushHistory('settings', { subpage: subpageId });
         }
 
@@ -4836,8 +5132,6 @@
                 { key: 'language', icon: 'fa-globe', label: 'langBtn' },
                 { key: 'services', icon: 'fa-bus', label: 'servicesBtn' },
                 { key: 'recent', icon: 'fa-clock', label: 'recent' },
-                { key: 'downloadPin', icon: 'fa-download', label: 'downloadPin' },
-                { key: 'uploadPin', icon: 'fa-upload', label: 'uploadPin' },
                 { key: 'reload', icon: 'fa-sync-alt', label: 'reloadApp' },
                 { key: 'about', icon: 'fa-info-circle', label: 'aboutBtn' }
             ];
@@ -4883,8 +5177,6 @@
                 language: 'langBtn',
                 services: 'servicesBtn',
                 recent: 'recent',
-                downloadPin: 'downloadPin',
-                uploadPin: 'uploadPin',
                 reload: 'reloadApp',
                 about: 'aboutBtn'
             };
@@ -4904,6 +5196,10 @@
             document.getElementById('themeLabel').innerText = t('theme');
             document.getElementById('lightLabel').innerText = t('light');
             document.getElementById('darkLabel').innerText = t('dark');
+            document.getElementById('mapStyleLabel').innerText = t('mapStyleLabel');
+            document.getElementById('mapStyleLightLabel').innerText = t('mapStyleLightLabel');
+            document.getElementById('mapStyleDarkLabel').innerText = t('mapStyleDarkLabel');
+            document.getElementById('mapStyleColorLabel').innerText = t('mapStyleColorLabel');
             document.getElementById('accentLabel').innerText = t('accentTitle');
             document.getElementById('langTitle').innerText = t('langTitle');
             document.getElementById('servicesTitle').innerText = t('servicesTitle');
@@ -4973,15 +5269,7 @@
             document.getElementById('relatedPinsCancelLabel').innerText = t('cancel');
             document.getElementById('relatedPinsSaveLabel').innerText = t('save');
 
-            document.getElementById('downloadPinTitle').innerText = t('downloadPin');
-            document.getElementById('uploadPinTitle').innerText = t('uploadPin');
             document.getElementById('reloadTitle').innerText = t('reloadApp');
-
-            document.getElementById('downloadJsonLabel').innerText = t('downloadJson');
-            document.getElementById('uploadPinTextarea').placeholder = t('pasteJson');
-            document.getElementById('uploadFromTextLabel').innerText = t('uploadFromText');
-            document.getElementById('uploadFromFileLabel').innerText = t('uploadFromFile');
-            document.getElementById('downloadPinSearch').placeholder = t('searchPins');
 
             document.getElementById('groupDialogTitle').innerText = state.editingGroupId ? t('editGroup') : t('createGroup');
             document.getElementById('groupNameLabel').innerText = t('groupName');
@@ -4991,11 +5279,16 @@
             document.getElementById('groupPinsLabel').innerText = t('groupPins');
             document.getElementById('groupPinsSearchInput').placeholder = t('searchPins');
 
-            document.getElementById('groupDetailEditLabel').innerText = t('edit');
-            document.getElementById('groupDetailDeleteLabel').innerText = t('delete');
-            document.getElementById('groupDetailCloseLabel').innerText = t('close');
-
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
+
+            document.getElementById('modePopupTitle').innerText = t('modePopupTitle');
+            document.getElementById('modeHomeName').innerText = t('modeHomeName');
+            document.getElementById('modeHomeDesc').innerText = t('modeHomeDesc');
+            document.getElementById('modeAwayName').innerText = t('modeAwayName');
+            document.getElementById('modeAwayDesc').innerText = t('modeAwayDesc');
+            document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
+            document.getElementById('outsideEnvMain').innerText = t('outsideEnvLabel');
+            document.getElementById('outsideEnvSub').innerText = t('outsideEnvSub');
 
             const aboutCard = document.querySelector('#settingsAbout .card');
             if (aboutCard) {
@@ -5014,12 +5307,13 @@
                 document.getElementById('themeLightBtn').classList.add('active');
             }
 
+            updateMapStyleButtons();
+
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
             renderServicesList(document.getElementById('settingsServiceSearch')?.value || '');
             renderFavorites();
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
-            renderDownloadPinList(document.getElementById('downloadPinSearch')?.value || '');
             renderProfile();
             if (document.getElementById('pinDialog').classList.contains('active')) {
                 renderSelectedServicesTags();
@@ -5042,6 +5336,8 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.settings-subpage').forEach(p => p.classList.remove('active'));
             document.getElementById(tabId + 'Page').classList.add('active');
+            const pageEl = document.getElementById(tabId + 'Page');
+            if (pageEl) pageEl.scrollTop = 0;
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector(`.nav-item[data-tab="${tabId}"]`)?.classList.add('active');
             if (tabId === 'map' && state.map) setTimeout(() => state.map.invalidateSize(), 200);
@@ -5054,8 +5350,7 @@
             }
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'settings') hideSettingsSubpage();
-            
-            // Afegir a l'historial
+
             pushHistory(tabId);
         }
 
@@ -5076,7 +5371,6 @@
             if (state.map) {
                 state.map.setView([lat, lng], zoom);
             }
-            // Actualitzar l'indicador visual a la llista d'opcions
             document.querySelectorAll('.map-start-option').forEach(btn => {
                 const btnLat = parseFloat(btn.dataset.lat);
                 const btnLng = parseFloat(btn.dataset.lng);
@@ -5086,7 +5380,6 @@
                     btn.innerHTML = btn.innerHTML.replace(' ✓', '');
                 }
             });
-            // Mostrar només errors, no l'èxit
         }
 
         // ---------- GPS ----------
@@ -5096,7 +5389,6 @@
                 return;
             }
 
-            // Si no s'ha de mostrar el splash, obtenir ubicació directament
             if (!showSplash) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -5126,10 +5418,8 @@
                 return;
             }
 
-            // Mostrar splash personalitzat amb transicions
             const splash = document.getElementById('splashScreen');
 
-            // Restablir estils
             splash.style.display = 'flex';
             splash.style.position = 'fixed';
             splash.style.top = '0';
@@ -5139,7 +5429,6 @@
             splash.style.background = state.accentColor;
             splash.style.zIndex = '9999';
 
-            // Contingut del splash d'ubicació
             splash.innerHTML = `
                 <div class="splash-icon"><i class="fas fa-crosshairs fa-spin"></i></div>
                 <div class="splash-title">${t('gpsSplashTitle')}</div>
@@ -5149,9 +5438,7 @@
                 </button>
             `;
 
-            // Aplicar transició d'entrada
             splash.className = 'splash-hide';
-            // Forçar reflow per reiniciar l'animació
             void splash.offsetWidth;
             splash.className = 'splash-show';
 
@@ -5160,11 +5447,9 @@
             if (cancelBtn) {
                 cancelBtn.onclick = () => {
                     cancelled = true;
-                    // Transició de sortida
                     splash.className = 'splash-hide';
                     setTimeout(() => {
                         splash.style.display = 'none';
-                        // Restaurar splash original
                         splash.innerHTML = `
                             <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
                             <div class="splash-title">LibrePin</div>
@@ -5177,7 +5462,6 @@
                 };
             }
 
-            // Sol·licitar ubicació
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     if (!cancelled) {
@@ -5186,7 +5470,6 @@
                         state.userLocation = [lat, lng];
                         setMapStartLocation(lat, lng);
 
-                        // Afegir marcador d'usuari
                         if (state.map) {
                             if (state.userMarker) {
                                 state.map.removeLayer(state.userMarker);
@@ -5200,11 +5483,9 @@
                             state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
 
-                        // Transició de sortida
                         splash.className = 'splash-hide';
                         setTimeout(() => {
                             splash.style.display = 'none';
-                            // Restaurar splash original
                             splash.innerHTML = `
                                 <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
                                 <div class="splash-title">LibrePin</div>
@@ -5213,7 +5494,6 @@
                             splash.className = '';
                         }, 500);
                         state.gpsSplashResolve && state.gpsSplashResolve('success');
-                        // No mostrar toast d'èxit
                     }
                 },
                 (error) => {
@@ -5221,11 +5501,9 @@
                         console.warn('GPS error:', error);
                         showToast(t('gpsPermissionDenied'), true);
 
-                        // Transició de sortida
                         splash.className = 'splash-hide';
                         setTimeout(() => {
                             splash.style.display = 'none';
-                            // Restaurar splash original
                             splash.innerHTML = `
                                 <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
                                 <div class="splash-title">LibrePin</div>
@@ -5243,7 +5521,6 @@
         // ---------- RECENTER MAP ----------
         function recenterMap() {
             if (!state.map) return;
-            // Mostrar splash d'ubicació només quan l'usuari fa click
             requestGpsLocation(true);
         }
 
@@ -5253,7 +5530,6 @@
             const clearBtn = document.getElementById('clearSearchBtn');
 
             input.addEventListener('focus', () => {
-                // If there's text already, select it all for quick replacement
                 if (input.value.length > 0) {
                     input.select();
                 }
@@ -5314,22 +5590,18 @@
             applyAccentColor();
             initMap();
             updateAllTexts();
+            updateModeUI();
 
-            // Setup search clear button
             setupSearchClear();
 
-            // Setup navigation history
             window.addEventListener('popstate', handlePopState);
 
-            // Inicialitzar l'historial amb la pàgina actual
             if (!window.location.hash || window.location.hash === '#') {
                 pushHistory('map');
             } else {
-                // Si hi ha un hash, intentar restaurar l'estat
                 const hash = window.location.hash.slice(1);
                 const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail'];
                 if (knownPages.includes(hash)) {
-                    // Intentar extreure paràmetres del hash
                     const parts = hash.split('?');
                     const page = parts[0];
                     const params = new URLSearchParams(parts[1] || '');
@@ -5346,11 +5618,19 @@
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
-            // Reposition when clicking the button
             document.getElementById('recenterMapBtn').addEventListener('click', recenterMap);
 
             document.getElementById('appTitleClick').addEventListener('click', () => {
                 switchTab('map');
+            });
+
+            // Mode selector
+            document.getElementById('modeSelectorBtn').addEventListener('click', toggleModePopup);
+            document.getElementById('modeHomeOption').addEventListener('click', () => setViewMode('home'));
+            document.getElementById('modeAwayOption').addEventListener('click', () => setViewMode('away'));
+            document.getElementById('modeCloseBtn').addEventListener('click', toggleModePopup);
+            document.getElementById('modePopupOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) toggleModePopup();
             });
 
             document.querySelectorAll('.stars-selector .star').forEach(el => {
@@ -5389,13 +5669,9 @@
             document.querySelectorAll('.settings-back').forEach(btn => {
                 btn.onclick = () => {
                     hideSettingsSubpage();
-                    // Afegir a l'historial
                     pushHistory('settings');
                 };
             });
-
-            // Remove the old globalSearchInput listener and use the one in setupSearchClear
-            // But we already have the input listener there
 
             document.getElementById('groupsSearchInput').addEventListener('input', (e) => {
                 renderGroups(e.target.value);
@@ -5496,6 +5772,25 @@
                 saveData();
             };
 
+            document.getElementById('mapStyleLightBtn').onclick = () => {
+                state.mapStyle = 'light';
+                saveData();
+                updateMapTheme();
+                updateAllTexts();
+            };
+            document.getElementById('mapStyleDarkBtn').onclick = () => {
+                state.mapStyle = 'dark';
+                saveData();
+                updateMapTheme();
+                updateAllTexts();
+            };
+            document.getElementById('mapStyleColorBtn').onclick = () => {
+                state.mapStyle = 'color';
+                saveData();
+                updateMapTheme();
+                updateAllTexts();
+            };
+
             document.getElementById('editProfileBtn').onclick = openProfileEditor;
             document.getElementById('profileDataExportBtn').onclick = exportData;
             document.getElementById('profileDataImportBtn').onclick = () => document.getElementById('profileDataImportInput').click();
@@ -5506,31 +5801,6 @@
                 }
             };
             document.getElementById('profileDataClearBtn').onclick = clearAllData;
-
-            document.getElementById('downloadPinBtn').onclick = downloadPinJson;
-            document.getElementById('downloadPinSearch').addEventListener('input', (e) => {
-                renderDownloadPinList(e.target.value);
-            });
-
-            document.getElementById('uploadPinFromTextBtn').onclick = () => {
-                const text = document.getElementById('uploadPinTextarea').value.trim();
-                if (!text) {
-                    showToast('Introdueix un JSON vàlid', true);
-                    return;
-                }
-                uploadPinFromJson(text);
-            };
-            document.getElementById('uploadPinFileBtn').onclick = () => document.getElementById('uploadPinFileInput').click();
-            document.getElementById('uploadPinFileInput').onchange = (e) => {
-                if (e.target.files.length > 0) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        uploadPinFromJson(ev.target.result);
-                    };
-                    reader.readAsText(e.target.files[0]);
-                    e.target.value = '';
-                }
-            };
 
             document.getElementById('reloadAppBtn2').onclick = reloadApp;
 
@@ -5546,8 +5816,7 @@
 
             document.getElementById('gpsStartOption').onclick = (e) => {
                 e.preventDefault();
-                requestGpsLocation();
-                // L'indicador visual s'actualitzarà quan es rebi la ubicació
+                requestGpsLocation(true);
             };
 
             document.querySelectorAll('.lang-option').forEach(btn => {
@@ -5565,27 +5834,21 @@
 
             document.querySelectorAll('.dialog-overlay').forEach(dialog => {
                 dialog.addEventListener('click', (e) => {
-                    // Only close if clicking the overlay itself, not the card
                     if (e.target === dialog) {
-                        // But we don't want to close all dialogs by clicking outside
-                        // Only close specific dialogs that should be closable by clicking outside
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'modePopupOverlay') {
                             dialog.classList.remove('active');
                         }
-                        // For other dialogs, we keep them open
                     }
                 });
             });
 
-            // Inicialitzar l'indicador de la posició del mapa
             updateMapStartIndicator();
 
-            // If user already granted permission, get location automatically (SENSE SPLASH)
             if (navigator.geolocation) {
                 navigator.permissions.query({ name: 'geolocation' }).then((result) => {
                     if (result.state === 'granted') {
-                        requestGpsLocation(false); // NO mostrar splash
+                        requestGpsLocation(false);
                     }
                 }).catch(() => {});
             }
