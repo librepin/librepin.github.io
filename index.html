@@ -43,6 +43,7 @@
             --splash-color: var(--md-primary);
             --map-style: light;
             --map-tiles: light;
+            --sidebar-width: 280px;
         }
 
         [data-theme="dark"] {
@@ -125,14 +126,29 @@
         /* --- TOP BAR --- */
         .top-bar {
             background: var(--md-surface);
-            padding: 12px 16px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border-bottom: 1px solid rgba(128,128,128,0.1);
             flex-shrink: 0;
             z-index: 10;
-            min-height: 60px;
+            min-height: 56px;
+        }
+        .top-bar .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 40px;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+        .top-bar .menu-btn:active {
+            background: rgba(128,128,128,0.15);
+            transform: scale(0.9);
         }
         .top-bar .app-title {
             font-size: 20px;
@@ -144,6 +160,8 @@
             cursor: pointer;
             transition: transform 0.2s ease;
             user-select: none;
+            flex: 1;
+            justify-content: center;
         }
         .top-bar .app-title:hover {
             transform: scale(1.02);
@@ -152,112 +170,52 @@
             transform: scale(0.95);
         }
         .top-bar .app-title i {
-            font-size: 24px;
-        }
-        .top-bar .search-wrapper {
-            flex: 1;
-            position: relative;
-        }
-        .top-bar .search-wrapper input {
-            width: 100%;
-            padding: 10px 16px 10px 40px;
-            border-radius: 40px;
-            border: 1px solid var(--md-outline);
-            background: var(--md-surface-dim);
-            color: var(--md-on-surface);
-            font-size: 15px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .top-bar .search-wrapper input:focus {
-            border-color: var(--md-primary);
-            box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
-        }
-        .top-bar .search-wrapper .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--md-on-surface-variant);
-            font-size: 16px;
-        }
-        .top-bar .search-wrapper .clear-search {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--md-on-surface-variant);
-            cursor: pointer;
-            font-size: 16px;
-            display: none;
-            padding: 4px;
+            font-size: 22px;
         }
         .top-bar .profile-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: var(--md-primary-container);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--md-primary);
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             border: none;
             flex-shrink: 0;
             transition: all 0.3s ease;
+            position: relative;
         }
         .top-bar .profile-icon:active {
             transform: scale(0.9);
         }
         .top-bar .profile-icon img {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
         }
-
-        .top-bar .mode-selector-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--md-primary-container);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--md-primary);
-            font-size: 20px;
-            cursor: pointer;
-            border: none;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .top-bar .mode-selector-btn:active {
-            transform: scale(0.9);
-        }
-        .top-bar .mode-selector-btn .mode-indicator {
+        .top-bar .profile-icon .mode-dot {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
+            bottom: 0px;
+            right: 0px;
             width: 12px;
             height: 12px;
             border-radius: 50%;
             border: 2px solid var(--md-surface);
             transition: all 0.3s ease;
         }
-        .top-bar .mode-selector-btn .mode-indicator.home {
+        .top-bar .profile-icon .mode-dot.home {
             background: #4CAF50;
         }
-        .top-bar .mode-selector-btn .mode-indicator.away {
+        .top-bar .profile-icon .mode-dot.away {
             background: #FF9800;
         }
 
-        /* Mode selector popup - con pointer-events: none mientras se anima */
-        .mode-popup-overlay {
+        /* --- SIDEBAR --- */
+        .sidebar-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -265,101 +223,114 @@
             bottom: 0;
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
+            z-index: 1000;
             visibility: hidden;
             opacity: 0;
             transition: 0.3s ease;
             pointer-events: none;
         }
-        .mode-popup-overlay.active {
+        .sidebar-overlay.active {
             visibility: visible;
             opacity: 1;
             pointer-events: auto;
         }
-        .mode-popup-overlay.animating {
-            pointer-events: none !important;
-        }
-        .mode-popup {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            max-width: 85vw;
             background: var(--md-surface);
-            border-radius: var(--radius-lg);
-            padding: 24px 20px 28px;
-            max-width: 340px;
-            width: 90%;
-            transform: scale(0.9);
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1001;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: var(--md-elevation-3);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            overflow-y: auto;
         }
-        .mode-popup-overlay.active .mode-popup {
-            transform: scale(1);
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
         }
-        .mode-popup h3 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            text-align: center;
+        .sidebar .sidebar-header {
+            padding: 0 20px 12px;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar .sidebar-header .sidebar-logo {
+            font-size: 28px;
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-header .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            padding: 4px;
+        }
+        .sidebar .sidebar-greeting {
+            padding: 16px 20px 10px;
+            font-size: 15px;
+            color: var(--md-on-surface-variant);
+            line-height: 1.5;
+        }
+        .sidebar .sidebar-greeting .greeting-name {
+            font-weight: 600;
             color: var(--md-on-surface);
         }
-        .mode-popup .mode-option {
+        .sidebar .sidebar-greeting .greeting-sub {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        .sidebar .sidebar-item {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 14px 16px;
-            border-radius: var(--radius-md);
-            border: 2px solid var(--md-outline);
-            background: var(--md-surface-dim);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-        .mode-popup .mode-option:active {
-            transform: scale(0.97);
-        }
-        .mode-popup .mode-option.active {
-            border-color: var(--md-primary);
-            background: var(--md-primary-container);
-        }
-        .mode-popup .mode-option .mode-icon {
-            font-size: 28px;
-            width: 44px;
-            text-align: center;
-        }
-        .mode-popup .mode-option .mode-info {
-            flex: 1;
-        }
-        .mode-popup .mode-option .mode-info .mode-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .mode-popup .mode-option .mode-info .mode-desc {
-            font-size: 12px;
-            color: var(--md-on-surface-variant);
-        }
-        .mode-popup .mode-option .mode-check {
-            font-size: 20px;
-            color: var(--md-primary);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-        .mode-popup .mode-option.active .mode-check {
-            opacity: 1;
-        }
-        .mode-popup .mode-close-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius-sm);
+            padding: 12px 20px;
             border: none;
-            background: var(--md-surface-dim);
-            color: var(--md-on-surface);
+            background: none;
+            width: 100%;
+            text-align: left;
             font-size: 15px;
             font-weight: 500;
+            color: var(--md-on-surface);
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 4px;
+            transition: background 0.2s ease;
+            font-family: inherit;
+            border-left: 3px solid transparent;
         }
-        .mode-popup .mode-close-btn:active {
-            transform: scale(0.95);
+        .sidebar .sidebar-item:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.98);
+        }
+        .sidebar .sidebar-item i {
+            font-size: 20px;
+            width: 28px;
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-divider {
+            height: 1px;
+            background: rgba(128,128,128,0.1);
+            margin: 6px 20px;
+        }
+        .sidebar .sidebar-footer {
+            margin-top: auto;
+            padding: 16px 20px;
+            border-top: 1px solid rgba(128,128,128,0.1);
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
         }
 
         /* --- BOTTOM NAV --- */
@@ -367,31 +338,31 @@
             background: var(--md-surface);
             display: flex;
             justify-content: space-around;
-            padding: 8px 8px 16px;
+            padding: 6px 8px 14px;
             border-top: 1px solid rgba(128,128,128,0.12);
             flex-shrink: 0;
             z-index: 30;
-            padding-bottom: max(16px, env(safe-area-inset-bottom));
+            padding-bottom: max(14px, env(safe-area-inset-bottom));
             animation: fadeInUp 0.3s ease;
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
+            gap: 1px;
             background: none;
             border: none;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--md-on-surface-variant);
             cursor: pointer;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 32px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
             flex: 1;
             position: relative;
         }
-        .nav-item i { font-size: 22px; transition: transform 0.3s ease; }
+        .nav-item i { font-size: 20px; transition: transform 0.3s ease; }
         .nav-item.active {
             color: var(--md-primary);
             background: var(--nav-active-bg);
@@ -1056,7 +1027,6 @@
             color: var(--md-on-surface-variant);
             display: block;
         }
-        /* Hacer que toda la fila sea clickeable */
         .checkbox-row {
             cursor: pointer;
         }
@@ -1798,15 +1768,15 @@
         @media (max-width: 500px) {
             .pin-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 14px; }
             .groups-grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 12px; }
-            .top-bar { padding: 10px 14px; min-height: 56px; }
+            .top-bar { padding: 8px 10px; min-height: 50px; }
             .top-bar .app-title { font-size: 17px; }
-            .top-bar .app-title i { font-size: 20px; }
-            .top-bar .profile-icon { width: 34px; height: 34px; font-size: 15px; }
+            .top-bar .app-title i { font-size: 18px; }
+            .top-bar .profile-icon { width: 34px; height: 34px; font-size: 14px; }
             .top-bar .profile-icon img { width: 34px; height: 34px; }
-            .top-bar .mode-selector-btn { width: 34px; height: 34px; font-size: 17px; }
-            .top-bar .mode-selector-btn .mode-indicator { width: 10px; height: 10px; }
-            .nav-item { padding: 4px 10px; font-size: 10px; }
-            .nav-item i { font-size: 20px; }
+            .top-bar .profile-icon .mode-dot { width: 10px; height: 10px; }
+            .top-bar .menu-btn { font-size: 22px; }
+            .nav-item { padding: 4px 8px; font-size: 9px; }
+            .nav-item i { font-size: 18px; }
             .dialog-card { padding: 18px 16px 24px; }
             .detail-name { font-size: 22px; }
             .detail-avatar { width: 68px; height: 68px; }
@@ -1847,6 +1817,9 @@
             .mode-popup { padding: 18px 16px 22px; }
             .mode-popup .mode-option { padding: 10px 12px; }
             .mode-popup .mode-option .mode-icon { font-size: 22px; width: 36px; }
+            .sidebar { width: 260px; }
+            .sidebar .sidebar-item { padding: 12px 16px; font-size: 15px; }
+            .sidebar .sidebar-greeting { font-size: 14px; padding: 14px 16px 8px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -1855,11 +1828,13 @@
             .pin-card img { width: 44px; height: 44px; }
             .data-actions-grid { grid-template-columns: 1fr; }
             .top-bar .app-title { font-size: 15px; }
-            .top-bar .app-title i { font-size: 17px; }
-            .top-bar .search-wrapper input { font-size: 13px; padding: 8px 12px 8px 34px; }
-            .top-bar .search-wrapper .search-icon { font-size: 14px; left: 10px; }
+            .top-bar .app-title i { font-size: 16px; }
+            .top-bar .profile-icon { width: 30px; height: 30px; font-size: 12px; }
+            .top-bar .profile-icon img { width: 30px; height: 30px; }
+            .top-bar .menu-btn { font-size: 20px; }
             .group-card { padding: 12px 10px; }
             .group-card .group-name { font-size: 12px; }
+            .sidebar { width: 220px; }
         }
 
         /* --- ANIMATIONS --- */
@@ -1947,6 +1922,67 @@
                 flex-direction: column;
             }
         }
+
+        /* --- NEARBY PAGE --- */
+        #nearbyPage .nearby-header {
+            padding: 16px 18px 8px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        #nearbyPage .nearby-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        #nearbyPage .nearby-header p {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
+
+        /* --- MODE PAGE --- */
+        #modePage .mode-header {
+            padding: 16px 18px 8px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        #modePage .mode-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        #modePage .mode-header p {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
+        .mode-option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        .mode-option-card:active { transform: scale(0.97); }
+        .mode-option-card.active {
+            border-color: var(--md-primary);
+            background: var(--md-primary-container);
+        }
+        .mode-option-card .mode-icon { font-size: 28px; width: 44px; text-align: center; }
+        .mode-option-card .mode-info { flex: 1; }
+        .mode-option-card .mode-info .mode-name { font-weight: 600; font-size: 16px; }
+        .mode-option-card .mode-info .mode-desc { font-size: 12px; color: var(--md-on-surface-variant); }
+        .mode-option-card .mode-check { font-size: 20px; color: var(--md-primary); opacity: 0; transition: all 0.3s ease; }
+        .mode-option-card.active .mode-check { opacity: 1; }
     </style>
 </head>
 <body>
@@ -1961,42 +1997,35 @@
     <div class="app-container">
         <!-- TOP BAR -->
         <div class="top-bar" id="mainTopBar">
+            <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
             <div class="app-title" id="appTitleClick"><i class="fas fa-map-pin"></i> LibrePin</div>
-            <div class="search-wrapper">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="globalSearchInput" placeholder="">
-                <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
-            </div>
-            <button class="mode-selector-btn" id="modeSelectorBtn" title="Seleccionar mode">
-                <i class="fas fa-building" id="modeIcon"></i>
-                <span class="mode-indicator home" id="modeIndicator"></span>
-            </button>
             <button class="profile-icon" id="profileIconBtn" title="Perfil">
                 <i class="fas fa-user"></i>
+                <span class="mode-dot home" id="profileModeDot"></span>
             </button>
         </div>
 
-        <!-- Mode selector popup -->
-        <div class="mode-popup-overlay" id="modePopupOverlay">
-            <div class="mode-popup">
-                <h3><i class="fas fa-globe" style="color:var(--md-primary);"></i> <span id="modePopupTitle">Mode de visualització</span></h3>
-                <div class="mode-option active" data-mode="home" id="modeHomeOption">
-                    <div class="mode-icon"><i class="fas fa-building"></i></div>
-                    <div class="mode-info">
-                        <div class="mode-name" id="modeHomeName">El meu entorn</div>
-                        <div class="mode-desc" id="modeHomeDesc">Mostra només pins del teu entorn</div>
-                    </div>
-                    <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+        <!-- SIDEBAR -->
+        <div class="sidebar-overlay" id="sidebarOverlay">
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <span class="sidebar-logo"><i class="fas fa-map-pin"></i></span>
+                    <span class="sidebar-title">LibrePin</span>
+                    <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="mode-option" data-mode="away" id="modeAwayOption">
-                    <div class="mode-icon"><i class="fas fa-umbrella-beach"></i></div>
-                    <div class="mode-info">
-                        <div class="mode-name" id="modeAwayName">Fora del meu entorn</div>
-                        <div class="mode-desc" id="modeAwayDesc">Mostra tots els pins, inclosos els de fora</div>
-                    </div>
-                    <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                <div class="sidebar-greeting" id="sidebarGreeting">
+                    <div class="greeting-name" id="greetingName">Bon dia, Usuari</div>
+                    <div class="greeting-sub" id="greetingSub">On anem avui?</div>
                 </div>
-                <button class="mode-close-btn" id="modeCloseBtn"><span id="modeCloseLabel">Tancar</span></button>
+                <div style="padding: 4px 0;">
+                    <button class="sidebar-item" id="sidebarNearby"><i class="fas fa-location-dot"></i> <span id="sidebarNearbyLabel">A prop meu</span></button>
+                    <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
+                    <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Ajustos</span></button>
+                </div>
+                <div class="sidebar-divider"></div>
+                <div class="sidebar-footer">
+                    <span>v1.8</span>
+                </div>
             </div>
         </div>
 
@@ -2018,6 +2047,13 @@
 
             <!-- SEARCH -->
             <div id="searchPage" class="page search-results-page">
+                <div style="padding: 12px 16px; background: var(--md-surface); border-bottom: 1px solid rgba(128,128,128,0.1); position: sticky; top: 0; z-index: 5;">
+                    <div class="search-wrapper" style="position:relative;">
+                        <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--md-on-surface-variant); font-size:16px;"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Buscar pins..." style="width:100%; padding:10px 16px 10px 42px; border-radius:40px; border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:15px; font-family:inherit; outline:none; transition:border-color 0.3s ease;">
+                        <button class="clear-search" id="clearSearchBtn" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; display:none; padding:4px;"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
                 <div id="searchResults" class="pin-grid"></div>
                 <div id="searchEmpty" class="empty-state" style="display:none;">
                     <i class="fas fa-search"></i>
@@ -2036,7 +2072,7 @@
                     </button>
                     <div style="margin-top:10px; position:relative;">
                         <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--md-on-surface-variant); font-size:14px;"></i>
-                        <input type="text" id="groupsSearchInput" placeholder="" style="width:100%; padding:10px 14px 10px 40px; border-radius:40px; border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; font-family:inherit; outline:none; transition:border-color 0.3s ease;">
+                        <input type="text" id="groupsSearchInput" placeholder="Cercar grups..." style="width:100%; padding:10px 14px 10px 40px; border-radius:40px; border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px; font-family:inherit; outline:none; transition:border-color 0.3s ease;">
                     </div>
                 </div>
                 <div class="groups-grid" id="groupsList"></div>
@@ -2058,6 +2094,50 @@
                     <i class="fas fa-heart" style="color:#FFB300;"></i>
                     <h3 id="noFavoritesLabel">No tens preferits</h3>
                     <p id="addFavoriteLabel">Afageix un pin com a preferit des de la seva pàgina</p>
+                </div>
+            </div>
+
+            <!-- NEARBY -->
+            <div id="nearbyPage" class="page">
+                <div class="nearby-header">
+                    <h3><i class="fas fa-location-dot" style="color:var(--md-primary);"></i> <span id="nearbyTitle">A prop meu</span></h3>
+                    <p id="nearbySubtitle">Els 20 pins més propers a la teva ubicació</p>
+                    <button class="fab-btn small secondary" id="nearbyRefreshBtn" style="margin-top:8px; padding:6px 16px; font-size:12px; width:100%;">
+                        <i class="fas fa-sync-alt"></i> <span id="nearbyRefreshLabel">Actualitzar ubicació</span>
+                    </button>
+                </div>
+                <div id="nearbyGrid" class="pin-grid"></div>
+                <div id="nearbyEmpty" class="empty-state" style="display:none;">
+                    <i class="fas fa-location-dot"></i>
+                    <h3 id="nearbyNoPins">No hi ha pins a prop</h3>
+                    <p id="nearbyNoPinsDesc">Esperant ubicació GPS...</p>
+                </div>
+            </div>
+
+            <!-- MODE PAGE -->
+            <div id="modePage" class="page">
+                <div class="mode-header">
+                    <h3><i class="fas fa-eye" style="color:var(--md-primary);"></i> <span id="modePageTitle">Mode de visualització</span></h3>
+                    <p id="modePageSubtitle">Selecciona com vols veure els pins</p>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="mode-option-card active" data-mode="home" id="modeHomeCard">
+                        <div class="mode-icon"><i class="fas fa-building"></i></div>
+                        <div class="mode-info">
+                            <div class="mode-name">El meu entorn</div>
+                            <div class="mode-desc">Mostra només pins del teu entorn</div>
+                        </div>
+                        <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                    </div>
+                    <div class="mode-option-card" data-mode="away" id="modeAwayCard">
+                        <div class="mode-icon"><i class="fas fa-umbrella-beach"></i></div>
+                        <div class="mode-info">
+                            <div class="mode-name">Fora del meu entorn</div>
+                            <div class="mode-desc">Mostra tots els pins, inclosos els de fora</div>
+                        </div>
+                        <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                    </div>
+                    <button class="fab-btn secondary" id="modePageCloseBtn" style="width:100%; margin-top:12px;">Tancar</button>
                 </div>
             </div>
 
@@ -2209,7 +2289,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.7.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.8 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2257,9 +2337,9 @@
         <!-- Bottom Nav -->
         <div class="bottom-nav">
             <button class="nav-item active" data-tab="map" id="navMap"><i class="fas fa-map"></i><span id="navMapLabel">Mapa</span></button>
+            <button class="nav-item" data-tab="search" id="navSearch"><i class="fas fa-search"></i><span id="navSearchLabel">Buscar</span></button>
             <button class="nav-item" data-tab="groups" id="navGroups"><i class="fas fa-layer-group"></i><span id="navGroupsLabel">Grups</span></button>
             <button class="nav-item" data-tab="favorites" id="navFavorites"><i class="fas fa-heart"></i><span id="navFavoritesLabel">Preferits</span></button>
-            <button class="nav-item" data-tab="settings" id="navSettings"><i class="fas fa-sliders-h"></i><span id="navSettingsLabel">Ajustos</span></button>
         </div>
     </div>
 
@@ -2501,7 +2581,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.7.1 Mobile';
+        const APP_VERSION = '1.8 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2510,7 +2590,7 @@
             favorites: [],
             favoritesOrder: [],
             groups: [],
-            lang: 'en',
+            lang: 'ca',
             darkMode: false,
             mapStyle: 'light',
             accentColor: '#7C4DFF',
@@ -2534,7 +2614,7 @@
             editingGroupId: null,
             tempGroupPins: [],
             profile: {
-                name: 'User',
+                name: 'Usuari',
                 avatar: DEFAULT_AVATAR,
                 pronouns: '',
                 subtitle: ''
@@ -2700,7 +2780,24 @@
                 modeAwayDesc: "Mostra tots els pins, inclosos els de fora de la teva ciutat",
                 modeCloseLabel: "Tancar",
                 outsideEnvLabel: "Fora del meu entorn",
-                outsideEnvSub: " "
+                outsideEnvSub: " ",
+                nearbyTitle: "A prop meu",
+                nearbySubtitle: "Els 20 pins més propers a la teva ubicació",
+                nearbyRefresh: "Actualitzar ubicació",
+                nearbyNoPins: "No hi ha pins a prop",
+                nearbyNoPinsDesc: "Esperant ubicació GPS...",
+                modePageTitle: "Mode de visualització",
+                modePageSubtitle: "Selecciona com vols veure els pins",
+                sidebarNearby: "A prop meu",
+                sidebarMode: "Mode de visualització",
+                sidebarSettings: "Ajustos",
+                greetingMorning: "Bon dia",
+                greetingAfternoon: "Bona tarda",
+                greetingEvening: "Bona nit",
+                greetingSub1: "On anem avui?",
+                greetingSub2: "Que tens en ment?",
+                greetingSub3: "Amb gana?",
+                greetingSub4: "On has anat avui?"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2853,7 +2950,24 @@
                 modeAwayDesc: "Muestra todos los pins, incluidos los de fuera de tu ciudad",
                 modeCloseLabel: "Cerrar",
                 outsideEnvLabel: "Fuera de tu entorno",
-                outsideEnvSub: " "
+                outsideEnvSub: " ",
+                nearbyTitle: "Cerca de mí",
+                nearbySubtitle: "Los 20 pins más cercanos a tu ubicación",
+                nearbyRefresh: "Actualizar ubicación",
+                nearbyNoPins: "No hay pins cerca",
+                nearbyNoPinsDesc: "Esperando ubicación GPS...",
+                modePageTitle: "Modo de visualización",
+                modePageSubtitle: "Selecciona cómo quieres ver los pins",
+                sidebarNearby: "Cerca de mí",
+                sidebarMode: "Modo de visualización",
+                sidebarSettings: "Ajustes",
+                greetingMorning: "Buenos días",
+                greetingAfternoon: "Buenas tardes",
+                greetingEvening: "Buenas noches",
+                greetingSub1: "¿Dónde vamos hoy?",
+                greetingSub2: "¿Qué tienes en mente?",
+                greetingSub3: "¿Con hambre?",
+                greetingSub4: "¿Dónde has ido hoy?"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -3006,7 +3120,24 @@
                 modeAwayDesc: "Show all pins, including those outside your city",
                 modeCloseLabel: "Close",
                 outsideEnvLabel: "Outside your environment",
-                outsideEnvSub: " "
+                outsideEnvSub: " ",
+                nearbyTitle: "Near me",
+                nearbySubtitle: "The 20 closest pins to your location",
+                nearbyRefresh: "Refresh location",
+                nearbyNoPins: "No pins nearby",
+                nearbyNoPinsDesc: "Waiting for GPS location...",
+                modePageTitle: "View mode",
+                modePageSubtitle: "Select how you want to see the pins",
+                sidebarNearby: "Near me",
+                sidebarMode: "View mode",
+                sidebarSettings: "Settings",
+                greetingMorning: "Good morning",
+                greetingAfternoon: "Good afternoon",
+                greetingEvening: "Good evening",
+                greetingSub1: "Where are we going today?",
+                greetingSub2: "What do you have in mind?",
+                greetingSub3: "Hungry?",
+                greetingSub4: "Where have you been today?"
             }
         };
 
@@ -3111,6 +3242,7 @@
             renderRecentPins();
             renderProfile();
             updateModeUI();
+            updateSidebarGreeting();
         }
 
         function saveData() {
@@ -3172,6 +3304,12 @@
                     if (data.pinId) {
                         openPinDetail(data.pinId);
                     }
+                    break;
+                case 'nearby':
+                    switchTab('nearby');
+                    break;
+                case 'mode':
+                    switchTab('mode');
                     break;
                 default:
                     switchTab('map');
@@ -3346,21 +3484,17 @@
             }
         }
 
-        // ---------- MODE SELECTOR ----------
+        // ---------- MODE UI ----------
         function updateModeUI() {
-            const icon = document.getElementById('modeIcon');
-            const indicator = document.getElementById('modeIndicator');
-
+            const dot = document.getElementById('profileModeDot');
             if (state.viewMode === 'home') {
-                icon.className = 'fas fa-building';
-                indicator.className = 'mode-indicator home';
-                document.getElementById('modeHomeOption').classList.add('active');
-                document.getElementById('modeAwayOption').classList.remove('active');
+                dot.className = 'mode-dot home';
+                document.getElementById('modeHomeCard').classList.add('active');
+                document.getElementById('modeAwayCard').classList.remove('active');
             } else {
-                icon.className = 'fas fa-umbrella-beach';
-                indicator.className = 'mode-indicator away';
-                document.getElementById('modeAwayOption').classList.add('active');
-                document.getElementById('modeHomeOption').classList.remove('active');
+                dot.className = 'mode-dot away';
+                document.getElementById('modeAwayCard').classList.add('active');
+                document.getElementById('modeHomeCard').classList.remove('active');
             }
 
             renderAllPins();
@@ -3382,27 +3516,13 @@
             return state.pins.filter(p => isPinVisible(p));
         }
 
-        function toggleModePopup() {
-            const overlay = document.getElementById('modePopupOverlay');
-            overlay.classList.add('animating');
-            overlay.classList.toggle('active');
-            updateAllTexts();
-            setTimeout(() => {
-                overlay.classList.remove('animating');
-            }, 350);
-        }
-
         function setViewMode(mode) {
-            if (mode === state.viewMode) {
-                toggleModePopup();
-                return;
-            }
             state.viewMode = mode;
             saveData();
             updateModeUI();
             updateAllTexts();
-            toggleModePopup();
             showToast(state.viewMode === 'home' ? t('modeHomeName') : t('modeAwayName'));
+            switchTab('map');
         }
 
         // ---------- PINS ----------
@@ -4466,20 +4586,16 @@
             const empty = document.getElementById('searchEmpty');
 
             const trimmedFilter = filter.trim();
-            if (trimmedFilter.length < 2) {
-                container.innerHTML = '';
-                empty.style.display = 'block';
-                document.getElementById('noPinsLabel').innerText = '' + (state.lang === 'ca' ? 'Introdueix almenys 2 caràcters' : state.lang === 'es' ? 'Introduce al menos 2 caracteres' : 'Enter at least 2 characters');
-                document.getElementById('addFirstPinLabel').innerText = '';
-                return;
-            }
-
             const f = trimmedFilter.toLowerCase();
             const visiblePins = getVisiblePins();
-            let filtered = visiblePins.filter(p =>
-                p.name.toLowerCase().includes(f) ||
-                (p.subtitle && p.subtitle.toLowerCase().includes(f))
-            );
+
+            let filtered = visiblePins;
+            if (f) {
+                filtered = visiblePins.filter(p =>
+                    p.name.toLowerCase().includes(f) ||
+                    (p.subtitle && p.subtitle.toLowerCase().includes(f))
+                );
+            }
 
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
@@ -4492,11 +4608,17 @@
             const end = Math.min(state.searchLimit, totalResults);
             const hasMore = end < totalResults;
 
-            if (totalResults === 0) {
+            if (totalResults === 0 && f) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
-                document.getElementById('noPinsLabel').innerText = visiblePins.length === 0 ? t('noPins') : t('noResults');
-                document.getElementById('addFirstPinLabel').innerText = visiblePins.length === 0 ? t('addFirstPin') : '';
+                document.getElementById('noPinsLabel').innerText = t('noResults');
+                document.getElementById('addFirstPinLabel').innerText = '';
+                return;
+            } else if (totalResults === 0 && !f) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('noPinsLabel').innerText = t('noPins');
+                document.getElementById('addFirstPinLabel').innerText = t('addFirstPin');
                 return;
             }
             empty.style.display = 'none';
@@ -4576,7 +4698,6 @@
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
 
-            // 🔥 CORRECCIÓN: Cargar la valoración existente del pin
             selectedRating = pinData?.rating || 0;
             updateStarsUI();
 
@@ -5121,7 +5242,7 @@
                 state.darkMode = false;
                 state.mapStyle = 'light';
                 state.viewMode = 'home';
-                state.lang = 'en';
+                state.lang = 'ca';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
                 state.profile = { name: 'Usuari', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
@@ -5155,9 +5276,9 @@
 
             const iconEl = document.getElementById('profileIconBtn');
             if (p.avatar && p.avatar !== DEFAULT_AVATAR) {
-                iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil">`;
+                iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
             } else {
-                iconEl.innerHTML = `<i class="fas fa-user"></i>`;
+                iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
             }
         }
 
@@ -5206,9 +5327,25 @@
                 renderProfile();
                 dialog.remove();
                 showToast(t('profileSaved'));
+                updateSidebarGreeting();
             };
 
             dialog.onclick = (e) => { if (e.target === dialog) dialog.remove(); };
+        }
+
+        // ---------- SIDEBAR GREETING ----------
+        function updateSidebarGreeting() {
+            const name = state.profile.name || 'Usuari';
+            const hour = new Date().getHours();
+            let greeting = '';
+            if (hour < 12) greeting = t('greetingMorning');
+            else if (hour < 19) greeting = t('greetingAfternoon');
+            else greeting = t('greetingEvening');
+
+            document.getElementById('greetingName').innerText = `${greeting}, ${name}`;
+
+            const subs = [t('greetingSub1'), t('greetingSub2'), t('greetingSub3'), t('greetingSub4')];
+            document.getElementById('greetingSub').innerText = subs[Math.floor(Math.random() * subs.length)];
         }
 
         // ---------- SETTINGS NAVIGATION ----------
@@ -5262,9 +5399,9 @@
             document.getElementById('settingsMainTitle').innerText = t('settingsTitle');
 
             document.getElementById('navMapLabel').innerText = t('map');
+            document.getElementById('navSearchLabel').innerText = t('search');
             document.getElementById('navGroupsLabel').innerText = t('groups');
             document.getElementById('navFavoritesLabel').innerText = t('favorites');
-            document.getElementById('navSettingsLabel').innerText = t('settings');
 
             document.getElementById('favoritesTitle').innerText = t('favoritesTitle');
             document.getElementById('favoritesSortLabel').innerText = t('favoritesSort');
@@ -5387,14 +5524,27 @@
 
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
 
-            document.getElementById('modePopupTitle').innerText = t('modePopupTitle');
-            document.getElementById('modeHomeName').innerText = t('modeHomeName');
-            document.getElementById('modeHomeDesc').innerText = t('modeHomeDesc');
-            document.getElementById('modeAwayName').innerText = t('modeAwayName');
-            document.getElementById('modeAwayDesc').innerText = t('modeAwayDesc');
-            document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
             document.getElementById('outsideEnvMain').innerText = t('outsideEnvLabel');
             document.getElementById('outsideEnvSub').innerText = t('outsideEnvSub');
+
+            document.getElementById('nearbyTitle').innerText = t('nearbyTitle');
+            document.getElementById('nearbySubtitle').innerText = t('nearbySubtitle');
+            document.getElementById('nearbyRefreshLabel').innerText = t('nearbyRefresh');
+            document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
+            document.getElementById('nearbyNoPinsDesc').innerText = t('nearbyNoPinsDesc');
+
+            document.getElementById('modePageTitle').innerText = t('modePageTitle');
+            document.getElementById('modePageSubtitle').innerText = t('modePageSubtitle');
+            document.querySelector('#modeHomeCard .mode-name').innerText = t('modeHomeName');
+            document.querySelector('#modeHomeCard .mode-desc').innerText = t('modeHomeDesc');
+            document.querySelector('#modeAwayCard .mode-name').innerText = t('modeAwayName');
+            document.querySelector('#modeAwayCard .mode-desc').innerText = t('modeAwayDesc');
+
+            document.getElementById('sidebarNearbyLabel').innerText = t('sidebarNearby');
+            document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
+            document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
+
+            updateSidebarGreeting();
 
             const aboutCard = document.querySelector('#settingsAbout .card');
             if (aboutCard) {
@@ -5441,21 +5591,31 @@
         function switchTab(tabId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.settings-subpage').forEach(p => p.classList.remove('active'));
-            document.getElementById(tabId + 'Page').classList.add('active');
-            const pageEl = document.getElementById(tabId + 'Page');
-            if (pageEl) pageEl.scrollTop = 0;
+            const targetPage = document.getElementById(tabId + 'Page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+                targetPage.scrollTop = 0;
+            }
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector(`.nav-item[data-tab="${tabId}"]`)?.classList.add('active');
             if (tabId === 'map' && state.map) setTimeout(() => state.map.invalidateSize(), 200);
             if (tabId === 'search') {
                 state.searchLimit = 25;
                 renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
+                setTimeout(() => {
+                    const input = document.getElementById('globalSearchInput');
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                }, 300);
             }
             if (tabId === 'groups') {
                 renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             }
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'settings') hideSettingsSubpage();
+            if (tabId === 'nearby') renderNearbyPins();
 
             pushHistory(tabId);
         }
@@ -5511,6 +5671,7 @@
                             });
                             state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
+                        renderNearbyPins();
                     },
                     (error) => {
                         console.warn('GPS error:', error);
@@ -5597,6 +5758,7 @@
                             splash.className = '';
                         }, 500);
                         state.gpsSplashResolve && state.gpsSplashResolve('success');
+                        renderNearbyPins();
                     }
                 },
                 (error) => {
@@ -5621,10 +5783,82 @@
             );
         }
 
-        // ---------- RECENTER MAP (siempre actualiza GPS) ----------
+        // ---------- NEARBY ----------
+        function getNearbyPins() {
+            if (!state.userLocation) return [];
+            const [userLat, userLng] = state.userLocation;
+            const visible = getVisiblePins();
+            const withDistance = visible.map(p => {
+                const d = Math.sqrt(Math.pow(p.lat - userLat, 2) + Math.pow(p.lng - userLng, 2));
+                return { ...p, distance: d };
+            });
+            withDistance.sort((a, b) => a.distance - b.distance);
+            return withDistance.slice(0, 20);
+        }
+
+        function renderNearbyPins() {
+            const container = document.getElementById('nearbyGrid');
+            const empty = document.getElementById('nearbyEmpty');
+            const nearby = getNearbyPins();
+
+            if (!state.userLocation) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
+                document.getElementById('nearbyNoPinsDesc').innerText = t('nearbyNoPinsDesc');
+                return;
+            }
+
+            if (nearby.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
+                document.getElementById('nearbyNoPinsDesc').innerText = '';
+                return;
+            }
+            empty.style.display = 'none';
+
+            container.innerHTML = nearby.map(pin => {
+                const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
+                const isFav = isFavorite(pin.id);
+                const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
+                const distance = pin.distance ? (pin.distance * 111).toFixed(1) : '?';
+                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
+                return `
+                <div class="pin-card" data-id="${pin.id}">
+                    ${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}
+                    <img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'">
+                    <div class="pin-name">${escapeHtml(pin.name)}</div>
+                    ${subtitle}
+                    ${stars ? `<div class="pin-stars">${stars}</div>` : ''}
+                    <div style="font-size:11px; color:var(--md-on-surface-variant);">${distance} km</div>
+                    ${outsideBadge}
+                    ${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => {
+                        const svc = state.services.find(s => s.id === sid);
+                        return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : '';
+                    }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}
+                </div>
+            `}).join('');
+
+            container.querySelectorAll('.pin-card').forEach(el => {
+                el.onclick = () => {
+                    const id = el.dataset.id;
+                    openPinDetail(id);
+                };
+            });
+        }
+
+        // ---------- RECENTER MAP ----------
         function recenterMap() {
             if (!state.map) return;
             requestGpsLocation(true);
+        }
+
+        // ---------- SIDEBAR ----------
+        function toggleSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
         }
 
         // ---------- SEARCH CLEAR BUTTON ----------
@@ -5643,15 +5877,13 @@
                 state.searchLimit = 25;
                 const val = input.value;
                 renderSearchResults(val);
-                if (val.trim().length >= 2) {
-                    switchTab('search');
-                }
             });
 
             clearBtn.addEventListener('click', () => {
                 input.value = '';
                 clearBtn.style.display = 'none';
                 renderSearchResults('');
+                input.focus();
             });
         }
 
@@ -5684,13 +5916,11 @@
 
         // ---------- INIT ----------
         function init() {
-            // VERIFICAR SI DEBE MOSTRAR EL OVERLAY DE RECARGA (se ejecuta ANTES que cualquier otra cosa)
+            // VERIFICAR SI DEBE MOSTRAR EL OVERLAY DE RECARGA
             if (localStorage.getItem('librepin_show_reload_overlay') === 'true') {
-                // Cargar idioma guardado en localStorage
                 const savedLang = localStorage.getItem('librepin_lang') || 'ca';
                 const lang = savedLang;
 
-                // Crear un overlay que bloquee completamente la interacción
                 const overlay = document.createElement('div');
                 overlay.id = 'reloadBlockOverlay';
                 overlay.style.cssText = `
@@ -5719,7 +5949,6 @@
                     pointer-events: auto;
                 `;
 
-                // Textos según idioma
                 const texts = {
                     ca: {
                         title: 'Recàrrega necessària',
@@ -5737,7 +5966,6 @@
 
                 const t = texts[lang] || texts.en;
 
-                // Contenido del overlay
                 overlay.innerHTML = `
                     <div style="font-size: 72px; margin-bottom: 20px; animation: splashPulse 1.5s ease-in-out infinite;">
                         <i class="fas fa-sync-alt fa-spin"></i>
@@ -5756,14 +5984,12 @@
 
                 document.body.appendChild(overlay);
 
-                // BLOQUEAR TODOS LOS EVENTOS DE CLIC Y TOUCH EN TODA LA PÁGINA
                 const blockEvents = (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
                 };
 
-                // Bloquear eventos en el overlay
                 overlay.addEventListener('click', blockEvents, true);
                 overlay.addEventListener('touchstart', blockEvents, true);
                 overlay.addEventListener('touchmove', blockEvents, true);
@@ -5774,7 +6000,6 @@
                 overlay.addEventListener('wheel', blockEvents, true);
                 overlay.addEventListener('scroll', blockEvents, true);
 
-                // También bloquear eventos en el documento mientras el overlay esté presente
                 document.addEventListener('click', blockEvents, true);
                 document.addEventListener('touchstart', blockEvents, true);
                 document.addEventListener('touchmove', blockEvents, true);
@@ -5785,17 +6010,13 @@
                 document.addEventListener('wheel', blockEvents, true);
                 document.addEventListener('scroll', blockEvents, true);
 
-                // Bloquear scroll
                 document.body.style.overflow = 'hidden';
                 document.body.style.position = 'fixed';
                 document.body.style.width = '100%';
                 document.body.style.height = '100%';
                 document.documentElement.style.overflow = 'hidden';
 
-                // Eliminar la bandera para que no se muestre de nuevo en futuras recargas
                 localStorage.removeItem('librepin_show_reload_overlay');
-
-                // NO continuamos con la inicialización, la app queda bloqueada
                 return;
             }
 
@@ -5819,7 +6040,7 @@
                 pushHistory('map');
             } else {
                 const hash = window.location.hash.slice(1);
-                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail'];
+                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail', 'nearby', 'mode'];
                 if (knownPages.includes(hash)) {
                     const parts = hash.split('?');
                     const page = parts[0];
@@ -5837,48 +6058,44 @@
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
+            // ---- SIDEBAR ----
+            document.getElementById('menuBtn').addEventListener('click', toggleSidebar);
+            document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
+            document.getElementById('sidebarOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) toggleSidebar();
+            });
+
+            document.getElementById('sidebarNearby').addEventListener('click', () => {
+                toggleSidebar();
+                switchTab('nearby');
+                if (state.userLocation) {
+                    renderNearbyPins();
+                } else {
+                    requestGpsLocation(true);
+                }
+            });
+
+            document.getElementById('sidebarMode').addEventListener('click', () => {
+                toggleSidebar();
+                switchTab('mode');
+            });
+
+            document.getElementById('sidebarSettings').addEventListener('click', () => {
+                toggleSidebar();
+                switchTab('settings');
+            });
+
+            // ---- MODE PAGE ----
+            document.getElementById('modeHomeCard').addEventListener('click', () => setViewMode('home'));
+            document.getElementById('modeAwayCard').addEventListener('click', () => setViewMode('away'));
+            document.getElementById('modePageCloseBtn').addEventListener('click', () => switchTab('map'));
+
+            // ---- RECENTER ----
             document.getElementById('recenterMapBtn').addEventListener('click', recenterMap);
 
             document.getElementById('appTitleClick').addEventListener('click', () => {
                 switchTab('map');
             });
-
-            document.getElementById('modeSelectorBtn').addEventListener('click', toggleModePopup);
-            document.getElementById('modeHomeOption').addEventListener('click', () => setViewMode('home'));
-            document.getElementById('modeAwayOption').addEventListener('click', () => setViewMode('away'));
-            document.getElementById('modeCloseBtn').addEventListener('click', toggleModePopup);
-            document.getElementById('modePopupOverlay').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) toggleModePopup();
-            });
-
-            document.querySelectorAll('.stars-selector .star').forEach(el => {
-                el.onclick = () => {
-                    const val = parseInt(el.dataset.value);
-                    if (selectedRating === val) {
-                        selectedRating = 0;
-                    } else {
-                        selectedRating = val;
-                    }
-                    updateStarsUI();
-                };
-                el.onmouseenter = () => {
-                    const val = parseInt(el.dataset.value);
-                    document.querySelectorAll('.stars-selector .star').forEach(s => {
-                        s.style.color = parseInt(s.dataset.value) <= val ? '#FFB300' : '#ddd';
-                    });
-                };
-                el.onmouseleave = () => {
-                    document.querySelectorAll('.stars-selector .star').forEach(s => {
-                        s.style.color = parseInt(s.dataset.value) <= selectedRating ? '#FFB300' : '#ddd';
-                    });
-                };
-            });
-
-            document.getElementById('clearStarsBtn').onclick = (e) => {
-                e.stopPropagation();
-                selectedRating = 0;
-                updateStarsUI();
-            };
 
             document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
                 btn.onclick = () => switchTab(btn.dataset.tab);
@@ -6043,7 +6260,6 @@
             document.querySelectorAll('.lang-option').forEach(btn => {
                 btn.onclick = () => {
                     state.lang = btn.dataset.lang;
-                    // Guardar el idioma en localStorage para que el overlay lo use
                     localStorage.setItem('librepin_lang', state.lang);
                     saveData();
                     localStorage.setItem('librepin_show_reload_overlay', 'true');
@@ -6060,11 +6276,16 @@
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'modePopupOverlay') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog') {
                             dialog.classList.remove('active');
                         }
                     }
                 });
+            });
+
+            document.getElementById('nearbyRefreshBtn').addEventListener('click', () => {
+                requestGpsLocation(true);
+                setTimeout(renderNearbyPins, 500);
             });
 
             updateMapStartIndicator();
