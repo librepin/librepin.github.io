@@ -2209,7 +2209,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.7 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.7.1 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2501,7 +2501,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.7 Mobile';
+        const APP_VERSION = '1.7.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -4576,7 +4576,8 @@
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
 
-            selectedRating = 0;
+            // 🔥 CORRECCIÓN: Cargar la valoración existente del pin
+            selectedRating = pinData?.rating || 0;
             updateStarsUI();
 
             state.tempRelatedPins = pinData?.relatedPins || [];
@@ -5685,39 +5686,117 @@
         function init() {
             // VERIFICAR SI DEBE MOSTRAR EL OVERLAY DE RECARGA (se ejecuta ANTES que cualquier otra cosa)
             if (localStorage.getItem('librepin_show_reload_overlay') === 'true') {
-                // Mostrar overlay incerrable
+                // Cargar idioma guardado en localStorage
+                const savedLang = localStorage.getItem('librepin_lang') || 'ca';
+                const lang = savedLang;
+
+                // Crear un overlay que bloquee completamente la interacción
                 const overlay = document.createElement('div');
-                overlay.className = 'reload-overlay';
-                const msg = state.lang === 'ca' ? 'Si us plau, tanca i torna a obrir l\'aplicació per aplicar els canvis.' :
-                            state.lang === 'es' ? 'Por favor, cierra y vuelve a abrir la aplicación para aplicar los cambios.' :
-                            'Please close and reopen the app to apply changes.';
-                overlay.innerHTML = `
-                    <div class="icon"><i class="fas fa-sync-alt fa-spin"></i></div>
-                    <h2>${state.lang === 'ca' ? 'Recàrrega necessària' : state.lang === 'es' ? 'Recarga necesaria' : 'Reload required'}</h2>
-                    <p>${msg}</p>
-                `;
-                document.body.appendChild(overlay);
+                overlay.id = 'reloadBlockOverlay';
                 overlay.style.cssText = `
                     position: fixed;
                     top: 0;
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    background: rgba(0,0,0,0.85);
-                    backdrop-filter: blur(10px);
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0,0,0,0.92);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    z-index: 999999;
+                    z-index: 9999999;
                     flex-direction: column;
                     color: white;
                     text-align: center;
-                    padding: 20px;
-                    pointer-events: none;
+                    padding: 30px;
+                    cursor: default;
+                    user-select: none;
+                    -webkit-user-select: none;
+                    touch-action: none;
+                    pointer-events: auto;
                 `;
-                // Eliminamos la bandera para que no se muestre de nuevo en futuras recargas
+
+                // Textos según idioma
+                const texts = {
+                    ca: {
+                        title: 'Recàrrega necessària',
+                        message: 'Si us plau, tanca i torna a obrir l\'aplicació per aplicar els canvis.'
+                    },
+                    es: {
+                        title: 'Recarga necesaria',
+                        message: 'Por favor, cierra y vuelve a abrir la aplicación para aplicar los cambios.'
+                    },
+                    en: {
+                        title: 'Reload required',
+                        message: 'Please close and reopen the app to apply changes.'
+                    }
+                };
+
+                const t = texts[lang] || texts.en;
+
+                // Contenido del overlay
+                overlay.innerHTML = `
+                    <div style="font-size: 72px; margin-bottom: 20px; animation: splashPulse 1.5s ease-in-out infinite;">
+                        <i class="fas fa-sync-alt fa-spin"></i>
+                    </div>
+                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 12px; color: white;">
+                        ${t.title}
+                    </h2>
+                    <p style="font-size: 18px; opacity: 0.9; max-width: 400px; line-height: 1.5; color: rgba(255,255,255,0.9);">
+                        ${t.message}
+                    </p>
+                    <div style="margin-top: 30px; font-size: 14px; opacity: 0.5; color: rgba(255,255,255,0.5);">
+                        <i class="fas fa-info-circle"></i>
+                        v${APP_VERSION}
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+
+                // BLOQUEAR TODOS LOS EVENTOS DE CLIC Y TOUCH EN TODA LA PÁGINA
+                const blockEvents = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
+
+                // Bloquear eventos en el overlay
+                overlay.addEventListener('click', blockEvents, true);
+                overlay.addEventListener('touchstart', blockEvents, true);
+                overlay.addEventListener('touchmove', blockEvents, true);
+                overlay.addEventListener('touchend', blockEvents, true);
+                overlay.addEventListener('mousedown', blockEvents, true);
+                overlay.addEventListener('mouseup', blockEvents, true);
+                overlay.addEventListener('contextmenu', blockEvents, true);
+                overlay.addEventListener('wheel', blockEvents, true);
+                overlay.addEventListener('scroll', blockEvents, true);
+
+                // También bloquear eventos en el documento mientras el overlay esté presente
+                document.addEventListener('click', blockEvents, true);
+                document.addEventListener('touchstart', blockEvents, true);
+                document.addEventListener('touchmove', blockEvents, true);
+                document.addEventListener('touchend', blockEvents, true);
+                document.addEventListener('mousedown', blockEvents, true);
+                document.addEventListener('mouseup', blockEvents, true);
+                document.addEventListener('contextmenu', blockEvents, true);
+                document.addEventListener('wheel', blockEvents, true);
+                document.addEventListener('scroll', blockEvents, true);
+
+                // Bloquear scroll
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+                document.body.style.height = '100%';
+                document.documentElement.style.overflow = 'hidden';
+
+                // Eliminar la bandera para que no se muestre de nuevo en futuras recargas
                 localStorage.removeItem('librepin_show_reload_overlay');
-                // Continuamos con la inicialización normal pero el overlay bloquea la interacción
+
+                // NO continuamos con la inicialización, la app queda bloqueada
+                return;
             }
 
             // Cargar idioma del navegador si no hay uno guardado
@@ -5964,6 +6043,8 @@
             document.querySelectorAll('.lang-option').forEach(btn => {
                 btn.onclick = () => {
                     state.lang = btn.dataset.lang;
+                    // Guardar el idioma en localStorage para que el overlay lo use
+                    localStorage.setItem('librepin_lang', state.lang);
                     saveData();
                     localStorage.setItem('librepin_show_reload_overlay', 'true');
                     window.location.reload();
