@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>LibrePin</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/bV3drrr.png">
-    <!-- Favicon -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -123,7 +122,7 @@
             50% { transform: scale(1.08); }
         }
 
-        /* --- TOP BAR (amb cerca) --- */
+        /* --- TOP BAR --- */
         .top-bar {
             background: var(--md-surface);
             padding: 12px 16px;
@@ -221,7 +220,6 @@
             object-fit: cover;
         }
 
-        /* Mode selector button */
         .top-bar .mode-selector-btn {
             width: 40px;
             height: 40px;
@@ -258,7 +256,7 @@
             background: #FF9800;
         }
 
-        /* Mode selector popup */
+        /* Mode selector popup - con pointer-events: none mientras se anima */
         .mode-popup-overlay {
             position: fixed;
             top: 0;
@@ -274,10 +272,15 @@
             visibility: hidden;
             opacity: 0;
             transition: 0.3s ease;
+            pointer-events: none;
         }
         .mode-popup-overlay.active {
             visibility: visible;
             opacity: 1;
+            pointer-events: auto;
+        }
+        .mode-popup-overlay.animating {
+            pointer-events: none !important;
         }
         .mode-popup {
             background: var(--md-surface);
@@ -542,7 +545,7 @@
         .fab-btn.glow:active { transform: scale(0.95); }
         .fab-btn.glow:hover { box-shadow: 0 6px 20px rgba(124,77,255,0.4); }
 
-        /* --- CERCA (pàgina de resultats) --- */
+        /* --- SEARCH --- */
         .search-results-page {
             padding-top: 0;
         }
@@ -599,7 +602,7 @@
             object-fit: cover;
         }
 
-        /* --- GRUPS (nova pestanya) --- */
+        /* --- GROUPS --- */
         #groupsPage .groups-header {
             padding: 16px 18px 8px;
             background: var(--md-surface);
@@ -669,7 +672,7 @@
             margin-top: 4px;
         }
 
-        /* --- RECENTS (settings) --- */
+        /* --- RECENTS --- */
         #recentPage {
             display: none !important;
         }
@@ -1001,7 +1004,7 @@
         }
         .dialog-card textarea { border-radius: var(--radius-sm); min-height: 60px; resize: vertical; }
 
-        /* --- CHECKBOXES MODERNITZATS --- */
+        /* --- CHECKBOXES --- */
         .checkbox-row {
             display: flex;
             align-items: center;
@@ -1052,6 +1055,13 @@
             font-size: 12px;
             color: var(--md-on-surface-variant);
             display: block;
+        }
+        /* Hacer que toda la fila sea clickeable */
+        .checkbox-row {
+            cursor: pointer;
+        }
+        .checkbox-row .checkbox-label {
+            cursor: pointer;
         }
 
         @keyframes checkboxPop {
@@ -1267,6 +1277,83 @@
         }
         .toast i { color: var(--md-primary); font-size: 20px; }
         .toast span { font-size: 15px; }
+
+        /* --- SPLASH DE PIN CREADO --- */
+        .pin-created-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            animation: fadeIn 0.4s ease;
+        }
+        .pin-created-splash .content {
+            background: var(--md-surface);
+            border-radius: var(--radius-lg);
+            padding: 40px 50px;
+            text-align: center;
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--md-elevation-3);
+        }
+        .pin-created-splash .content .check-icon {
+            font-size: 72px;
+            color: #4CAF50;
+            margin-bottom: 12px;
+            animation: splashPulse 1s ease-in-out infinite;
+        }
+        .pin-created-splash .content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--md-on-surface);
+        }
+        .pin-created-splash .content p {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- RELOAD FORZADO --- */
+        .reload-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .reload-overlay .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            color: #FFB300;
+        }
+        .reload-overlay h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .reload-overlay p {
+            font-size: 16px;
+            opacity: 0.8;
+            max-width: 400px;
+        }
 
         .empty-state {
             text-align: center;
@@ -1798,45 +1885,35 @@
             pointer-events: none !important;
             user-select: none !important;
         }
-        /* Splash d'ubicació - transicions suaus */
         #splashScreen {
             transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease;
             transform: scale(1);
         }
-
         #splashScreen.splash-hide {
             opacity: 0;
             visibility: hidden;
             transform: scale(0.95);
             pointer-events: none;
         }
-
         #splashScreen.splash-show {
             opacity: 1;
             visibility: visible;
             transform: scale(1);
             pointer-events: auto;
         }
-
-        /* Animació d'entrada dels elements del splash */
         #splashScreen .splash-icon {
             animation: splashPulse 1.5s ease-in-out infinite;
             transition: transform 0.3s ease;
         }
-
         #splashScreen .splash-title {
             animation: fadeInUp 0.6s ease 0.2s both;
         }
-
         #splashScreen .splash-sub {
             animation: fadeInUp 0.6s ease 0.4s both;
         }
-
         #splashScreen .splash-cancel-btn {
             animation: fadeInUp 0.6s ease 0.6s both;
         }
-
-        /* Nova animació fadeInUp si no existeix */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -1847,15 +1924,28 @@
                 transform: translateY(0);
             }
         }
-
-        /* Animació de rotació pel crosshair */
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
         .fa-crosshairs.fa-spin {
             animation: spin 1.5s linear infinite;
+        }
+
+        /* Estilo para el selector de idioma vertical */
+        #settingsLanguage .card .lang-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        #settingsLanguage .card .lang-options .lang-option {
+            width: 100%;
+            justify-content: center;
+        }
+        @media (min-width: 500px) {
+            #settingsLanguage .card .lang-options {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -1877,7 +1967,6 @@
                 <input type="text" id="globalSearchInput" placeholder="">
                 <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
             </div>
-            <!-- Mode selector button -->
             <button class="mode-selector-btn" id="modeSelectorBtn" title="Seleccionar mode">
                 <i class="fas fa-building" id="modeIcon"></i>
                 <span class="mode-indicator home" id="modeIndicator"></span>
@@ -1917,7 +2006,6 @@
             <div id="mapPage" class="page active">
                 <div class="map-container">
                     <div id="mainMap"></div>
-                    <!-- Restart position -->
                     <button class="recenter-btn" id="recenterMapBtn" title="Go to my location">
                         <i class="fas fa-crosshairs"></i>
                     </button>
@@ -1928,7 +2016,7 @@
                 </div>
             </div>
 
-            <!-- SEARCH (results) -->
+            <!-- SEARCH -->
             <div id="searchPage" class="page search-results-page">
                 <div id="searchResults" class="pin-grid"></div>
                 <div id="searchEmpty" class="empty-state" style="display:none;">
@@ -2062,10 +2150,10 @@
                     <h3 id="langTitle">Idioma</h3>
                 </div>
                 <div class="card">
-                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <button class="fab-btn secondary lang-option" data-lang="ca" style="flex:1; min-width:60px; font-size:15px; padding:12px;">Català</button>
-                        <button class="fab-btn secondary lang-option" data-lang="es" style="flex:1; min-width:60px; font-size:15px; padding:12px;">Español</button>
-                        <button class="fab-btn secondary lang-option" data-lang="en" style="flex:1; min-width:60px; font-size:15px; padding:12px;">English</button>
+                    <div class="lang-options" style="display:flex; flex-direction:column; gap:8px;">
+                        <button class="fab-btn secondary lang-option" data-lang="ca" style="width:100%; font-size:15px; padding:12px; justify-content:center;">Català</button>
+                        <button class="fab-btn secondary lang-option" data-lang="es" style="width:100%; font-size:15px; padding:12px; justify-content:center;">Español</button>
+                        <button class="fab-btn secondary lang-option" data-lang="en" style="width:100%; font-size:15px; padding:12px; justify-content:center;">English</button>
                     </div>
                 </div>
             </div>
@@ -2086,7 +2174,7 @@
                 </div>
             </div>
 
-            <!-- RECENTS (dins de settings) -->
+            <!-- RECENTS -->
             <div id="settingsRecent" class="settings-subpage">
                 <div class="sub-header">
                     <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
@@ -2121,7 +2209,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.2</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.7 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2220,13 +2308,13 @@
             </div>
             <button id="addCustomBtnRow" class="fab-btn secondary small" style="padding:8px 16px; font-size:13px; margin:6px 0 8px; width:auto;"><i class="fas fa-plus"></i> <span id="addBtnLabel">Afegir botó</span></button>
 
-            <div class="checkbox-row">
+            <div class="checkbox-row" onclick="toggleCheckbox('isTransportStop')">
                 <input type="checkbox" id="isTransportStop">
                 <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
                 <label for="isTransportStop" id="transportLabel" style="margin:0; font-size:15px; cursor:pointer;">És una parada de transport públic</label>
             </div>
 
-            <div class="checkbox-row">
+            <div class="checkbox-row" onclick="toggleCheckbox('isOutsideEnvironment')">
                 <input type="checkbox" id="isOutsideEnvironment">
                 <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
                 <label for="isOutsideEnvironment" id="outsideEnvLabel" style="margin:0; font-size:15px; cursor:pointer;">
@@ -2369,7 +2457,6 @@
                     <p id="groupDetailDesc" style="font-size:13px; color:var(--md-on-surface-variant); margin:0;">Descripció</p>
                 </div>
             </div>
-            <!-- Acció buttons sota la descripció, abans dels pins -->
             <div style="display:flex; gap:6px; margin:8px 0 12px;">
                 <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0;"><i class="fas fa-edit"></i></button>
                 <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0; color:#E30613;"><i class="fas fa-trash"></i></button>
@@ -2414,7 +2501,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.6 Mobile';
+        const APP_VERSION = '1.7 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2425,9 +2512,9 @@
             groups: [],
             lang: 'en',
             darkMode: false,
-            mapStyle: 'light', // 'light', 'dark', 'color'
+            mapStyle: 'light',
             accentColor: '#7C4DFF',
-            viewMode: 'home', // 'home' or 'away'
+            viewMode: 'home',
             map: null,
             markerCluster: null,
             markers: {},
@@ -2610,10 +2697,10 @@
                 modeHomeName: "El meu entorn",
                 modeHomeDesc: "Mostra només pins del teu entorn",
                 modeAwayName: "Fora del meu entorn",
-                modeAwayDesc: "Mostra tots els pins, inclosos els de fora de la teva ciutat.",
+                modeAwayDesc: "Mostra tots els pins, inclosos els de fora de la teva ciutat",
                 modeCloseLabel: "Tancar",
                 outsideEnvLabel: "Fora del meu entorn",
-                outsideEnvSub: "­"
+                outsideEnvSub: " "
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2763,10 +2850,10 @@
                 modeHomeName: "Mi entorno",
                 modeHomeDesc: "Muestra solo pins de tu entorno",
                 modeAwayName: "Fuera de mi entorno",
-                modeAwayDesc: "Muestra todos los pins, incluidos los de fuera de tu ciudad.",
+                modeAwayDesc: "Muestra todos los pins, incluidos los de fuera de tu ciudad",
                 modeCloseLabel: "Cerrar",
                 outsideEnvLabel: "Fuera de tu entorno",
-                outsideEnvSub: "­"
+                outsideEnvSub: " "
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2916,14 +3003,23 @@
                 modeHomeName: "My environment",
                 modeHomeDesc: "Show only pins from your environment",
                 modeAwayName: "Outside my environment",
-                modeAwayDesc: "Show all pins, including those outside your city.",
+                modeAwayDesc: "Show all pins, including those outside your city",
                 modeCloseLabel: "Close",
                 outsideEnvLabel: "Outside your environment",
-                outsideEnvSub: "­"
+                outsideEnvSub: " "
             }
         };
 
         function t(key) { return translations[state.lang]?.[key] || key; }
+
+        // Función para toggle de checkbox por ID
+        function toggleCheckbox(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.checked = !el.checked;
+                el.dispatchEvent(new Event('change'));
+            }
+        }
 
         // ---------- TOAST ----------
         function showToast(msg, isError = false) {
@@ -2932,6 +3028,25 @@
             toast.classList.add('show');
             clearTimeout(toast._timeout);
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // ---------- SPLASH DE PIN CREADO ----------
+        function showPinCreatedSplash(pinName) {
+            const overlay = document.createElement('div');
+            overlay.className = 'pin-created-splash';
+            overlay.innerHTML = `
+                <div class="content">
+                    <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>${t('pinAdded')}</h3>
+                    <p>${escapeHtml(pinName)}</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.4s ease';
+                setTimeout(() => overlay.remove(), 400);
+            }, 1500);
         }
 
         // ---------- CONFIRM ----------
@@ -3028,10 +3143,8 @@
                 switchTab('map');
                 return;
             }
-
             const page = stateObj.page;
             const data = stateObj.data || {};
-
             switch (page) {
                 case 'map':
                     switchTab('map');
@@ -3117,7 +3230,6 @@
             if (state.mapStyle === 'dark') {
                 return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
             } else if (state.mapStyle === 'color') {
-                // Estil modern amb colors (estil de mapes de viatges)
                 return 'https://tile.openstreetmap.de/{z}/{x}/{y}.png';
             }
             return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
@@ -3131,7 +3243,6 @@
                     <circle cx="12" cy="9" r="2.5" fill="white"></circle>
                 </svg>`
             );
-
             if (pin.imageUrl && pin.imageUrl.trim()) {
                 return L.icon({
                     iconUrl: pin.imageUrl,
@@ -3252,7 +3363,6 @@
                 document.getElementById('modeHomeOption').classList.remove('active');
             }
 
-            // Re-render all visible pins
             renderAllPins();
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
             renderFavorites();
@@ -3274,8 +3384,12 @@
 
         function toggleModePopup() {
             const overlay = document.getElementById('modePopupOverlay');
+            overlay.classList.add('animating');
             overlay.classList.toggle('active');
             updateAllTexts();
+            setTimeout(() => {
+                overlay.classList.remove('animating');
+            }, 350);
         }
 
         function setViewMode(mode) {
@@ -3520,7 +3634,6 @@
             empty.style.display = 'none';
 
             container.innerHTML = groups.map(group => {
-                // Filter pins in group by visibility
                 const groupPins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
                 const pinCount = groupPins.length;
                 const color = group.color || state.accentColor;
@@ -3609,7 +3722,6 @@
                 `;
                 grid.appendChild(div);
 
-                // Setup checkbox toggle
                 const checkbox = div.querySelector('input[type="checkbox"]');
                 const label = div.querySelector('.name');
                 const customCheck = div.querySelector('.custom-checkbox-sm');
@@ -3631,7 +3743,6 @@
                         customCheck.querySelector('.check-icon-sm').style.transform = 'scale(0)';
                     }
                 });
-                // Trigger initial state
                 if (checked) {
                     checkbox.dispatchEvent(new Event('change'));
                 }
@@ -4465,7 +4576,6 @@
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
 
-            // Reset stars to grey (no memory from last edit)
             selectedRating = 0;
             updateStarsUI();
 
@@ -4498,7 +4608,6 @@
             state.editingPinId = pinData?.id || null;
             document.getElementById('transportServicesContainer').style.display = document.getElementById('isTransportStop').checked ? 'block' : 'none';
 
-            // Setup checkbox UI for transport stop
             const transportCheckbox = document.getElementById('isTransportStop');
             const transportCustom = transportCheckbox.parentElement.querySelector('.custom-checkbox');
             transportCheckbox.addEventListener('change', function() {
@@ -4515,10 +4624,8 @@
                 }
                 document.getElementById('transportServicesContainer').style.display = this.checked ? 'block' : 'none';
             });
-            // Trigger initial state
             transportCheckbox.dispatchEvent(new Event('change'));
 
-            // Setup checkbox UI for outside environment
             const outsideCheckbox = document.getElementById('isOutsideEnvironment');
             const outsideCustom = outsideCheckbox.parentElement.querySelector('.custom-checkbox');
             outsideCheckbox.addEventListener('change', function() {
@@ -4534,7 +4641,6 @@
                     outsideCustom.querySelector('.check-icon').style.transform = 'scale(0)';
                 }
             });
-            // Trigger initial state
             outsideCheckbox.dispatchEvent(new Event('change'));
 
             document.getElementById('pinDialog').classList.add('active');
@@ -4679,7 +4785,7 @@
             } else {
                 state.pins.push(pinData);
                 addPinToMap(pinData);
-                showToast(t('pinAdded'));
+                showPinCreatedSplash(pinData.name);
             }
 
             saveData();
@@ -5113,7 +5219,6 @@
                 target.classList.add('active');
                 target.scrollTop = 0;
             }
-
             pushHistory('settings', { subpage: subpageId });
         }
 
@@ -5356,11 +5461,8 @@
 
         // ---------- RELOAD APP ----------
         function reloadApp() {
-            showConfirmDialog(t('confirmReload')).then(confirmed => {
-                if (confirmed) {
-                    window.location.reload();
-                }
-            });
+            localStorage.setItem('librepin_show_reload_overlay', 'true');
+            window.location.reload();
         }
 
         // ---------- MAP START LOCATION ----------
@@ -5518,7 +5620,7 @@
             );
         }
 
-        // ---------- RECENTER MAP ----------
+        // ---------- RECENTER MAP (siempre actualiza GPS) ----------
         function recenterMap() {
             if (!state.map) return;
             requestGpsLocation(true);
@@ -5581,6 +5683,44 @@
 
         // ---------- INIT ----------
         function init() {
+            // VERIFICAR SI DEBE MOSTRAR EL OVERLAY DE RECARGA (se ejecuta ANTES que cualquier otra cosa)
+            if (localStorage.getItem('librepin_show_reload_overlay') === 'true') {
+                // Mostrar overlay incerrable
+                const overlay = document.createElement('div');
+                overlay.className = 'reload-overlay';
+                const msg = state.lang === 'ca' ? 'Si us plau, tanca i torna a obrir l\'aplicació per aplicar els canvis.' :
+                            state.lang === 'es' ? 'Por favor, cierra y vuelve a abrir la aplicación para aplicar los cambios.' :
+                            'Please close and reopen the app to apply changes.';
+                overlay.innerHTML = `
+                    <div class="icon"><i class="fas fa-sync-alt fa-spin"></i></div>
+                    <h2>${state.lang === 'ca' ? 'Recàrrega necessària' : state.lang === 'es' ? 'Recarga necesaria' : 'Reload required'}</h2>
+                    <p>${msg}</p>
+                `;
+                document.body.appendChild(overlay);
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.85);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 999999;
+                    flex-direction: column;
+                    color: white;
+                    text-align: center;
+                    padding: 20px;
+                    pointer-events: none;
+                `;
+                // Eliminamos la bandera para que no se muestre de nuevo en futuras recargas
+                localStorage.removeItem('librepin_show_reload_overlay');
+                // Continuamos con la inicialización normal pero el overlay bloquea la interacción
+            }
+
+            // Cargar idioma del navegador si no hay uno guardado
             const browserLang = navigator.language?.slice(0, 2) || 'ca';
             if (['ca', 'es', 'en'].includes(browserLang)) state.lang = browserLang;
 
@@ -5624,7 +5764,6 @@
                 switchTab('map');
             });
 
-            // Mode selector
             document.getElementById('modeSelectorBtn').addEventListener('click', toggleModePopup);
             document.getElementById('modeHomeOption').addEventListener('click', () => setViewMode('home'));
             document.getElementById('modeAwayOption').addEventListener('click', () => setViewMode('away'));
@@ -5802,7 +5941,10 @@
             };
             document.getElementById('profileDataClearBtn').onclick = clearAllData;
 
-            document.getElementById('reloadAppBtn2').onclick = reloadApp;
+            document.getElementById('reloadAppBtn2').onclick = () => {
+                localStorage.setItem('librepin_show_reload_overlay', 'true');
+                window.location.reload();
+            };
 
             document.querySelectorAll('.map-start-option').forEach(btn => {
                 btn.onclick = () => {
@@ -5823,6 +5965,7 @@
                 btn.onclick = () => {
                     state.lang = btn.dataset.lang;
                     saveData();
+                    localStorage.setItem('librepin_show_reload_overlay', 'true');
                     window.location.reload();
                 };
             });
@@ -5857,7 +6000,7 @@
                 if (state.map) setTimeout(() => state.map.invalidateSize(), 200);
             });
 
-            console.log('LibrePin initialized! 🗺️');
+            console.log('LibrePin v' + APP_VERSION + ' initialized! 🗺️');
         }
 
         window.removeTempRelatedPin = function(id) {
