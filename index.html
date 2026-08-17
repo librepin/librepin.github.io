@@ -1782,6 +1782,153 @@
             white-space: nowrap;
         }
 
+        /* --- LINE SETTINGS --- */
+        .line-item {
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--md-primary);
+        }
+        .line-item .line-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .line-item .line-header .line-name {
+            font-weight: 600;
+            flex: 1;
+            font-size: 15px;
+        }
+        .line-item .line-header .line-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .line-item .line-header .line-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            transition: 0.2s;
+        }
+        .line-item .line-header .line-actions button:active {
+            background: var(--md-surface);
+            transform: scale(0.9);
+        }
+        .line-item .line-details {
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .line-item .line-details span {
+            background: var(--md-surface);
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        /* --- LEGEND PAGE --- */
+        #legendPage .legend-header {
+            padding: 16px 18px 8px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        #legendPage .legend-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        #legendPage .legend-header p {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(128,128,128,0.06);
+            background: var(--md-surface);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+        }
+        .legend-item .line-icon-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 4px;
+        }
+        .legend-item .line-info {
+            flex: 1;
+        }
+        .legend-item .line-info .line-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .legend-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        /* SLIDER TOGGLE */
+        .slider-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            padding: 4px 0;
+        }
+        .slider-toggle .slider-track {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: var(--md-surface-dim);
+            border-radius: 14px;
+            border: 2px solid var(--md-outline);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+        .slider-toggle .slider-track .slider-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--md-on-surface-variant);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--md-elevation-1);
+        }
+        .slider-toggle.active .slider-track {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .slider-toggle.active .slider-track .slider-thumb {
+            left: 26px;
+            background: white;
+        }
+        .slider-toggle .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-on-surface);
+        }
+        .slider-toggle .slider-label .icon {
+            margin-right: 4px;
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 500px) {
             .pin-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 14px; }
@@ -1841,6 +1988,10 @@
             .sidebar .sidebar-greeting .greeting-avatar { width: 36px; height: 36px; }
             .sidebar .sidebar-greeting .greeting-text .greeting-name { font-size: 14px; }
             .sidebar .sidebar-greeting .greeting-text .greeting-sub { font-size: 12px; }
+            .legend-item .line-icon-img { width: 28px; height: 28px; }
+            .slider-toggle .slider-track { width: 44px; height: 24px; }
+            .slider-toggle .slider-track .slider-thumb { width: 16px; height: 16px; top: 2px; left: 2px; }
+            .slider-toggle.active .slider-track .slider-thumb { left: 22px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -1857,6 +2008,7 @@
             .group-card .group-name { font-size: 12px; }
             .sidebar { width: 220px; }
             .sidebar .sidebar-greeting .greeting-avatar { width: 30px; height: 30px; }
+            .legend-item .line-icon-img { width: 24px; height: 24px; }
         }
 
         /* --- ANIMATIONS --- */
@@ -2005,6 +2157,110 @@
         .mode-option-card .mode-info .mode-desc { font-size: 12px; color: var(--md-on-surface-variant); }
         .mode-option-card .mode-check { font-size: 20px; color: var(--md-primary); opacity: 0; transition: all 0.3s ease; }
         .mode-option-card.active .mode-check { opacity: 1; }
+
+        /* --- LINE DIALOG COLOR PICKER --- */
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0 8px;
+        }
+        .color-picker-wrapper input[type="color"] {
+            width: 48px;
+            height: 48px;
+            padding: 2px;
+            border: 2px solid var(--md-outline);
+            border-radius: var(--radius-sm);
+            background: var(--md-surface);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .color-picker-wrapper .color-hex {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            font-family: monospace;
+        }
+
+        /* --- SEE ALSO POPUP --- */
+        .see-also-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .see-also-popup .popup-content {
+            background: var(--md-surface);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--md-elevation-3);
+        }
+        .see-also-popup .popup-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--md-on-surface);
+        }
+        .see-also-popup .popup-content h3 i {
+            color: var(--md-primary);
+        }
+        .see-also-popup .popup-group-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--md-surface-dim);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid var(--md-primary);
+        }
+        .see-also-popup .popup-group-item:active {
+            transform: scale(0.97);
+        }
+        .see-also-popup .popup-group-item:hover {
+            background: var(--md-primary-container);
+        }
+        .see-also-popup .popup-group-item img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--md-surface);
+            flex-shrink: 0;
+        }
+        .see-also-popup .popup-group-item .group-info {
+            flex: 1;
+        }
+        .see-also-popup .popup-group-item .group-info .group-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .see-also-popup .popup-group-item .group-info .group-desc {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+        }
+        .see-also-popup .popup-close-btn {
+            width: 100%;
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
@@ -2044,12 +2300,15 @@
                 </div>
                 <div style="padding: 4px 0;">
                     <button class="sidebar-item" id="sidebarNearby"><i class="fas fa-location-dot"></i> <span id="sidebarNearbyLabel">A prop meu</span></button>
+                    <button class="sidebar-item" id="sidebarRecent"><i class="fas fa-clock"></i> <span id="sidebarRecentLabel">Recents</span></button>
                     <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
+                    <button class="sidebar-item" id="sidebarLegend"><i class="fas fa-route"></i> <span id="sidebarLegendLabel">Llegendes de línies</span></button>
+                    <button class="sidebar-item" id="sidebarStudio"><i class="fas fa-paint-brush"></i> <span id="sidebarStudioLabel">Studio</span></button>
                     <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Arranjament</span></button>
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.8.1</span>
+                    <span>v1.9.0</span>
                 </div>
             </div>
         </div>
@@ -2136,6 +2395,28 @@
                     <i class="fas fa-location-dot"></i>
                     <h3 id="nearbyNoPins">No hi ha pins a prop</h3>
                     <p id="nearbyNoPinsDesc">Esperant ubicació GPS...</p>
+                </div>
+            </div>
+
+            <!-- LEGEND PAGE -->
+            <div id="legendPage" class="page">
+                <div class="legend-header">
+                    <h3><i class="fas fa-route" style="color:var(--md-primary);"></i> <span id="legendTitle">Llegendes de línies</span></h3>
+                    <p id="legendSubtitle">Línies dibuixades al mapa</p>
+                    <div class="legend-header-actions">
+                        <div class="slider-toggle" id="linesVisibilityToggle">
+                            <div class="slider-track">
+                                <div class="slider-thumb"></div>
+                            </div>
+                            <span class="slider-label" id="linesVisibilityLabel"><i class="fas fa-eye"></i> Mostrar</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="legendList" style="padding:12px 16px;"></div>
+                <div id="legendEmpty" class="empty-state" style="display:none;">
+                    <i class="fas fa-route"></i>
+                    <h3 id="noLegendLinesLabel">No hi ha línies</h3>
+                    <p id="noLegendDescLabel">Crea la teva primera línia</p>
                 </div>
             </div>
 
@@ -2296,6 +2577,26 @@
                 </div>
             </div>
 
+            <!-- LINES SETTINGS -->
+            <div id="settingsLines" class="settings-subpage">
+                <div class="sub-header">
+                    <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
+                    <h3 id="linesTitle">Línies</h3>
+                </div>
+                <div class="card">
+                    <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:12px;" id="linesSubtitle">Dibuixa línies al mapa per indicar rutes o traçats</p>
+                    <button class="fab-btn small glow" id="addLineBtn" style="margin-bottom:12px; width:100%;">
+                        <i class="fas fa-plus"></i> <span id="addLineLabel">Afegir línia</span>
+                    </button>
+                    <div id="linesList"></div>
+                    <div id="linesEmpty" class="empty-state" style="display:none; padding:20px;">
+                        <i class="fas fa-draw-polygon"></i>
+                        <h3 id="noLinesLabel">No hi ha línies</h3>
+                        <p id="noLinesDescLabel">Crea la teva primera línia</p>
+                    </div>
+                </div>
+            </div>
+
             <div id="settingsReload" class="settings-subpage">
                 <div class="sub-header">
                     <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
@@ -2314,7 +2615,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.8.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.0 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2350,6 +2651,7 @@
                         <button class="fab-btn secondary" id="detailPlayBtn" style="display:none;"><i class="fas fa-volume-up"></i> <span id="detailPlayLabel">Escoltar en veu alta</span></button>
                         <button class="fab-btn secondary" id="detailMapBtn"><i class="fas fa-map-marker-alt"></i> <span id="detailMapLabel">Veure al mapa</span></button>
                         <button class="fab-btn secondary" id="detailGoFromBtn"><i class="fas fa-route"></i> <span id="detailGoFromLabel">Ir desde</span></button>
+                        <button class="fab-btn secondary" id="detailSeeAlsoBtn" style="display:none;"><i class="fas fa-layer-group"></i> <span id="detailSeeAlsoLabel">Vegeu també</span></button>
                     </div>
                     <div class="related-pins-section" id="relatedPinsSection" style="display:none;">
                         <h4><i class="fas fa-link" style="color:var(--md-primary);"></i> <span id="relatedPinsLabel">Pins relacionats</span></h4>
@@ -2572,6 +2874,37 @@
         </div>
     </div>
 
+    <!-- Dialog: Add/Edit Line -->
+    <div id="lineDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3 id="lineDialogTitle">Afegir línia</h3>
+            <label id="lineNameLabel">Name *</label>
+            <input type="text" id="lineNameInput" placeholder="Line name">
+
+            <label id="lineIconLabel">URL de la icona (PNG)</label>
+            <input type="text" id="lineIconInput" placeholder="https://example.com/icon.png">
+
+            <label id="lineColorLabel">Color</label>
+            <div class="color-picker-wrapper">
+                <input type="color" id="lineColorInput" value="#FF0000">
+                <span class="color-hex" id="lineColorHex">#FF0000</span>
+            </div>
+
+            <label id="lineWidthLabel">Thickness (px)</label>
+            <input type="range" id="lineWidthInput" min="2" max="12" value="4" style="width:100%;">
+            <span id="lineWidthValue" style="font-size:13px; color:var(--md-on-surface-variant);">4 px</span>
+
+            <label id="linePointsLabel">Points (lat,lng separated by ;)</label>
+            <textarea id="linePointsInput" placeholder="41.3851,2.1734;41.3861,2.1744;41.3871,2.1754" style="min-height:80px;"></textarea>
+            <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">Each point is a lat,lng coordinate. Separate the points with ;</p>
+
+            <div class="dialog-actions">
+                <button id="lineDialogCancel" class="fab-btn secondary"><span>Cancel</span></button>
+                <button id="lineDialogSave" class="fab-btn glow"><span>OK</span></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div id="toastMsg" class="toast"><i class="fas fa-info-circle"></i><span id="toastText"></span></div>
 
@@ -2606,7 +2939,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.8.1 Mobile';
+        const APP_VERSION = '1.9.0 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2615,6 +2948,7 @@
             favorites: [],
             favoritesOrder: [],
             groups: [],
+            lines: [],
             lang: 'ca',
             darkMode: false,
             mapStyle: 'light',
@@ -2650,9 +2984,14 @@
             userMarker: null,
             history: ['map'],
             gpsSplashVisible: false,
-            gpsSplashResolve: null
+            gpsSplashResolve: null,
+            lineLayers: {},
+            lineVisibility: {},
+            editingLineId: null,
+            linesVisible: true
         };
 
+        // ---------- TRADUCCIONS COMPLETES ----------
         const translations = {
             ca: {
                 appTitle: "LibrePin", addPin: "Afegir pin", settings: "Arranjament", map: "Mapa", search: "Cerca", favorites: "Preferits", recent: "Recents",
@@ -2814,7 +3153,10 @@
                 modePageTitle: "Mode de visualització",
                 modePageSubtitle: "Selecciona com vols veure els pins",
                 sidebarNearby: "A prop meu",
+                sidebarRecent: "Recents",
                 sidebarMode: "Mode de visualització",
+                sidebarLegend: "Llegendes de línies",
+                sidebarStudio: "Studio",
                 sidebarSettings: "Arranjament",
                 greetingMorning: "Bon dia",
                 greetingAfternoon: "Bona tarda",
@@ -2822,7 +3164,34 @@
                 greetingSub1: "On anem avui?",
                 greetingSub2: "Que tens en ment?",
                 greetingSub3: "Amb gana?",
-                greetingSub4: "On has anat avui?"
+                greetingSub4: "On has anat avui?",
+                lines: "Línies",
+                linesTitle: "Línies",
+                linesSubtitle: "Dibuixa línies al mapa per indicar rutes o traçats",
+                addLine: "Afegir línia",
+                lineName: "Nom",
+                lineColor: "Color",
+                lineWidth: "Gruix (px)",
+                linePoints: "Punts (lat,lng separats per ;)",
+                noLines: "No hi ha línies",
+                noLinesDesc: "Crea la teva primera línia",
+                lineAdded: "Línia afegida",
+                lineUpdated: "Línia actualitzada",
+                lineDeleted: "Línia eliminada",
+                confirmDeleteLine: "Eliminar aquesta línia?",
+                legendTitle: "Llegendes de línies",
+                legendSubtitle: "Línies dibuixades al mapa",
+                noLegendLines: "No hi ha línies",
+                noLegendDesc: "Crea línies des de l'apartat Línies als arranjaments",
+                linesBtn: "Línies",
+                lineIcon: "URL de la icona (PNG)",
+                showLine: "Mostrar al mapa",
+                toggleAll: "Mostrar totes",
+                toggleNone: "Amagar totes",
+                seeAlso: "Vegeu també",
+                seeAlsoTitle: "Aquest pin pertany a",
+                linesVisible: "Mostrar línies",
+                linesHidden: "Amagar línies"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2846,7 +3215,7 @@
                 pinUpdated: "Pin actualizado",
                 pinDeleted: "Pin eliminado",
                 serviceAdded: "Servicio añadido",
-                serviceRemoved: "Eiminar servicio",
+                serviceRemoved: "Eliminar servicio",
                 selectImage: "Selecciona una imagen",
                 addHere: "¿Añadir aquí?",
                 viewOnMap: "Ver en el mapa",
@@ -2984,7 +3353,10 @@
                 modePageTitle: "Modo de visualización",
                 modePageSubtitle: "Selecciona cómo quieres ver los pins",
                 sidebarNearby: "Cerca de mí",
+                sidebarRecent: "Recientes",
                 sidebarMode: "Modo de visualización",
+                sidebarLegend: "Leyendas de líneas",
+                sidebarStudio: "Studio",
                 sidebarSettings: "Ajustes",
                 greetingMorning: "Buenos días",
                 greetingAfternoon: "Buenas tardes",
@@ -2992,7 +3364,34 @@
                 greetingSub1: "¿Dónde vamos hoy?",
                 greetingSub2: "¿Qué tienes en mente?",
                 greetingSub3: "¿Con hambre?",
-                greetingSub4: "¿Dónde has ido hoy?"
+                greetingSub4: "¿Dónde has ido hoy?",
+                lines: "Líneas",
+                linesTitle: "Líneas",
+                linesSubtitle: "Dibuja líneas en el mapa para indicar rutas o trazados",
+                addLine: "Añadir línea",
+                lineName: "Nombre",
+                lineColor: "Color",
+                lineWidth: "Grosor (px)",
+                linePoints: "Puntos (lat,lng separados por ;)",
+                noLines: "No hay líneas",
+                noLinesDesc: "Crea tu primera línea",
+                lineAdded: "Línea añadida",
+                lineUpdated: "Línea actualizada",
+                lineDeleted: "Línea eliminada",
+                confirmDeleteLine: "¿Eliminar esta línea?",
+                legendTitle: "Leyendas de líneas",
+                legendSubtitle: "Líneas dibujadas en el mapa",
+                noLegendLines: "No hay líneas",
+                noLegendDesc: "Crea líneas desde el apartado Líneas en los ajustes",
+                linesBtn: "Líneas",
+                lineIcon: "URL del icono (PNG)",
+                showLine: "Mostrar en el mapa",
+                toggleAll: "Mostrar todas",
+                toggleNone: "Ocultar todas",
+                seeAlso: "Véase también",
+                seeAlsoTitle: "Este pin pertenece a",
+                linesVisible: "Mostrar líneas",
+                linesHidden: "Ocultar líneas"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -3154,7 +3553,10 @@
                 modePageTitle: "View mode",
                 modePageSubtitle: "Select how you want to see the pins",
                 sidebarNearby: "Near me",
+                sidebarRecent: "Recent",
                 sidebarMode: "View mode",
+                sidebarLegend: "Line legends",
+                sidebarStudio: "Studio",
                 sidebarSettings: "Settings",
                 greetingMorning: "Good morning",
                 greetingAfternoon: "Good afternoon",
@@ -3162,13 +3564,39 @@
                 greetingSub1: "Where are we going today?",
                 greetingSub2: "What do you have in mind?",
                 greetingSub3: "Hungry?",
-                greetingSub4: "Where have you been today?"
+                greetingSub4: "Where have you been today?",
+                lines: "Lines",
+                linesTitle: "Lines",
+                linesSubtitle: "Draw lines on the map to indicate routes or tracks",
+                addLine: "Add line",
+                lineName: "Name",
+                lineColor: "Color",
+                lineWidth: "Width (px)",
+                linePoints: "Points (lat,lng separated by ;)",
+                noLines: "No lines",
+                noLinesDesc: "Create your first line",
+                lineAdded: "Line added",
+                lineUpdated: "Line updated",
+                lineDeleted: "Line deleted",
+                confirmDeleteLine: "Delete this line?",
+                legendTitle: "Line legends",
+                legendSubtitle: "Lines drawn on the map",
+                noLegendLines: "No lines",
+                noLegendDesc: "Create lines from the Lines section in settings",
+                linesBtn: "Lines",
+                lineIcon: "Icon URL (PNG)",
+                showLine: "Show on map",
+                toggleAll: "Show all",
+                toggleNone: "Hide all",
+                seeAlso: "See also",
+                seeAlsoTitle: "This pin belongs to",
+                linesVisible: "Show lines",
+                linesHidden: "Hide lines"
             }
         };
 
         function t(key) { return translations[state.lang]?.[key] || key; }
 
-        // Función para toggle de checkbox por ID
         function toggleCheckbox(id) {
             const el = document.getElementById(id);
             if (el) {
@@ -3235,6 +3663,9 @@
                     state.favorites = data.favorites || [];
                     state.favoritesOrder = data.favoritesOrder || [];
                     state.groups = data.groups || [];
+                    state.lines = data.lines || [];
+                    state.lineVisibility = data.lineVisibility || {};
+                    state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
                     if (data.accentColor) state.accentColor = data.accentColor;
                     if (data.darkMode !== undefined) state.darkMode = data.darkMode;
                     if (data.mapStyle) state.mapStyle = data.mapStyle;
@@ -3266,8 +3697,11 @@
             renderGroups();
             renderRecentPins();
             renderProfile();
+            renderLinesList();
+            renderLegend();
             updateModeUI();
             updateSidebarGreeting();
+            drawAllLines();
         }
 
         function saveData() {
@@ -3277,6 +3711,9 @@
                 favorites: state.favorites,
                 favoritesOrder: state.favoritesOrder,
                 groups: state.groups,
+                lines: state.lines,
+                lineVisibility: state.lineVisibility,
+                linesVisible: state.linesVisible,
                 accentColor: state.accentColor,
                 darkMode: state.darkMode,
                 mapStyle: state.mapStyle,
@@ -3335,6 +3772,9 @@
                     break;
                 case 'mode':
                     switchTab('mode');
+                    break;
+                case 'legend':
+                    switchTab('legend');
                     break;
                 default:
                     switchTab('map');
@@ -3465,6 +3905,7 @@
             state.map.addLayer(state.markerCluster);
 
             renderAllPins();
+            drawAllLines();
 
             map.on('click', (e) => {
                 let clickedMarker = false;
@@ -3496,6 +3937,7 @@
                 maxZoom: 19
             }).addTo(state.map);
             updateMapStyleButtons();
+            drawAllLines();
         }
 
         function updateMapStyleButtons() {
@@ -3507,6 +3949,236 @@
             } else {
                 document.getElementById('mapStyleLightBtn').classList.add('active');
             }
+        }
+
+        // ---------- LINES ----------
+        function drawAllLines() {
+            if (!state.map) return;
+            Object.values(state.lineLayers).forEach(layer => {
+                if (state.map.hasLayer(layer)) state.map.removeLayer(layer);
+            });
+            state.lineLayers = {};
+
+            if (!state.linesVisible) return;
+
+            state.lines.forEach(line => {
+                if (!line.points || line.points.length < 2) return;
+                const latlngs = line.points.map(p => [p.lat, p.lng]);
+                const polyline = L.polyline(latlngs, {
+                    color: line.color || '#FF0000',
+                    weight: line.width || 4,
+                    opacity: 0.8
+                });
+                polyline.addTo(state.map);
+                state.lineLayers[line.id] = polyline;
+            });
+        }
+
+        function toggleAllLines() {
+            state.linesVisible = !state.linesVisible;
+            saveData();
+            drawAllLines();
+            renderLegend();
+            updateAllTexts();
+            updateSliderUI();
+        }
+
+        function updateSliderUI() {
+            const toggle = document.getElementById('linesVisibilityToggle');
+            const label = document.getElementById('linesVisibilityLabel');
+            if (state.linesVisible) {
+                toggle.classList.add('active');
+                label.innerHTML = `<i class="fas fa-eye"></i> ${t('linesVisible')}`;
+            } else {
+                toggle.classList.remove('active');
+                label.innerHTML = `<i class="fas fa-eye-slash"></i> ${t('linesHidden')}`;
+            }
+        }
+
+        function renderLinesList(filter = '') {
+            const container = document.getElementById('linesList');
+            const empty = document.getElementById('linesEmpty');
+
+            let lines = state.lines;
+            if (filter.trim()) {
+                const f = filter.toLowerCase().trim();
+                lines = lines.filter(l => l.name.toLowerCase().includes(f));
+            }
+
+            if (lines.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('noLinesLabel').innerText = t('noLines');
+                document.getElementById('noLinesDescLabel').innerText = t('noLinesDesc');
+                return;
+            }
+            empty.style.display = 'none';
+
+            container.innerHTML = lines.map(line => `
+                <div class="line-item" style="border-left-color: ${line.color || '#FF0000'};">
+                    <div class="line-header">
+                        <span class="line-name" style="color: ${line.color || '#FF0000'};">${escapeHtml(line.name)}</span>
+                        <div class="line-actions">
+                            <button class="edit-line-btn" data-id="${line.id}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-line-btn" data-id="${line.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="line-details">
+                        <span>${line.points ? line.points.length : 0} punts</span>
+                        <span>Gruix: ${line.width || 4}px</span>
+                        <span style="display:inline-block; width:16px; height:16px; border-radius:50%; background:${line.color || '#FF0000'}; border:1px solid rgba(0,0,0,0.1);"></span>
+                        ${line.icon ? `<img src="${line.icon}" style="width:20px;height:20px;object-fit:contain;border-radius:4px;">` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.edit-line-btn').forEach(btn => {
+                btn.onclick = () => openLineDialog(btn.dataset.id);
+            });
+            container.querySelectorAll('.delete-line-btn').forEach(btn => {
+                btn.onclick = () => deleteLine(btn.dataset.id);
+            });
+        }
+
+        function openLineDialog(lineId = null) {
+            const isEditing = !!lineId;
+            const line = isEditing ? state.lines.find(l => l.id === lineId) : null;
+
+            document.getElementById('lineDialogTitle').innerText = isEditing ? t('edit') : t('addLine');
+            document.getElementById('lineDialogSave').innerText = t('save');
+
+            document.getElementById('lineNameInput').value = line?.name || '';
+            document.getElementById('lineIconInput').value = line?.icon || '';
+            document.getElementById('lineColorInput').value = line?.color || '#FF0000';
+            document.getElementById('lineColorHex').innerText = line?.color || '#FF0000';
+            document.getElementById('lineWidthInput').value = line?.width || 4;
+            document.getElementById('lineWidthValue').innerText = (line?.width || 4) + ' px';
+            document.getElementById('linePointsInput').value = line?.points ? line.points.map(p => `${p.lat},${p.lng}`).join(';') : '';
+
+            state.editingLineId = lineId;
+
+            document.getElementById('lineWidthInput').oninput = function() {
+                document.getElementById('lineWidthValue').innerText = this.value + ' px';
+            };
+            document.getElementById('lineColorInput').oninput = function() {
+                document.getElementById('lineColorHex').innerText = this.value;
+            };
+
+            document.getElementById('lineDialog').classList.add('active');
+            updateAllTexts();
+        }
+
+        function closeLineDialog() {
+            document.getElementById('lineDialog').classList.remove('active');
+            state.editingLineId = null;
+        }
+
+        function saveLineFromDialog() {
+            const name = document.getElementById('lineNameInput').value.trim();
+            if (!name) {
+                showToast(t('lineName') + ' ' + (state.lang === 'ca' ? 'és obligatori' : state.lang === 'es' ? 'es obligatorio' : 'is required'), true);
+                return;
+            }
+
+            const icon = document.getElementById('lineIconInput').value.trim();
+            const color = document.getElementById('lineColorInput').value;
+            const width = parseInt(document.getElementById('lineWidthInput').value) || 4;
+            const pointsStr = document.getElementById('linePointsInput').value.trim();
+            const points = pointsStr.split(';').filter(p => p.trim()).map(p => {
+                const parts = p.split(',').map(Number);
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                    return { lat: parts[0], lng: parts[1] };
+                }
+                return null;
+            }).filter(p => p !== null);
+
+            if (points.length < 2) {
+                showToast('Necessites almenys 2 punts vàlids (lat,lng)', true);
+                return;
+            }
+
+            if (state.editingLineId) {
+                const idx = state.lines.findIndex(l => l.id === state.editingLineId);
+                if (idx >= 0) {
+                    state.lines[idx] = { ...state.lines[idx], name, icon: icon || null, color, width, points };
+                    showToast(t('lineUpdated'));
+                }
+            } else {
+                const newLine = {
+                    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                    name,
+                    icon: icon || null,
+                    color,
+                    width,
+                    points
+                };
+                state.lines.push(newLine);
+                showToast(t('lineAdded'));
+            }
+
+            saveData();
+            closeLineDialog();
+            renderLinesList();
+            renderLegend();
+            drawAllLines();
+        }
+
+        async function deleteLine(lineId) {
+            const confirmed = await showConfirmDialog(t('confirmDeleteLine'));
+            if (confirmed) {
+                state.lines = state.lines.filter(l => l.id !== lineId);
+                if (state.lineLayers[lineId] && state.map) {
+                    state.map.removeLayer(state.lineLayers[lineId]);
+                    delete state.lineLayers[lineId];
+                }
+                saveData();
+                renderLinesList();
+                renderLegend();
+                showToast(t('lineDeleted'));
+            }
+        }
+
+        function renderLegend() {
+            const container = document.getElementById('legendList');
+            const empty = document.getElementById('legendEmpty');
+
+            if (state.lines.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('noLegendLinesLabel').innerText = t('noLegendLines');
+                document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
+                return;
+            }
+            empty.style.display = 'none';
+
+            updateSliderUI();
+
+            container.innerHTML = state.lines.map(line => {
+                return `
+                    <div class="legend-item" data-id="${line.id}">
+                        ${line.icon ? `<img class="line-icon-img" src="${line.icon}" onerror="this.style.display='none'">` : `<div class="line-icon-img" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--md-surface-dim);border-radius:4px;">📏</div>`}
+                        <div class="line-info">
+                            <div class="line-name" style="color:${line.color || '#FF0000'};">${escapeHtml(line.name)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.querySelectorAll('.legend-item').forEach(el => {
+                el.onclick = () => {
+                    const id = el.dataset.id;
+                    switchTab('map');
+                    const line = state.lines.find(l => l.id === id);
+                    if (line && state.lineLayers[id] && state.map && state.linesVisible) {
+                        const bounds = state.lineLayers[id].getBounds();
+                        if (bounds.isValid()) {
+                            state.map.fitBounds(bounds, { padding: [40, 40] });
+                        }
+                    } else if (line && !state.linesVisible) {
+                        showToast('Les línies estan amagades', true);
+                    }
+                };
+            });
         }
 
         // ---------- MODE UI ----------
@@ -3804,6 +4476,70 @@
             });
         }
 
+        // ---------- SEE ALSO ----------
+        function getPinGroups(pinId) {
+            return state.groups.filter(g => g.pinIds && g.pinIds.includes(pinId));
+        }
+
+        function openSeeAlsoPopup(pinId) {
+            const groups = getPinGroups(pinId);
+            if (groups.length === 0) return;
+
+            const overlay = document.createElement('div');
+            overlay.className = 'see-also-popup';
+            overlay.innerHTML = `
+                <div class="popup-content">
+                    <h3><i class="fas fa-layer-group"></i> ${t('seeAlsoTitle')}</h3>
+                    ${groups.map(group => `
+                        <div class="popup-group-item" data-id="${group.id}" style="border-left-color: ${group.color || state.accentColor};">
+                            ${group.icon ? `<img src="${group.icon}" onerror="this.style.display='none'">` : `<div style="width:32px;height:32px;border-radius:50%;background:${group.color || state.accentColor}20;display:flex;align-items:center;justify-content:center;color:${group.color || state.accentColor};font-size:16px;flex-shrink:0;"><i class="fas fa-layer-group"></i></div>`}
+                            <div class="group-info">
+                                <div class="group-name" style="color:${group.color || state.accentColor};">${escapeHtml(group.name)}</div>
+                                ${group.description ? `<div class="group-desc">${escapeHtml(group.description)}</div>` : ''}
+                            </div>
+                            <i class="fas fa-chevron-right" style="color:var(--md-on-surface-variant);"></i>
+                        </div>
+                    `).join('')}
+                    <button class="fab-btn secondary popup-close-btn">${t('close')}</button>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            overlay.querySelectorAll('.popup-group-item').forEach(el => {
+                el.onclick = () => {
+                    const id = el.dataset.id;
+                    overlay.remove();
+                    const group = state.groups.find(g => g.id === id);
+                    if (group) {
+                        openGroupDetail(id);
+                    }
+                };
+            });
+
+            overlay.querySelector('.popup-close-btn').onclick = () => overlay.remove();
+            overlay.onclick = (e) => {
+                if (e.target === overlay) overlay.remove();
+            };
+        }
+
+        function updateSeeAlsoButton() {
+            const btn = document.getElementById('detailSeeAlsoBtn');
+            if (!state.detailPinId) {
+                btn.style.display = 'none';
+                return;
+            }
+            const groups = getPinGroups(state.detailPinId);
+            if (groups.length > 0) {
+                btn.style.display = 'flex';
+                document.getElementById('detailSeeAlsoLabel').innerText = t('seeAlso');
+                btn.onclick = () => openSeeAlsoPopup(state.detailPinId);
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        // ---------- GROUPS ----------
         function openGroupDialog(groupId = null) {
             const isEditing = !!groupId;
             const group = isEditing ? state.groups.find(g => g.id === groupId) : null;
@@ -4582,6 +5318,7 @@
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
             goFromBtn.onclick = openGoFromSelector;
 
+            updateSeeAlsoButton();
             renderRelatedPins(pinId);
 
             updateFavoriteUI();
@@ -4611,7 +5348,6 @@
             const empty = document.getElementById('searchEmpty');
 
             const trimmedFilter = filter.trim();
-            // Requerir mínimo 2 caracteres para búsqueda
             if (trimmedFilter.length < 2) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
@@ -4790,7 +5526,6 @@
             });
             outsideCheckbox.dispatchEvent(new Event('change'));
 
-            // Configurar evento de clic para las estrellas
             document.querySelectorAll('.stars-selector .star').forEach(el => {
                 el.onclick = function(e) {
                     e.stopPropagation();
@@ -5191,6 +5926,9 @@
                 favorites: state.favorites,
                 favoritesOrder: state.favoritesOrder,
                 groups: state.groups,
+                lines: state.lines,
+                lineVisibility: state.lineVisibility,
+                linesVisible: state.linesVisible,
                 accentColor: state.accentColor,
                 darkMode: state.darkMode,
                 mapStyle: state.mapStyle,
@@ -5215,7 +5953,7 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (data.pins && data.services) {
-                        const hasData = state.pins.length > 0 || state.services.length > 0 || state.favorites.length > 0 || state.groups.length > 0;
+                        const hasData = state.pins.length > 0 || state.services.length > 0 || state.favorites.length > 0 || state.groups.length > 0 || state.lines.length > 0;
                         if (hasData) {
                             showConfirmDialog(t('overwriteProfile')).then(confirmed => {
                                 if (confirmed) {
@@ -5241,6 +5979,9 @@
             state.favorites = data.favorites || [];
             state.favoritesOrder = data.favoritesOrder || [];
             state.groups = data.groups || [];
+            state.lines = data.lines || [];
+            state.lineVisibility = data.lineVisibility || {};
+            state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
             if (data.accentColor) state.accentColor = data.accentColor;
             if (data.darkMode !== undefined) state.darkMode = data.darkMode;
             if (data.mapStyle) state.mapStyle = data.mapStyle;
@@ -5264,6 +6005,9 @@
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             renderProfile();
+            renderLinesList();
+            renderLegend();
+            drawAllLines();
             updateModeUI();
             showToast(t('importSuccess'));
         }
@@ -5277,6 +6021,9 @@
                 state.favorites = [];
                 state.favoritesOrder = [];
                 state.groups = [];
+                state.lines = [];
+                state.lineVisibility = {};
+                state.linesVisible = true;
                 state.accentColor = '#7C4DFF';
                 state.darkMode = false;
                 state.mapStyle = 'light';
@@ -5296,6 +6043,9 @@
                 renderRecentPins();
                 renderGroups('');
                 renderProfile();
+                renderLinesList();
+                renderLegend();
+                drawAllLines();
                 updateModeUI();
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
@@ -5320,7 +6070,6 @@
                 iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
             }
 
-            // Actualizar avatar en la barra lateral
             document.getElementById('greetingAvatar').src = p.avatar || DEFAULT_AVATAR;
         }
 
@@ -5389,7 +6138,6 @@
             const subs = [t('greetingSub1'), t('greetingSub2'), t('greetingSub3'), t('greetingSub4')];
             document.getElementById('greetingSub').innerText = subs[Math.floor(Math.random() * subs.length)];
 
-            // Actualizar avatar
             document.getElementById('greetingAvatar').src = state.profile.avatar || DEFAULT_AVATAR;
         }
 
@@ -5420,6 +6168,7 @@
                 { key: 'language', icon: 'fa-globe', label: 'langBtn' },
                 { key: 'services', icon: 'fa-bus', label: 'servicesBtn' },
                 { key: 'recent', icon: 'fa-clock', label: 'recent' },
+                { key: 'lines', icon: 'fa-draw-polygon', label: 'lines' },
                 { key: 'reload', icon: 'fa-sync-alt', label: 'reloadApp' },
                 { key: 'about', icon: 'fa-info-circle', label: 'aboutBtn' }
             ];
@@ -5458,6 +6207,20 @@
             document.getElementById('createGroupLabel').innerText = t('createGroup');
             document.getElementById('groupsSearchInput').placeholder = t('groupsSearch');
 
+            document.getElementById('linesTitle').innerText = t('linesTitle');
+            document.getElementById('linesSubtitle').innerText = t('linesSubtitle');
+            document.getElementById('addLineLabel').innerText = t('addLine');
+            document.getElementById('noLinesLabel').innerText = t('noLines');
+            document.getElementById('noLinesDescLabel').innerText = t('noLinesDesc');
+
+            document.getElementById('legendTitle').innerText = t('legendTitle');
+            document.getElementById('legendSubtitle').innerText = t('legendSubtitle');
+            document.getElementById('noLegendLinesLabel').innerText = t('noLegendLines');
+            document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
+
+            // Update slider label
+            updateSliderUI();
+
             const menuLabels = {
                 profile: 'profile',
                 map: 'mapSettings',
@@ -5465,6 +6228,7 @@
                 language: 'langBtn',
                 services: 'servicesBtn',
                 recent: 'recent',
+                lines: 'lines',
                 reload: 'reloadApp',
                 about: 'aboutBtn'
             };
@@ -5568,6 +6332,7 @@
             document.getElementById('groupPinsSearchInput').placeholder = t('searchPins');
 
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
+            document.getElementById('detailSeeAlsoLabel').innerText = t('seeAlso');
 
             document.getElementById('outsideEnvMain').innerText = t('outsideEnvLabel');
             document.getElementById('outsideEnvSub').innerText = t('outsideEnvSub');
@@ -5587,8 +6352,13 @@
             document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
 
             document.getElementById('sidebarNearbyLabel').innerText = t('sidebarNearby');
+            document.getElementById('sidebarRecentLabel').innerText = t('sidebarRecent');
             document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
+            document.getElementById('sidebarLegendLabel').innerText = t('sidebarLegend');
+            document.getElementById('sidebarStudioLabel').innerText = t('sidebarStudio');
             document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
+
+            document.getElementById('lineIconLabel').innerText = t('lineIcon');
 
             updateSidebarGreeting();
 
@@ -5617,6 +6387,9 @@
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             renderProfile();
+            renderLinesList();
+            renderLegend();
+            updateSeeAlsoButton();
             if (document.getElementById('pinDialog').classList.contains('active')) {
                 renderSelectedServicesTags();
                 renderSelectedRelatedPins();
@@ -5662,6 +6435,7 @@
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'settings') hideSettingsSubpage();
             if (tabId === 'nearby') renderNearbyPins();
+            if (tabId === 'legend') renderLegend();
 
             pushHistory(tabId);
         }
@@ -6086,7 +6860,7 @@
                 pushHistory('map');
             } else {
                 const hash = window.location.hash.slice(1);
-                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail', 'nearby', 'mode'];
+                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail', 'nearby', 'mode', 'legend'];
                 if (knownPages.includes(hash)) {
                     const parts = hash.split('?');
                     const page = parts[0];
@@ -6100,6 +6874,12 @@
                     pushHistory('map');
                 }
             }
+
+            // Setup lines visibility toggle
+            document.getElementById('linesVisibilityToggle').addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleAllLines();
+            });
 
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
@@ -6121,9 +6901,26 @@
                 }
             });
 
+            document.getElementById('sidebarRecent').addEventListener('click', () => {
+                toggleSidebar();
+                switchTab('settings');
+                showSettingsSubpage('recent');
+            });
+
             document.getElementById('sidebarMode').addEventListener('click', () => {
                 toggleSidebar();
                 switchTab('mode');
+            });
+
+            document.getElementById('sidebarLegend').addEventListener('click', () => {
+                toggleSidebar();
+                switchTab('legend');
+                renderLegend();
+            });
+
+            document.getElementById('sidebarStudio').addEventListener('click', () => {
+                toggleSidebar();
+                window.open('about:blank', '_blank');
             });
 
             document.getElementById('sidebarSettings').addEventListener('click', () => {
@@ -6318,11 +7115,15 @@
             document.getElementById('groupDialogCancel').onclick = closeGroupDialog;
             document.getElementById('groupDialogSave').onclick = saveGroupFromDialog;
 
+            document.getElementById('addLineBtn').onclick = () => openLineDialog(null);
+            document.getElementById('lineDialogCancel').onclick = closeLineDialog;
+            document.getElementById('lineDialogSave').onclick = saveLineFromDialog;
+
             document.querySelectorAll('.dialog-overlay').forEach(dialog => {
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog') {
                             dialog.classList.remove('active');
                         }
                     }
