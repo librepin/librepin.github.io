@@ -280,19 +280,35 @@
             padding: 4px;
         }
         .sidebar .sidebar-greeting {
-            padding: 16px 20px 10px;
-            font-size: 15px;
-            color: var(--md-on-surface-variant);
-            line-height: 1.5;
+            padding: 12px 20px 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(128,128,128,0.05);
         }
-        .sidebar .sidebar-greeting .greeting-name {
+        .sidebar .sidebar-greeting .greeting-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--md-primary);
+            flex-shrink: 0;
+            background: var(--md-surface-dim);
+        }
+        .sidebar .sidebar-greeting .greeting-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .sidebar .sidebar-greeting .greeting-text .greeting-name {
             font-weight: 600;
             color: var(--md-on-surface);
+            font-size: 15px;
         }
-        .sidebar .sidebar-greeting .greeting-sub {
-            font-size: 14px;
+        .sidebar .sidebar-greeting .greeting-text .greeting-sub {
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
             opacity: 0.8;
-            margin-top: 2px;
+            margin-top: 1px;
         }
         .sidebar .sidebar-item {
             display: flex;
@@ -1198,6 +1214,8 @@
         .stars-selector .star {
             color: #ddd;
             transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
         }
         .stars-selector .star.active {
             color: #FFB300;
@@ -1819,7 +1837,10 @@
             .mode-popup .mode-option .mode-icon { font-size: 22px; width: 36px; }
             .sidebar { width: 260px; }
             .sidebar .sidebar-item { padding: 12px 16px; font-size: 15px; }
-            .sidebar .sidebar-greeting { font-size: 14px; padding: 14px 16px 8px; }
+            .sidebar .sidebar-greeting { padding: 10px 16px 8px; gap: 10px; }
+            .sidebar .sidebar-greeting .greeting-avatar { width: 36px; height: 36px; }
+            .sidebar .sidebar-greeting .greeting-text .greeting-name { font-size: 14px; }
+            .sidebar .sidebar-greeting .greeting-text .greeting-sub { font-size: 12px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -1835,6 +1856,7 @@
             .group-card { padding: 12px 10px; }
             .group-card .group-name { font-size: 12px; }
             .sidebar { width: 220px; }
+            .sidebar .sidebar-greeting .greeting-avatar { width: 30px; height: 30px; }
         }
 
         /* --- ANIMATIONS --- */
@@ -2014,17 +2036,20 @@
                     <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="sidebar-greeting" id="sidebarGreeting">
-                    <div class="greeting-name" id="greetingName">Bon dia, Usuari</div>
-                    <div class="greeting-sub" id="greetingSub">On anem avui?</div>
+                    <img class="greeting-avatar" id="greetingAvatar" src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg" alt="Avatar">
+                    <div class="greeting-text">
+                        <div class="greeting-name" id="greetingName">Bon dia, Usuari</div>
+                        <div class="greeting-sub" id="greetingSub">On anem avui?</div>
+                    </div>
                 </div>
                 <div style="padding: 4px 0;">
                     <button class="sidebar-item" id="sidebarNearby"><i class="fas fa-location-dot"></i> <span id="sidebarNearbyLabel">A prop meu</span></button>
                     <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
-                    <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Ajustos</span></button>
+                    <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Arranjament</span></button>
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.8</span>
+                    <span>v1.8.1</span>
                 </div>
             </div>
         </div>
@@ -2137,14 +2162,14 @@
                         </div>
                         <div class="mode-check"><i class="fas fa-check-circle"></i></div>
                     </div>
-                    <button class="fab-btn secondary" id="modePageCloseBtn" style="width:100%; margin-top:12px;">Tancar</button>
+                    <button class="fab-btn secondary" id="modePageCloseBtn" style="width:100%; margin-top:12px;"><span id="modeCloseLabel">Tancar</span></button>
                 </div>
             </div>
 
             <!-- SETTINGS -->
             <div id="settingsPage" class="page">
                 <div style="padding: 16px 16px 8px; background: var(--md-surface); border-bottom: 1px solid rgba(128,128,128,0.1); position: sticky; top: 0; z-index: 5;">
-                    <h2 style="font-size: 22px; font-weight: 700;"><i class="fas fa-sliders-h" style="color:var(--md-primary); margin-right: 8px;"></i> <span id="settingsMainTitle">Ajustos</span></h2>
+                    <h2 style="font-size: 22px; font-weight: 700;"><i class="fas fa-sliders-h" style="color:var(--md-primary); margin-right: 8px;"></i> <span id="settingsMainTitle">Arranjament</span></h2>
                 </div>
                 <div class="settings-sections" id="settingsSectionsContainer"></div>
             </div>
@@ -2289,7 +2314,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.8 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.8.1 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2375,7 +2400,7 @@
                 <span class="star" data-value="3">★</span>
                 <span class="star" data-value="4">★</span>
                 <span class="star" data-value="5">★</span>
-                <button class="clear-stars" id="clearStarsBtn" title="Delete rating"><i class="fas fa-times-circle"></i></button>
+                <button class="clear-stars" id="clearStarsBtn" title="Delete rating" style="display:none;"><i class="fas fa-times-circle"></i></button>
             </div>
 
             <label id="buttonsLabel">Botons personalitzats</label>
@@ -2581,7 +2606,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.8 Mobile';
+        const APP_VERSION = '1.8.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -2790,7 +2815,7 @@
                 modePageSubtitle: "Selecciona com vols veure els pins",
                 sidebarNearby: "A prop meu",
                 sidebarMode: "Mode de visualització",
-                sidebarSettings: "Ajustos",
+                sidebarSettings: "Arranjament",
                 greetingMorning: "Bon dia",
                 greetingAfternoon: "Bona tarda",
                 greetingEvening: "Bona nit",
@@ -4586,16 +4611,22 @@
             const empty = document.getElementById('searchEmpty');
 
             const trimmedFilter = filter.trim();
+            // Requerir mínimo 2 caracteres para búsqueda
+            if (trimmedFilter.length < 2) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('noPinsLabel').innerText = state.lang === 'ca' ? 'Introdueix almenys 2 caràcters' : state.lang === 'es' ? 'Introduce al menos 2 caracteres' : 'Enter at least 2 characters';
+                document.getElementById('addFirstPinLabel').innerText = '';
+                return;
+            }
+
             const f = trimmedFilter.toLowerCase();
             const visiblePins = getVisiblePins();
 
-            let filtered = visiblePins;
-            if (f) {
-                filtered = visiblePins.filter(p =>
-                    p.name.toLowerCase().includes(f) ||
-                    (p.subtitle && p.subtitle.toLowerCase().includes(f))
-                );
-            }
+            let filtered = visiblePins.filter(p =>
+                p.name.toLowerCase().includes(f) ||
+                (p.subtitle && p.subtitle.toLowerCase().includes(f))
+            );
 
             filtered.sort((a, b) => {
                 const aTime = a.lastAccessed || 0;
@@ -4608,17 +4639,11 @@
             const end = Math.min(state.searchLimit, totalResults);
             const hasMore = end < totalResults;
 
-            if (totalResults === 0 && f) {
+            if (totalResults === 0) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
                 document.getElementById('noPinsLabel').innerText = t('noResults');
                 document.getElementById('addFirstPinLabel').innerText = '';
-                return;
-            } else if (totalResults === 0 && !f) {
-                container.innerHTML = '';
-                empty.style.display = 'block';
-                document.getElementById('noPinsLabel').innerText = t('noPins');
-                document.getElementById('addFirstPinLabel').innerText = t('addFirstPin');
                 return;
             }
             empty.style.display = 'none';
@@ -4764,6 +4789,20 @@
                 }
             });
             outsideCheckbox.dispatchEvent(new Event('change'));
+
+            // Configurar evento de clic para las estrellas
+            document.querySelectorAll('.stars-selector .star').forEach(el => {
+                el.onclick = function(e) {
+                    e.stopPropagation();
+                    const val = parseInt(this.dataset.value);
+                    if (selectedRating === val) {
+                        selectedRating = 0;
+                    } else {
+                        selectedRating = val;
+                    }
+                    updateStarsUI();
+                };
+            });
 
             document.getElementById('pinDialog').classList.add('active');
             updateAllTexts();
@@ -5280,6 +5319,9 @@
             } else {
                 iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
             }
+
+            // Actualizar avatar en la barra lateral
+            document.getElementById('greetingAvatar').src = p.avatar || DEFAULT_AVATAR;
         }
 
         function openProfileEditor() {
@@ -5346,6 +5388,9 @@
 
             const subs = [t('greetingSub1'), t('greetingSub2'), t('greetingSub3'), t('greetingSub4')];
             document.getElementById('greetingSub').innerText = subs[Math.floor(Math.random() * subs.length)];
+
+            // Actualizar avatar
+            document.getElementById('greetingAvatar').src = state.profile.avatar || DEFAULT_AVATAR;
         }
 
         // ---------- SETTINGS NAVIGATION ----------
@@ -5539,6 +5584,7 @@
             document.querySelector('#modeHomeCard .mode-desc').innerText = t('modeHomeDesc');
             document.querySelector('#modeAwayCard .mode-name').innerText = t('modeAwayName');
             document.querySelector('#modeAwayCard .mode-desc').innerText = t('modeAwayDesc');
+            document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
 
             document.getElementById('sidebarNearbyLabel').innerText = t('sidebarNearby');
             document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
