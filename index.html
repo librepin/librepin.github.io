@@ -2382,7 +2382,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.9.1</span>
+                    <span>v1.9.2</span>
                 </div>
             </div>
         </div>
@@ -2484,6 +2484,7 @@
                             </div>
                             <span class="slider-label" id="linesVisibilityLabel"><i class="fas fa-eye"></i> Mostrar</span>
                         </div>
+                        <button class="fab-btn secondary small" id="legendEditLinesBtn"><i class="fas fa-edit"></i> <span id="legendEditLinesLabel">Editar línies</span></button>
                     </div>
                 </div>
                 <div id="legendList" style="padding:12px 16px;"></div>
@@ -2689,7 +2690,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.2 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -3013,7 +3014,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.9.1 Mobile';
+        const APP_VERSION = '1.9.2 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3266,7 +3267,8 @@
                 seeAlsoTitle: "Aquest pin pertany a",
                 linesVisible: "Mostrar línies",
                 linesHidden: "Amagar línies",
-                showLineLegend: "Mostrar al mapa"
+                showLineLegend: "Mostrar al mapa",
+                editLines: "Editar línies"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -3467,7 +3469,8 @@
                 seeAlsoTitle: "Este pin pertenece a",
                 linesVisible: "Mostrar líneas",
                 linesHidden: "Ocultar líneas",
-                showLineLegend: "Mostrar en el mapa"
+                showLineLegend: "Mostrar en el mapa",
+                editLines: "Editar líneas"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -3668,7 +3671,8 @@
                 seeAlsoTitle: "This pin belongs to",
                 linesVisible: "Show lines",
                 linesHidden: "Hide lines",
-                showLineLegend: "Show on map"
+                showLineLegend: "Show on map",
+                editLines: "Edit lines"
             }
         };
 
@@ -4040,7 +4044,10 @@
 
             if (!state.linesVisible) return;
 
-            state.lines.forEach(line => {
+            // Dibujar líneas en orden inverso: la primera de la lista se dibuja encima
+            const reversedLines = [...state.lines].reverse();
+
+            reversedLines.forEach(line => {
                 if (!line.points || line.points.length < 2) return;
                 const isVisible = state.lineVisibility[line.id] !== false;
                 if (!isVisible) return;
@@ -4237,7 +4244,8 @@
                     width,
                     points
                 };
-                state.lines.push(newLine);
+                // Insertar al principio de la lista (posición 0)
+                state.lines.unshift(newLine);
                 state.lineVisibility[newLine.id] = true;
                 showToast(t('lineAdded'));
             }
@@ -4329,6 +4337,11 @@
             saveData();
             drawAllLines();
             renderLegend();
+        }
+
+        function goToEditLines() {
+            switchTab('settings');
+            showSettingsSubpage('lines');
         }
 
         // ---------- MODE UI ----------
@@ -6367,6 +6380,7 @@
             document.getElementById('legendSubtitle').innerText = t('legendSubtitle');
             document.getElementById('noLegendLinesLabel').innerText = t('noLegendLines');
             document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
+            document.getElementById('legendEditLinesLabel').innerText = t('editLines');
 
             // Update slider label
             updateSliderUI();
@@ -7031,6 +7045,11 @@
                 toggleAllLines();
             });
 
+            // Setup edit lines button in legend
+            document.getElementById('legendEditLinesBtn').addEventListener('click', function(e) {
+                goToEditLines();
+            });
+
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
@@ -7070,7 +7089,7 @@
 
             document.getElementById('sidebarStudio').addEventListener('click', () => {
                 toggleSidebar();
-                window.open('https://librepin.github.io/studio');
+                window.open('https://www.google.com', '_blank');
             });
 
             document.getElementById('sidebarSettings').addEventListener('click', () => {
