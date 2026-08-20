@@ -214,6 +214,12 @@
         .top-bar .profile-icon .mode-dot.away {
             background: #FF9800;
         }
+        .top-bar .profile-icon .mode-dot.dnd {
+            background: #E30613;
+        }
+        .top-bar .profile-icon .mode-dot.transport {
+            background: #2196F3;
+        }
 
         /* --- SIDEBAR --- */
         .sidebar-overlay {
@@ -1270,50 +1276,6 @@
         .toast i { color: var(--md-primary); font-size: 20px; }
         .toast span { font-size: 15px; }
 
-        /* --- SPLASH DE PIN CREADO --- */
-        .pin-created-splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5000;
-            animation: fadeIn 0.4s ease;
-        }
-        .pin-created-splash .content {
-            background: var(--md-surface);
-            border-radius: var(--radius-lg);
-            padding: 40px 50px;
-            text-align: center;
-            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: var(--md-elevation-3);
-        }
-        .pin-created-splash .content .check-icon {
-            font-size: 72px;
-            color: #4CAF50;
-            margin-bottom: 12px;
-            animation: splashPulse 1s ease-in-out infinite;
-        }
-        .pin-created-splash .content h3 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--md-on-surface);
-        }
-        .pin-created-splash .content p {
-            font-size: 14px;
-            color: var(--md-on-surface-variant);
-            margin-top: 4px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         /* --- RELOAD FORZADO --- */
         .reload-overlay {
             position: fixed;
@@ -2102,6 +2064,15 @@
             from { transform: translateX(-50%) translateY(20px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
+        /* Animació ràpida pel popup d'horaris */
+        @keyframes schedulePopupIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .schedule-popup .dialog-card {
+            animation: schedulePopupIn 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
         #detailTitle {
             color: transparent !important;
             opacity: 0 !important;
@@ -2382,7 +2353,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.9.2</span>
+                    <span>v1.9.3</span>
                 </div>
             </div>
         </div>
@@ -2515,6 +2486,22 @@
                         <div class="mode-info">
                             <div class="mode-name">Fora del meu entorn</div>
                             <div class="mode-desc">Mostra tots els pins, inclosos els de fora</div>
+                        </div>
+                        <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                    </div>
+                    <div class="mode-option-card" data-mode="dnd" id="modeDndCard">
+                        <div class="mode-icon"><i class="fas fa-moon"></i></div>
+                        <div class="mode-info">
+                            <div class="mode-name">No destorbar</div>
+                            <div class="mode-desc">Mostra només els pins marcats com a preferits</div>
+                        </div>
+                        <div class="mode-check"><i class="fas fa-check-circle"></i></div>
+                    </div>
+                    <div class="mode-option-card" data-mode="transport" id="modeTransportCard">
+                        <div class="mode-icon"><i class="fas fa-bus"></i></div>
+                        <div class="mode-info">
+                            <div class="mode-name">Només transport</div>
+                            <div class="mode-desc">Mostra només les parades de transport públic</div>
                         </div>
                         <div class="mode-check"><i class="fas fa-check-circle"></i></div>
                     </div>
@@ -2690,7 +2677,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.2 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.3 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2954,7 +2941,7 @@
         <div class="dialog-card">
             <h3 id="lineDialogTitle">Afegir línia</h3>
             <label id="lineNameLabel">Nom *</label>
-            <input type="text" id="lineNameInput" placeholder="Line name">
+            <input type="text" id="lineNameInput" placeholder="Nom de la línia">
 
             <label id="lineIconLabel">URL de la icona (PNG)</label>
             <input type="text" id="lineIconInput" placeholder="https://example.com/icon.png">
@@ -2965,16 +2952,16 @@
                 <span class="color-hex" id="lineColorHex">#FF0000</span>
             </div>
 
-            <label id="lineWidthLabel">Thickness (px)</label>
+            <label id="lineWidthLabel">Gruix (px)</label>
             <input type="range" id="lineWidthInput" min="2" max="12" value="4" style="width:100%;">
             <span id="lineWidthValue" style="font-size:13px; color:var(--md-on-surface-variant);">4 px</span>
 
-            <label id="linePointsLabel">Points (lat,lng separated by ;)</label>
+            <label id="linePointsLabel">Punts (lat,lng separats per ;)</label>
             <textarea id="linePointsInput" placeholder="41.3851,2.1734;41.3861,2.1744;41.3871,2.1754" style="min-height:80px;"></textarea>
-            <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">Each point is a lat,lng coordinate. Separate the points with ;</p>
+            <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;">Cada punt és una coordenada lat,lng. Separa els punts amb ;</p>
 
             <div class="dialog-actions">
-                <button id="lineDialogCancel" class="fab-btn secondary"><span>Cancel</span></button>
+                <button id="lineDialogCancel" class="fab-btn secondary"><span>Cancel·lar</span></button>
                 <button id="lineDialogSave" class="fab-btn glow"><span>Guardar</span></button>
             </div>
         </div>
@@ -3014,7 +3001,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.9.2 Mobile';
+        const APP_VERSION = '1.9.3 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3196,7 +3183,7 @@
                 groupPinCount: " pins",
                 groupPinsPreview: "Pins del grup",
                 close: "Tancar",
-                gpsPermissionDenied: "Permís de geolocalització denegat. No es pot usar la ubicació del GPS.",
+                gpsPermissionDenied: "Permís de geolocalització denegat o no es pot usar la ubicació del GPS ara.",
                 gpsUnavailable: "No s'ha pogut obtenir la ubicació GPS.",
                 groupActions: "Accions del grup",
                 editGroupAction: "Editar grup",
@@ -3217,6 +3204,10 @@
                 modeHomeDesc: "Mostra només pins del teu entorn",
                 modeAwayName: "Fora del meu entorn",
                 modeAwayDesc: "Mostra tots els pins, inclosos els de fora de la teva ciutat",
+                modeDndName: "No destorbar",
+                modeDndDesc: "Mostra només els pins marcats com a preferits",
+                modeTransportName: "Només transport",
+                modeTransportDesc: "Mostra només les parades de transport públic",
                 modeCloseLabel: "Tancar",
                 outsideEnvLabel: "Fora del meu entorn",
                 outsideEnvSub: " ",
@@ -3398,7 +3389,7 @@
                 groupPinCount: " pins",
                 groupPinsPreview: "Pins del grupo",
                 close: "Cerrar",
-                gpsPermissionDenied: "Permiso de geolocalización denegado. No se puede usar la ubicación del GPS.",
+                gpsPermissionDenied: "Permiso de geolocalización denegado o no se puede usar la ubicación del GPS ahora.",
                 gpsUnavailable: "No se ha podido obtener la ubicación GPS.",
                 groupActions: "Acciones del grupo",
                 editGroupAction: "Editar grupo",
@@ -3419,6 +3410,10 @@
                 modeHomeDesc: "Muestra solo pins de tu entorno",
                 modeAwayName: "Fuera de mi entorno",
                 modeAwayDesc: "Muestra todos los pins, incluidos los de fuera de tu ciudad",
+                modeDndName: "No molestar",
+                modeDndDesc: "Muestra solo los pins marcados como favoritos",
+                modeTransportName: "Solo transporte",
+                modeTransportDesc: "Muestra solo las paradas de transporte público",
                 modeCloseLabel: "Cerrar",
                 outsideEnvLabel: "Fuera de tu entorno",
                 outsideEnvSub: " ",
@@ -3600,7 +3595,7 @@
                 groupPinCount: " pins",
                 groupPinsPreview: "Group pins",
                 close: "Close",
-                gpsPermissionDenied: "Geolocation permission denied. GPS location cannot be used.",
+                gpsPermissionDenied: "Geolocation permission denied or GPS location cannot be used right now.",
                 gpsUnavailable: "Could not get GPS location.",
                 groupActions: "Group actions",
                 editGroupAction: "Edit group",
@@ -3621,6 +3616,10 @@
                 modeHomeDesc: "Show only pins from your environment",
                 modeAwayName: "Outside my environment",
                 modeAwayDesc: "Show all pins, including those outside your city",
+                modeDndName: "Do not disturb",
+                modeDndDesc: "Show only favorite pins",
+                modeTransportName: "Transport only",
+                modeTransportDesc: "Show only public transport stops",
                 modeCloseLabel: "Close",
                 outsideEnvLabel: "Outside your environment",
                 outsideEnvSub: " ",
@@ -3693,25 +3692,6 @@
             toast.classList.add('show');
             clearTimeout(toast._timeout);
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2800);
-        }
-
-        // ---------- SPLASH DE PIN CREADO ----------
-        function showPinCreatedSplash(pinName) {
-            const overlay = document.createElement('div');
-            overlay.className = 'pin-created-splash';
-            overlay.innerHTML = `
-                <div class="content">
-                    <div class="check-icon"><i class="fas fa-check-circle"></i></div>
-                    <h3>${t('pinAdded')}</h3>
-                    <p>${escapeHtml(pinName)}</p>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-                overlay.style.transition = 'opacity 0.4s ease';
-                setTimeout(() => overlay.remove(), 400);
-            }, 1500);
         }
 
         // ---------- CONFIRM ----------
@@ -4346,16 +4326,33 @@
 
         // ---------- MODE UI ----------
         function updateModeUI() {
+            // Actualizar el dot del perfil según el modo
             const dot = document.getElementById('profileModeDot');
+            document.querySelectorAll('.mode-option-card').forEach(c => c.classList.remove('active'));
+
             if (state.viewMode === 'home') {
                 dot.className = 'mode-dot home';
                 document.getElementById('modeHomeCard').classList.add('active');
-                document.getElementById('modeAwayCard').classList.remove('active');
-            } else {
+            } else if (state.viewMode === 'away') {
                 dot.className = 'mode-dot away';
                 document.getElementById('modeAwayCard').classList.add('active');
-                document.getElementById('modeHomeCard').classList.remove('active');
+            } else if (state.viewMode === 'dnd') {
+                dot.className = 'mode-dot dnd';
+                document.getElementById('modeDndCard').classList.add('active');
+            } else if (state.viewMode === 'transport') {
+                dot.className = 'mode-dot transport';
+                document.getElementById('modeTransportCard').classList.add('active');
             }
+
+            // Actualizar textos de los modos
+            document.querySelector('#modeHomeCard .mode-name').innerText = t('modeHomeName');
+            document.querySelector('#modeHomeCard .mode-desc').innerText = t('modeHomeDesc');
+            document.querySelector('#modeAwayCard .mode-name').innerText = t('modeAwayName');
+            document.querySelector('#modeAwayCard .mode-desc').innerText = t('modeAwayDesc');
+            document.querySelector('#modeDndCard .mode-name').innerText = t('modeDndName');
+            document.querySelector('#modeDndCard .mode-desc').innerText = t('modeDndDesc');
+            document.querySelector('#modeTransportCard .mode-name').innerText = t('modeTransportName');
+            document.querySelector('#modeTransportCard .mode-desc').innerText = t('modeTransportDesc');
 
             renderAllPins();
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
@@ -4368,7 +4365,12 @@
         function isPinVisible(pin) {
             if (state.viewMode === 'home') {
                 return !pin.isOutsideEnvironment;
+            } else if (state.viewMode === 'dnd') {
+                return state.favorites.includes(pin.id);
+            } else if (state.viewMode === 'transport') {
+                return pin.isTransportStop === true;
             }
+            // away mode - mostrar todos
             return true;
         }
 
@@ -4381,7 +4383,13 @@
             saveData();
             updateModeUI();
             updateAllTexts();
-            showToast(state.viewMode === 'home' ? t('modeHomeName') : t('modeAwayName'));
+            const modeNames = {
+                home: t('modeHomeName'),
+                away: t('modeAwayName'),
+                dnd: t('modeDndName'),
+                transport: t('modeTransportName')
+            };
+            showToast(modeNames[mode] || mode);
             switchTab('map');
         }
 
@@ -4451,6 +4459,8 @@
             renderRecentPins();
             renderGroups();
             updateFavoriteUI();
+            // Re-renderizar mapa para reflejar cambios en modo DND
+            renderAllPins();
         }
 
         function getFavoritesOrdered() {
@@ -5273,9 +5283,10 @@
                 return;
             }
 
+            // Crear popup con animación rápida
             scheduleBtn.onclick = () => {
                 const overlay = document.createElement('div');
-                overlay.className = 'dialog-overlay active';
+                overlay.className = 'dialog-overlay active schedule-popup';
                 overlay.style.display = 'flex';
                 overlay.innerHTML = `
                     <div class="dialog-card" style="max-height:70vh; overflow-y:auto;">
@@ -5844,7 +5855,8 @@
             } else {
                 state.pins.push(pinData);
                 addPinToMap(pinData);
-                showPinCreatedSplash(pinData.name);
+                // Eliminada la animació de splash de pin creat
+                showToast(t('pinAdded'));
             }
 
             saveData();
@@ -6228,9 +6240,9 @@
 
             const iconEl = document.getElementById('profileIconBtn');
             if (p.avatar && p.avatar !== DEFAULT_AVATAR) {
-                iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
+                iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
             } else {
-                iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : 'away'}" id="profileModeDot"></span>`;
+                iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
             }
 
             document.getElementById('greetingAvatar').src = p.avatar || DEFAULT_AVATAR;
@@ -6513,6 +6525,10 @@
             document.querySelector('#modeHomeCard .mode-desc').innerText = t('modeHomeDesc');
             document.querySelector('#modeAwayCard .mode-name').innerText = t('modeAwayName');
             document.querySelector('#modeAwayCard .mode-desc').innerText = t('modeAwayDesc');
+            document.querySelector('#modeDndCard .mode-name').innerText = t('modeDndName');
+            document.querySelector('#modeDndCard .mode-desc').innerText = t('modeDndDesc');
+            document.querySelector('#modeTransportCard .mode-name').innerText = t('modeTransportName');
+            document.querySelector('#modeTransportCard .mode-desc').innerText = t('modeTransportDesc');
             document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
 
             document.getElementById('sidebarNearbyLabel').innerText = t('sidebarNearby');
@@ -7050,6 +7066,12 @@
                 goToEditLines();
             });
 
+            // Setup mode cards
+            document.getElementById('modeHomeCard').addEventListener('click', () => setViewMode('home'));
+            document.getElementById('modeAwayCard').addEventListener('click', () => setViewMode('away'));
+            document.getElementById('modeDndCard').addEventListener('click', () => setViewMode('dnd'));
+            document.getElementById('modeTransportCard').addEventListener('click', () => setViewMode('transport'));
+
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
 
@@ -7098,8 +7120,6 @@
             });
 
             // ---- MODE PAGE ----
-            document.getElementById('modeHomeCard').addEventListener('click', () => setViewMode('home'));
-            document.getElementById('modeAwayCard').addEventListener('click', () => setViewMode('away'));
             document.getElementById('modePageCloseBtn').addEventListener('click', () => switchTab('map'));
 
             // ---- RECENTER ----
