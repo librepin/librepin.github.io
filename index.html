@@ -45,6 +45,13 @@
             --map-tiles: light;
             --sidebar-width: 280px;
             --bottom-nav-height: 60px;
+            
+            /* Colors de les estrelles */
+            --star-color-1: #E30613;
+            --star-color-2: #FF8C00;
+            --star-color-3: #FFB300;
+            --star-color-4: #66BB6A;
+            --star-color-5: #2E7D32;
         }
 
         [data-theme="dark"] {
@@ -546,6 +553,81 @@
         .search-results-page {
             padding-top: 0;
         }
+        /* Search header with sort button */
+        .search-header {
+            padding: 12px 16px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-wrapper .search-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        .search-wrapper .search-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--md-on-surface-variant);
+            font-size: 16px;
+        }
+        .search-wrapper .search-input-wrapper input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 40px;
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .search-wrapper .search-input-wrapper input:focus {
+            border-color: var(--md-primary);
+        }
+        .search-wrapper .search-input-wrapper .clear-search {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            font-size: 16px;
+            display: none;
+            padding: 4px;
+        }
+        .search-wrapper .sort-btn {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            display: none;
+        }
+        .search-wrapper .sort-btn:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+        .search-wrapper .sort-btn.visible {
+            display: block;
+        }
+
         .pin-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -584,7 +666,7 @@
         .pin-card:hover img { transform: scale(1.05); }
         .pin-card .pin-name { font-weight: 600; margin: 8px 0 2px; font-size: 15px; }
         .pin-card .pin-subtitle { font-size: 12px; color: var(--md-on-surface-variant); margin-bottom: 4px; }
-        .pin-card .pin-stars { font-size: 16px; color: #FFB300; letter-spacing: 2px; margin: 4px 0; }
+        .pin-card .pin-stars { font-size: 16px; letter-spacing: 2px; margin: 4px 0; }
         .pin-card .pin-services {
             display: flex;
             justify-content: center;
@@ -598,6 +680,31 @@
             border-radius: 0px;
             object-fit: cover;
         }
+
+        /* --- SEARCH SORT DIALOG --- */
+        .sort-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+        .sort-option:active { transform: scale(0.97); }
+        .sort-option.active {
+            border-color: var(--md-primary);
+            background: var(--md-primary-container);
+        }
+        .sort-option .sort-icon { font-size: 20px; width: 36px; text-align: center; color: var(--md-primary); }
+        .sort-option .sort-info { flex: 1; }
+        .sort-option .sort-info .sort-name { font-weight: 600; font-size: 15px; }
+        .sort-option .sort-info .sort-desc { font-size: 12px; color: var(--md-on-surface-variant); }
+        .sort-option .sort-check { font-size: 20px; color: var(--md-primary); opacity: 0; transition: all 0.3s ease; }
+        .sort-option.active .sort-check { opacity: 1; }
 
         /* --- GROUPS --- */
         #groupsPage .groups-header {
@@ -758,7 +865,45 @@
         .detail-name { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
         .detail-subtitle { font-size: 16px; color: var(--md-on-surface-variant); margin-bottom: 8px; }
         .detail-desc { color: var(--md-on-surface-variant); margin-bottom: 12px; font-size: 16px; }
-        .detail-stars { font-size: 22px; color: #FFB300; margin-bottom: 12px; letter-spacing: 3px; }
+        .detail-stars { font-size: 22px; margin-bottom: 12px; letter-spacing: 3px; }
+
+        /* --- TARGETA DE RESSENYA --- */
+        .review-card {
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        .review-card .review-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--md-on-surface);
+        }
+        .review-card .review-text {
+            font-size: 15px;
+            color: var(--md-on-surface);
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .review-card .review-stars {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        /* Colors pastel per rating */
+        .review-card.rating-1 { background: #FDE8E8; border-color: #E30613; }
+        .review-card.rating-2 { background: #FFF0D6; border-color: #FF8C00; }
+        .review-card.rating-3 { background: #FFF8D6; border-color: #FFB300; }
+        .review-card.rating-4 { background: #E8F5E9; border-color: #66BB6A; }
+        .review-card.rating-5 { background: #C8E6C9; border-color: #2E7D32; }
+        [data-theme="dark"] .review-card.rating-1 { background: #3D1A1A; border-color: #E30613; }
+        [data-theme="dark"] .review-card.rating-2 { background: #3D2A0A; border-color: #FF8C00; }
+        [data-theme="dark"] .review-card.rating-3 { background: #3D3500; border-color: #FFB300; }
+        [data-theme="dark"] .review-card.rating-4 { background: #1A3D1A; border-color: #66BB6A; }
+        [data-theme="dark"] .review-card.rating-5 { background: #0D2E0D; border-color: #2E7D32; }
 
         .detail-services-wrapper {
             margin-bottom: 14px;
@@ -1227,10 +1372,11 @@
             cursor: pointer;
             user-select: none;
         }
-        .stars-selector .star.active {
-            color: #FFB300;
-            transform: scale(1.1);
-        }
+        .stars-selector .star.active-1 { color: #E30613; }
+        .stars-selector .star.active-2 { color: #FF8C00; }
+        .stars-selector .star.active-3 { color: #FFB300; }
+        .stars-selector .star.active-4 { color: #66BB6A; }
+        .stars-selector .star.active-5 { color: #2E7D32; }
         .stars-selector .clear-stars {
             background: none;
             border: none;
@@ -2027,6 +2173,10 @@
             .slider-toggle.active .slider-track .slider-thumb { left: 22px; }
             .legend-item .legend-checkbox .custom-checkbox-sm { width: 18px; height: 18px; min-width: 18px; }
             .line-item .drag-handle-line { font-size: 16px; padding: 2px 6px 2px 2px; }
+            .review-card { padding: 14px 14px; }
+            .review-card .review-title { font-size: 15px; }
+            .review-card .review-text { font-size: 14px; }
+            .search-wrapper .sort-btn { font-size: 18px; padding: 6px 8px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -2306,6 +2456,9 @@
             width: 100%;
             margin-top: 12px;
         }
+        #clearSearchBtn {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -2353,7 +2506,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.9.3.1</span>
+                    <span>v1.10.0</span>
                 </div>
             </div>
         </div>
@@ -2376,11 +2529,14 @@
 
             <!-- SEARCH -->
             <div id="searchPage" class="page search-results-page">
-                <div style="padding: 12px 16px; background: var(--md-surface); border-bottom: 1px solid rgba(128,128,128,0.1); position: sticky; top: 0; z-index: 5;">
-                    <div class="search-wrapper" style="position:relative;">
-                        <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--md-on-surface-variant); font-size:16px;"></i>
-                        <input type="text" id="globalSearchInput" placeholder="Buscar pins..." style="width:100%; padding:10px 16px 10px 42px; border-radius:40px; border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:15px; font-family:inherit; outline:none; transition:border-color 0.3s ease;">
-                        <button class="clear-search" id="clearSearchBtn" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; display:none; padding:4px;"><i class="fas fa-times"></i></button>
+                <div class="search-header">
+                    <div class="search-wrapper">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="globalSearchInput" placeholder="Buscar pins...">
+                            <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <button class="sort-btn" id="sortBtn"><i class="fas fa-sliders-h"></i></button>
                     </div>
                 </div>
                 <div id="searchResults" class="pin-grid"></div>
@@ -2677,7 +2833,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.9.3.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.10.0 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2707,6 +2863,12 @@
                         </button>
                     </div>
                     <div class="detail-buttons" id="detailButtons"></div>
+                    <!-- TARGETA DE RESSENYA -->
+                    <div id="reviewCard" class="review-card" style="display:none;">
+                        <div class="review-stars" id="reviewStars"></div>
+                        <div class="review-title" id="reviewTitle"></div>
+                        <div class="review-text" id="reviewText"></div>
+                    </div>
                     <div class="detail-actions">
                         <button class="fab-btn glow" id="detailGoBtn"><i class="fas fa-directions"></i> <span id="detailGoLabel">Ves-hi</span></button>
                         <button class="fab-btn purple glow" id="detailScheduleBtn" style="display:none;"><i class="fas fa-clock"></i> <span id="detailScheduleLabel">Consultar horari</span></button>
@@ -2729,6 +2891,51 @@
             <button class="nav-item" data-tab="search" id="navSearch"><i class="fas fa-search"></i><span id="navSearchLabel">Buscar</span></button>
             <button class="nav-item" data-tab="groups" id="navGroups"><i class="fas fa-layer-group"></i><span id="navGroupsLabel">Grups</span></button>
             <button class="nav-item" data-tab="favorites" id="navFavorites"><i class="fas fa-heart"></i><span id="navFavoritesLabel">Preferits</span></button>
+        </div>
+    </div>
+
+    <!-- Dialog: Sort Options -->
+    <div id="sortDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3><i class="fas fa-sort"></i> <span id="sortDialogTitle">Ordenar cerca</span></h3>
+            <div id="sortOptions">
+                <div class="sort-option active" data-sort="recent">
+                    <div class="sort-icon"><i class="fas fa-clock"></i></div>
+                    <div class="sort-info">
+                        <div class="sort-name">Últim vist</div>
+                        <div class="sort-desc">Ordena per data d'última visita</div>
+                    </div>
+                    <div class="sort-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="sort-option" data-sort="rating">
+                    <div class="sort-icon"><i class="fas fa-star"></i></div>
+                    <div class="sort-info">
+                        <div class="sort-name">Puntuació</div>
+                        <div class="sort-desc">Ordena per valoració (de més alta a més baixa)</div>
+                    </div>
+                    <div class="sort-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="sort-option" data-sort="alphabetical">
+                    <div class="sort-icon"><i class="fas fa-sort-alpha-down"></i></div>
+                    <div class="sort-info">
+                        <div class="sort-name">Alfabètic</div>
+                        <div class="sort-desc">Ordena per nom de la A a la Z</div>
+                    </div>
+                    <div class="sort-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="sort-option" data-sort="distance">
+                    <div class="sort-icon"><i class="fas fa-location-dot"></i></div>
+                    <div class="sort-info">
+                        <div class="sort-name">Més a prop</div>
+                        <div class="sort-desc">Ordena per distància a la teva ubicació</div>
+                    </div>
+                    <div class="sort-check"><i class="fas fa-check-circle"></i></div>
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button class="fab-btn secondary" id="sortDialogCancel"><span id="cancelSortLabel">Cancel·lar</span></button>
+                <button class="fab-btn glow" id="sortDialogApply"><span id="applySortLabel">Aplicar</span></button>
+            </div>
         </div>
     </div>
 
@@ -2766,6 +2973,13 @@
                 <span class="star" data-value="5">★</span>
                 <button class="clear-stars" id="clearStarsBtn" title="Delete rating" style="display:none;"><i class="fas fa-times-circle"></i></button>
             </div>
+
+            <!-- Nous camps per la ressenya -->
+            <label id="reviewTitleLabel" style="margin-top:12px;">En poques paraules (màx 50 caràcters)</label>
+            <input type="text" id="pinReviewTitleInput" placeholder="..." maxlength="50">
+
+            <label id="reviewTextLabel">Ressenya (text lliure)</label>
+            <textarea id="pinReviewTextInput" placeholder="..." style="min-height:60px;"></textarea>
 
             <label id="buttonsLabel">Botons personalitzats</label>
             <div id="customButtonsContainer">
@@ -3001,7 +3215,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.9.3.1 Mobile';
+        const APP_VERSION = '1.10.0 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3050,7 +3264,9 @@
             lineLayers: {},
             lineVisibility: {},
             editingLineId: null,
-            linesVisible: true
+            linesVisible: true,
+            sortMode: 'recent', // recent | rating | alphabetical | distance
+            currentSearchQuery: ''
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -3259,7 +3475,20 @@
                 linesVisible: "Mostrar línies",
                 linesHidden: "Amagar línies",
                 showLineLegend: "Mostrar al mapa",
-                editLines: "Editar línies"
+                editLines: "Editar línies",
+                reviewTitle: "En poques paraules",
+                reviewText: "Ressenya",
+                sortDialogTitle: "Ordenar cerca",
+                sortRecent: "Últim vist",
+                sortRecentDesc: "Ordena per data d'última visita",
+                sortRating: "Puntuació",
+                sortRatingDesc: "Ordena per valoració (de més alta a més baixa)",
+                sortAlphabetical: "Alfabètic",
+                sortAlphabeticalDesc: "Ordena per nom de la A a la Z",
+                sortDistance: "Més a prop",
+                sortDistanceDesc: "Ordena per distància a la teva ubicació",
+                cancelSort: "Cancel·lar",
+                applySort: "Aplicar"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -3465,7 +3694,20 @@
                 linesVisible: "Mostrar líneas",
                 linesHidden: "Ocultar líneas",
                 showLineLegend: "Mostrar en el mapa",
-                editLines: "Editar líneas"
+                editLines: "Editar líneas",
+                reviewTitle: "En pocas palabras",
+                reviewText: "Reseña",
+                sortDialogTitle: "Ordenar búsqueda",
+                sortRecent: "Último visto",
+                sortRecentDesc: "Ordena por fecha de última visita",
+                sortRating: "Puntuación",
+                sortRatingDesc: "Ordena por valoración (de más alta a más baja)",
+                sortAlphabetical: "Alfabético",
+                sortAlphabeticalDesc: "Ordena por nombre de la A a la Z",
+                sortDistance: "Más cerca",
+                sortDistanceDesc: "Ordena por distancia a tu ubicación",
+                cancelSort: "Cancelar",
+                applySort: "Aplicar"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -3671,7 +3913,20 @@
                 linesVisible: "Show lines",
                 linesHidden: "Hide lines",
                 showLineLegend: "Show on map",
-                editLines: "Edit lines"
+                editLines: "Edit lines",
+                reviewTitle: "In a few words",
+                reviewText: "Review",
+                sortDialogTitle: "Sort search",
+                sortRecent: "Last viewed",
+                sortRecentDesc: "Sort by last visit date",
+                sortRating: "Rating",
+                sortRatingDesc: "Sort by rating (highest to lowest)",
+                sortAlphabetical: "Alphabetical",
+                sortAlphabeticalDesc: "Sort by name A to Z",
+                sortDistance: "Closest",
+                sortDistanceDesc: "Sort by distance to your location",
+                cancelSort: "Cancel",
+                applySort: "Apply"
             }
         };
 
@@ -3683,6 +3938,38 @@
                 el.checked = !el.checked;
                 el.dispatchEvent(new Event('change'));
             }
+        }
+
+        // ---------- FUNCIONS PER LES ESTRELLES ----------
+        function getStarColor(rating) {
+            if (rating === 1) return '#E30613';
+            if (rating === 2) return '#FF8C00';
+            if (rating === 3) return '#FFB300';
+            if (rating === 4) return '#66BB6A';
+            if (rating === 5) return '#2E7D32';
+            return '#ddd';
+        }
+
+        function getStarClass(rating) {
+            if (rating === 1) return 'active-1';
+            if (rating === 2) return 'active-2';
+            if (rating === 3) return 'active-3';
+            if (rating === 4) return 'active-4';
+            if (rating === 5) return 'active-5';
+            return '';
+        }
+
+        function getReviewCardClass(rating) {
+            if (!rating || rating < 1 || rating > 5) return '';
+            return 'rating-' + rating;
+        }
+
+        function renderStarsHTML(rating) {
+            if (!rating || rating < 1) return '';
+            const full = '★'.repeat(rating);
+            const empty = '☆'.repeat(5 - rating);
+            const color = getStarColor(rating);
+            return `<span style="color:${color};">${full}</span><span style="color:#ddd;">${empty}</span>`;
         }
 
         // ---------- TOAST ----------
@@ -3732,6 +4019,7 @@
                     if (data.mapStyle) state.mapStyle = data.mapStyle;
                     if (data.viewMode) state.viewMode = data.viewMode;
                     if (data.lang) state.lang = data.lang;
+                    if (data.sortMode) state.sortMode = data.sortMode;
                     if (data.mapStartLocation) {
                         state.mapStartLocation = data.mapStartLocation;
                         state.currentLocation = data.mapStartLocation;
@@ -3763,6 +4051,7 @@
             updateModeUI();
             updateSidebarGreeting();
             drawAllLines();
+            updateSortUI();
         }
 
         function saveData() {
@@ -3780,6 +4069,7 @@
                 mapStyle: state.mapStyle,
                 viewMode: state.viewMode,
                 lang: state.lang,
+                sortMode: state.sortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
             }));
@@ -4490,7 +4780,7 @@
             empty.style.display = 'none';
 
             container.innerHTML = favPins.map((pin, index) => {
-                const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
+                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
                 return `
@@ -4901,12 +5191,13 @@
             } else {
                 emptyMsg.style.display = 'none';
                 grid.innerHTML = pins.map(pin => {
-                    const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
+                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                     return `
                         <div class="group-detail-pin-item" data-id="${pin.id}">
                             <img src="${pin.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
                             <div class="name">${escapeHtml(pin.name)}</div>
                             ${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
+                            ${stars ? `<div style="font-size:12px; margin-top:2px;">${stars}</div>` : ''}
                         </div>
                     `;
                 }).join('');
@@ -4964,13 +5255,17 @@
             }
 
             section.style.display = 'block';
-            grid.innerHTML = related.map(p => `
-                <div class="related-pin-item" data-id="${p.id}">
-                    <img src="${p.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
-                    <div class="name">${escapeHtml(p.name)}</div>
-                    ${p.subtitle ? `<div class="subtitle">${escapeHtml(p.subtitle)}</div>` : ''}
-                </div>
-            `).join('');
+            grid.innerHTML = related.map(p => {
+                const stars = (p.rating && p.rating > 0) ? renderStarsHTML(p.rating) : '';
+                return `
+                    <div class="related-pin-item" data-id="${p.id}">
+                        <img src="${p.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
+                        <div class="name">${escapeHtml(p.name)}</div>
+                        ${p.subtitle ? `<div class="subtitle">${escapeHtml(p.subtitle)}</div>` : ''}
+                        ${stars ? `<div style="font-size:11px; margin-top:2px;">${stars}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
 
             grid.querySelectorAll('.related-pin-item').forEach(el => {
                 el.onclick = () => {
@@ -5318,6 +5613,62 @@
             scheduleBtn.innerHTML = `<i class="fas fa-clock"></i> ${t('scheduleBtn')}`;
         }
 
+        // Función para renderizar la targeta de ressenya
+        function renderReviewCard(pin) {
+            const card = document.getElementById('reviewCard');
+            const starsEl = document.getElementById('reviewStars');
+            const titleEl = document.getElementById('reviewTitle');
+            const textEl = document.getElementById('reviewText');
+
+            const hasReviewTitle = pin.reviewTitle && pin.reviewTitle.trim().length > 0;
+            const hasReviewText = pin.reviewText && pin.reviewText.trim().length > 0;
+
+            // Solo mostrar si hay reviewTitle o reviewText
+            if (!hasReviewTitle && !hasReviewText) {
+                card.style.display = 'none';
+                // Si no hay reseña, mostramos detail-stars
+                document.getElementById('detailStars').style.display = 'block';
+                return;
+            }
+
+            card.style.display = 'block';
+            // Ocultar detail-stars cuando se muestra la targeta
+            document.getElementById('detailStars').style.display = 'none';
+
+            // Limpiar clases anteriores
+            card.className = 'review-card';
+            const hasRating = pin.rating && pin.rating > 0;
+            if (hasRating) {
+                card.classList.add(getReviewCardClass(pin.rating));
+                starsEl.innerHTML = renderStarsHTML(pin.rating);
+                starsEl.style.display = 'block';
+            } else {
+                // Si no tiene rating pero tiene texto, usar un fondo neutro
+                card.style.background = 'var(--md-surface-dim)';
+                card.style.borderColor = 'var(--md-outline)';
+                starsEl.innerHTML = '';
+                starsEl.style.display = 'none';
+            }
+
+            // Título
+            if (hasReviewTitle) {
+                titleEl.textContent = pin.reviewTitle;
+                titleEl.style.display = 'block';
+            } else {
+                titleEl.textContent = '';
+                titleEl.style.display = 'none';
+            }
+
+            // Texto de la reseña
+            if (hasReviewText) {
+                textEl.textContent = pin.reviewText;
+                textEl.style.display = 'block';
+            } else {
+                textEl.textContent = '';
+                textEl.style.display = 'none';
+            }
+        }
+
         function openGoFromSelector() {
             const currentPin = state.pins.find(p => p.id === state.detailPinId);
             if (!currentPin) return;
@@ -5371,6 +5722,7 @@
                 list.innerHTML = sortedPins.map(pin => {
                     const isCurrent = pin.id === currentPin.id;
                     const fav = isFavorite(pin.id);
+                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                     return `
                         <div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" 
                              data-id="${pin.id}" 
@@ -5379,6 +5731,7 @@
                             <div style="flex:1; min-width:0;">
                                 <div style="font-weight:500;font-size:14px;">${escapeHtml(pin.name)} ${isCurrent ? '(actual)' : ''}</div>
                                 ${pin.subtitle ? `<div style="font-size:12px;color:var(--md-on-surface-variant);">${escapeHtml(pin.subtitle)}</div>` : ''}
+                                ${stars ? `<div style="font-size:12px;margin-top:2px;">${stars}</div>` : ''}
                             </div>
                             ${fav ? `<div style="color:#FFB300; font-size:18px;"><i class="fas fa-heart"></i></div>` : ''}
                         </div>
@@ -5439,9 +5792,10 @@
 
             const starsContainer = document.getElementById('detailStars');
             if (pin.rating && pin.rating > 0) {
-                starsContainer.innerText = '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating);
+                starsContainer.innerHTML = renderStarsHTML(pin.rating);
                 starsContainer.style.display = 'block';
             } else {
+                starsContainer.innerHTML = '';
                 starsContainer.style.display = 'none';
             }
 
@@ -5481,6 +5835,9 @@
                 });
             }
 
+            // Renderitzar la targeta de ressenya (oculta detail-stars si cal)
+            renderReviewCard(pin);
+
             const goBtn = document.getElementById('detailGoBtn');
             goBtn.onclick = () => {
                 const url = `https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}`;
@@ -5517,11 +5874,72 @@
         }
 
         // ---------- SEARCH ----------
+        function getSortedPins(pins) {
+            const sorted = [...pins];
+            const mode = state.sortMode || 'recent';
+
+            switch (mode) {
+                case 'recent':
+                    sorted.sort((a, b) => {
+                        const aTime = a.lastAccessed || 0;
+                        const bTime = b.lastAccessed || 0;
+                        return bTime - aTime;
+                    });
+                    break;
+                case 'rating':
+                    sorted.sort((a, b) => {
+                        const aRating = a.rating || 0;
+                        const bRating = b.rating || 0;
+                        if (bRating !== aRating) return bRating - aRating;
+                        // Si misma puntuación, orden alfabético
+                        return a.name.localeCompare(b.name);
+                    });
+                    break;
+                case 'alphabetical':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'distance':
+                    if (state.userLocation) {
+                        const [userLat, userLng] = state.userLocation;
+                        sorted.sort((a, b) => {
+                            const dA = Math.sqrt(Math.pow(a.lat - userLat, 2) + Math.pow(a.lng - userLng, 2));
+                            const dB = Math.sqrt(Math.pow(b.lat - userLat, 2) + Math.pow(b.lng - userLng, 2));
+                            return dA - dB;
+                        });
+                    } else {
+                        // Fallback a recent si no hay ubicación
+                        sorted.sort((a, b) => {
+                            const aTime = a.lastAccessed || 0;
+                            const bTime = b.lastAccessed || 0;
+                            return bTime - aTime;
+                        });
+                    }
+                    break;
+                default:
+                    sorted.sort((a, b) => {
+                        const aTime = a.lastAccessed || 0;
+                        const bTime = b.lastAccessed || 0;
+                        return bTime - aTime;
+                    });
+            }
+            return sorted;
+        }
+
         function renderSearchResults(filter = '') {
             const container = document.getElementById('searchResults');
             const empty = document.getElementById('searchEmpty');
+            const sortBtn = document.getElementById('sortBtn');
 
+            state.currentSearchQuery = filter;
             const trimmedFilter = filter.trim();
+
+            // Mostrar/ocultar botón de ordenación
+            if (trimmedFilter.length >= 2) {
+                sortBtn.classList.add('visible');
+            } else {
+                sortBtn.classList.remove('visible');
+            }
+
             if (trimmedFilter.length < 2) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
@@ -5538,11 +5956,8 @@
                 (p.subtitle && p.subtitle.toLowerCase().includes(f))
             );
 
-            filtered.sort((a, b) => {
-                const aTime = a.lastAccessed || 0;
-                const bTime = b.lastAccessed || 0;
-                return bTime - aTime;
-            });
+            // Aplicar ordenación
+            filtered = getSortedPins(filtered);
 
             const totalResults = filtered.length;
             const start = 0;
@@ -5560,7 +5975,7 @@
 
             const resultsToShow = filtered.slice(start, end);
             container.innerHTML = resultsToShow.map(pin => {
-                const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
+                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                 const isFav = isFavorite(pin.id);
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
@@ -5602,6 +6017,62 @@
             });
         }
 
+        // ---------- SORT DIALOG ----------
+        function openSortDialog() {
+            // Actualizar estado activo en el diálogo
+            document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.sort === state.sortMode);
+            });
+            document.getElementById('sortDialog').classList.add('active');
+            updateAllTexts();
+        }
+
+        function closeSortDialog() {
+            document.getElementById('sortDialog').classList.remove('active');
+        }
+
+        function applySort() {
+            const selected = document.querySelector('#sortOptions .sort-option.active');
+            if (selected) {
+                const newMode = selected.dataset.sort;
+                if (newMode === 'distance' && !state.userLocation) {
+                    // Si se selecciona distancia y no hay ubicación, pedir GPS
+                    showToast('Obtenint ubicació...');
+                    requestGpsLocation(true);
+                    // Guardar el modo seleccionado igualmente, se aplicará cuando se obtenga ubicación
+                    state.sortMode = newMode;
+                    saveData();
+                    closeSortDialog();
+                    renderSearchResults(state.currentSearchQuery);
+                    updateSortUI();
+                    return;
+                }
+                state.sortMode = newMode;
+                saveData();
+                closeSortDialog();
+                renderSearchResults(state.currentSearchQuery);
+                updateSortUI();
+            } else {
+                closeSortDialog();
+            }
+        }
+
+        function updateSortUI() {
+            const sortBtn = document.getElementById('sortBtn');
+            const mode = state.sortMode || 'recent';
+            const icons = {
+                recent: 'fa-clock',
+                rating: 'fa-star',
+                alphabetical: 'fa-sort-alpha-down',
+                distance: 'fa-location-dot'
+            };
+            sortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
+            // Actualizar también el diálogo
+            document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.sort === mode);
+            });
+        }
+
         function escapeHtml(str) {
             if (!str) return '';
             return String(str).replace(/[&<>]/g, function(m) {
@@ -5632,6 +6103,10 @@
             document.getElementById('isTransportStop').checked = pinData?.isTransportStop || false;
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
+
+            // Nous camps de ressenya
+            document.getElementById('pinReviewTitleInput').value = pinData?.reviewTitle || '';
+            document.getElementById('pinReviewTextInput').value = pinData?.reviewText || '';
 
             selectedRating = pinData?.rating || 0;
             updateStarsUI();
@@ -5746,8 +6221,17 @@
         function updateStarsUI() {
             document.querySelectorAll('.stars-selector .star').forEach(el => {
                 const val = parseInt(el.dataset.value);
-                el.classList.toggle('active', val <= selectedRating);
-                el.style.color = val <= selectedRating ? '#FFB300' : '#ddd';
+                const isActive = val <= selectedRating;
+                el.classList.toggle('active-1', isActive && selectedRating === 1);
+                el.classList.toggle('active-2', isActive && selectedRating === 2);
+                el.classList.toggle('active-3', isActive && selectedRating === 3);
+                el.classList.toggle('active-4', isActive && selectedRating === 4);
+                el.classList.toggle('active-5', isActive && selectedRating === 5);
+                if (isActive) {
+                    el.style.color = getStarColor(selectedRating);
+                } else {
+                    el.style.color = '#ddd';
+                }
             });
         }
 
@@ -5826,6 +6310,10 @@
             const scheduleLinks = getScheduleLinks();
             const isOutside = document.getElementById('isOutsideEnvironment').checked;
 
+            // Recollir els nous camps de ressenya
+            const reviewTitle = document.getElementById('pinReviewTitleInput').value.trim().slice(0, 50);
+            const reviewText = document.getElementById('pinReviewTextInput').value.trim();
+
             const pinData = {
                 id: state.editingPinId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
                 name,
@@ -5842,7 +6330,9 @@
                 relatedPins: state.tempRelatedPins,
                 lat: lat,
                 lng: lng,
-                isOutsideEnvironment: isOutside
+                isOutsideEnvironment: isOutside,
+                reviewTitle: reviewTitle || null,
+                reviewText: reviewText || null
             };
 
             if (isEditing) {
@@ -5855,7 +6345,6 @@
             } else {
                 state.pins.push(pinData);
                 addPinToMap(pinData);
-                // Eliminada la animació de splash de pin creat
                 showToast(t('pinAdded'));
             }
 
@@ -6109,6 +6598,7 @@
                 mapStyle: state.mapStyle,
                 viewMode: state.viewMode,
                 lang: state.lang,
+                sortMode: state.sortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
             };
@@ -6162,6 +6652,7 @@
             if (data.mapStyle) state.mapStyle = data.mapStyle;
             if (data.viewMode) state.viewMode = data.viewMode;
             if (data.lang) state.lang = data.lang;
+            if (data.sortMode) state.sortMode = data.sortMode;
             if (data.mapStartLocation) {
                 state.mapStartLocation = data.mapStartLocation;
                 state.currentLocation = data.mapStartLocation;
@@ -6184,6 +6675,7 @@
             renderLegend();
             drawAllLines();
             updateModeUI();
+            updateSortUI();
             showToast(t('importSuccess'));
         }
 
@@ -6204,6 +6696,7 @@
                 state.mapStyle = 'light';
                 state.viewMode = 'home';
                 state.lang = 'ca';
+                state.sortMode = 'recent';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
                 state.profile = { name: 'Usuari', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
@@ -6222,6 +6715,7 @@
                 renderLegend();
                 drawAllLines();
                 updateModeUI();
+                updateSortUI();
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
@@ -6443,6 +6937,23 @@
 
             document.getElementById('relatedPinsLabel').innerText = t('relatedPins');
 
+            // Labels nous per la ressenya
+            document.getElementById('reviewTitleLabel').innerText = t('reviewTitle') + ' (màx 50)';
+            document.getElementById('reviewTextLabel').innerText = t('reviewText');
+
+            // Labels per l'ordenació
+            document.getElementById('sortDialogTitle').innerText = t('sortDialogTitle');
+            document.querySelector('#sortOptions .sort-option[data-sort="recent"] .sort-name').innerText = t('sortRecent');
+            document.querySelector('#sortOptions .sort-option[data-sort="recent"] .sort-desc').innerText = t('sortRecentDesc');
+            document.querySelector('#sortOptions .sort-option[data-sort="rating"] .sort-name').innerText = t('sortRating');
+            document.querySelector('#sortOptions .sort-option[data-sort="rating"] .sort-desc').innerText = t('sortRatingDesc');
+            document.querySelector('#sortOptions .sort-option[data-sort="alphabetical"] .sort-name').innerText = t('sortAlphabetical');
+            document.querySelector('#sortOptions .sort-option[data-sort="alphabetical"] .sort-desc').innerText = t('sortAlphabeticalDesc');
+            document.querySelector('#sortOptions .sort-option[data-sort="distance"] .sort-name').innerText = t('sortDistance');
+            document.querySelector('#sortOptions .sort-option[data-sort="distance"] .sort-desc').innerText = t('sortDistanceDesc');
+            document.getElementById('cancelSortLabel').innerText = t('cancelSort');
+            document.getElementById('applySortLabel').innerText = t('applySort');
+
             document.getElementById('cancelLabel').innerText = t('cancel');
             document.getElementById('saveLabel').innerText = t('save');
             document.getElementById('cancelLabel2').innerText = t('cancel');
@@ -6560,6 +7071,7 @@
             }
 
             updateMapStyleButtons();
+            updateSortUI();
 
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
             renderServicesList(document.getElementById('settingsServiceSearch')?.value || '');
@@ -6672,6 +7184,10 @@
                             state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
                         renderNearbyPins();
+                        // Si el modo de ordenación es distance, actualizar búsqueda
+                        if (state.sortMode === 'distance') {
+                            renderSearchResults(state.currentSearchQuery);
+                        }
                     },
                     (error) => {
                         console.warn('GPS error:', error);
@@ -6759,6 +7275,10 @@
                         }, 500);
                         state.gpsSplashResolve && state.gpsSplashResolve('success');
                         renderNearbyPins();
+                        // Si el modo de ordenación es distance, actualizar búsqueda
+                        if (state.sortMode === 'distance') {
+                            renderSearchResults(state.currentSearchQuery);
+                        }
                     }
                 },
                 (error) => {
@@ -6819,7 +7339,7 @@
             empty.style.display = 'none';
 
             container.innerHTML = nearby.map(pin => {
-                const stars = (pin.rating && pin.rating > 0) ? '★'.repeat(pin.rating) + '☆'.repeat(5 - pin.rating) : '';
+                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                 const isFav = isFavorite(pin.id);
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const distance = pin.distance ? (pin.distance * 111).toFixed(1) : '?';
@@ -6877,12 +7397,15 @@
                 state.searchLimit = 25;
                 const val = input.value;
                 renderSearchResults(val);
+                // Mostrar/ocultar botón de ordenación
+                document.getElementById('sortBtn').classList.toggle('visible', val.trim().length >= 2);
             });
 
             clearBtn.addEventListener('click', () => {
                 input.value = '';
                 clearBtn.style.display = 'none';
                 renderSearchResults('');
+                document.getElementById('sortBtn').classList.remove('visible');
                 input.focus();
             });
         }
@@ -7071,6 +7594,19 @@
             document.getElementById('modeAwayCard').addEventListener('click', () => setViewMode('away'));
             document.getElementById('modeDndCard').addEventListener('click', () => setViewMode('dnd'));
             document.getElementById('modeTransportCard').addEventListener('click', () => setViewMode('transport'));
+
+            // Setup sort button
+            document.getElementById('sortBtn').addEventListener('click', openSortDialog);
+
+            // Setup sort dialog
+            document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    document.querySelectorAll('#sortOptions .sort-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            document.getElementById('sortDialogCancel').addEventListener('click', closeSortDialog);
+            document.getElementById('sortDialogApply').addEventListener('click', applySort);
 
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
@@ -7312,7 +7848,7 @@
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog') {
                             dialog.classList.remove('active');
                         }
                     }
