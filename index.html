@@ -553,7 +553,7 @@
         .search-results-page {
             padding-top: 0;
         }
-        /* Search header with sort button */
+        /* Search header with sort and mode buttons */
         .search-header {
             padding: 12px 16px;
             background: var(--md-surface);
@@ -566,7 +566,7 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .search-wrapper .search-input-wrapper {
             position: relative;
@@ -608,24 +608,37 @@
             display: none;
             padding: 4px;
         }
-        .search-wrapper .sort-btn {
+        .search-wrapper .header-btn {
             background: none;
             border: none;
             color: var(--md-on-surface-variant);
             font-size: 20px;
             cursor: pointer;
-            padding: 8px 10px;
+            padding: 8px 8px;
             border-radius: 40px;
             transition: all 0.2s ease;
             flex-shrink: 0;
             display: none;
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
         }
-        .search-wrapper .sort-btn:active {
+        .search-wrapper .header-btn.visible {
+            display: block;
+            animation: searchBtnAppear 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            pointer-events: auto;
+        }
+        .search-wrapper .header-btn:active {
             transform: scale(0.9);
             background: var(--md-surface-dim);
         }
-        .search-wrapper .sort-btn.visible {
-            display: block;
+        .search-wrapper .header-btn .badge-dot {
+            display: none;
+        }
+
+        @keyframes searchBtnAppear {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         .pin-grid {
@@ -774,6 +787,76 @@
             font-size: 11px;
             color: var(--md-on-surface-variant);
             margin-top: 4px;
+        }
+
+        /* --- GROUP DETAIL DIALOG --- */
+        #groupDetailDialog .group-detail-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 8px 0 12px;
+            flex-wrap: wrap;
+        }
+        #groupDetailDialog .group-detail-header-actions .fab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            min-width: 0;
+            font-size: 14px;
+        }
+        #groupDetailDialog .group-detail-header-actions .sort-btn-small {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            display: none;
+        }
+        #groupDetailDialog .group-detail-header-actions .sort-btn-small:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+        #groupDetailDialog .group-detail-header-actions .sort-btn-small.visible {
+            display: block;
+        }
+
+        .group-detail-pins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .group-detail-pin-item {
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-sm);
+            padding: 10px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .group-detail-pin-item:active { transform: scale(0.95); }
+        .group-detail-pin-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            background: var(--md-surface);
+        }
+        .group-detail-pin-item .name {
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        .group-detail-pin-item .subtitle {
+            font-size: 10px;
+            color: var(--md-on-surface-variant);
+            margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* --- RECENTS --- */
@@ -1857,43 +1940,6 @@
             transform: scale(1.15);
         }
 
-        /* --- GROUP DETAIL DIALOG --- */
-        .group-detail-pins-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .group-detail-pin-item {
-            background: var(--md-surface-dim);
-            border-radius: var(--radius-sm);
-            padding: 10px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .group-detail-pin-item:active { transform: scale(0.95); }
-        .group-detail-pin-item img {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-            background: var(--md-surface);
-        }
-        .group-detail-pin-item .name {
-            font-size: 12px;
-            margin-top: 4px;
-            font-weight: 500;
-        }
-        .group-detail-pin-item .subtitle {
-            font-size: 10px;
-            color: var(--md-on-surface-variant);
-            margin-top: 2px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
         /* --- LINE SETTINGS --- */
         .line-item {
             background: var(--md-surface-dim);
@@ -2108,6 +2154,42 @@
             cursor: pointer;
         }
 
+        /* --- FAVORITES SORT BUTTON --- */
+        .favorites-header {
+            padding: 16px 18px 8px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .favorites-header .favorites-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .favorites-header .favorites-actions .fab-btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        .favorites-header .favorites-actions .sort-btn-small {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        .favorites-header .favorites-actions .sort-btn-small:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 500px) {
             .pin-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 14px; }
@@ -2176,7 +2258,8 @@
             .review-card { padding: 14px 14px; }
             .review-card .review-title { font-size: 15px; }
             .review-card .review-text { font-size: 14px; }
-            .search-wrapper .sort-btn { font-size: 18px; padding: 6px 8px; }
+            .search-wrapper .header-btn { font-size: 18px; padding: 6px 6px; }
+            #groupDetailDialog .group-detail-header-actions .sort-btn-small { font-size: 16px; padding: 6px 8px; }
         }
         @media (max-width: 380px) {
             .pin-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; }
@@ -2459,6 +2542,25 @@
         #clearSearchBtn {
             display: none !important;
         }
+
+        /* Favorites header */
+        #favoritesPage .favorites-header {
+            padding: 16px 18px 8px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        #favoritesPage .favorites-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        #favoritesPage .favorites-header p {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -2506,7 +2608,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.10.0</span>
+                    <span>v1.10.1</span>
                 </div>
             </div>
         </div>
@@ -2536,7 +2638,10 @@
                             <input type="text" id="globalSearchInput" placeholder="Buscar pins...">
                             <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
                         </div>
-                        <button class="sort-btn" id="sortBtn"><i class="fas fa-sliders-h"></i></button>
+                        <button class="header-btn" id="modeBtnSearch" title="Mode de visualització">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="header-btn" id="sortBtnSearch"><i class="fas fa-sliders-h"></i></button>
                     </div>
                 </div>
                 <div id="searchResults" class="pin-grid"></div>
@@ -2570,9 +2675,14 @@
 
             <!-- FAVOURITES -->
             <div id="favoritesPage" class="page">
-                <div style="padding: 16px 18px 8px; background: var(--md-surface); border-bottom: 1px solid rgba(128,128,128,0.1); position: sticky; top: 0; z-index: 5;">
-                    <h3 style="font-size:18px; font-weight:600;"><i class="fas fa-heart" style="color:#FFB300;"></i> <span id="favoritesTitle">Preferits</span></h3>
-                    <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;" id="favoritesSortLabel">Arrossega per ordenar</p>
+                <div class="favorites-header">
+                    <h3><i class="fas fa-heart" style="color:#FFB300;"></i> <span id="favoritesTitle">Preferits</span></h3>
+                    <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;" id="favoritesSortLabel">Ordena els preferits</p>
+                    <div class="favorites-actions">
+                        <button class="fab-btn secondary" id="favoritesSortBtn" style="flex:0; padding:8px 12px;">
+                            <i class="fas fa-sliders-h"></i> <span id="favoritesSortBtnLabel">Ordenar</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="favoritesGrid" class="pin-grid"></div>
                 <div id="favoritesEmpty" class="empty-state" style="display:none;">
@@ -2833,7 +2943,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.10.0 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.10.1 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2951,6 +3061,10 @@
 
             <label id="descLabel">Descripció</label>
             <textarea id="pinDescInput" placeholder="Description"></textarea>
+
+            <!-- NOU CAMP: ETIQUETES -->
+            <label id="tagsLabel">Etiquetes (separades per comes)</label>
+            <input type="text" id="pinTagsInput" placeholder="restaurant, cheap..." style="font-size:14px;">
 
             <label id="imageLabel">URL de la imatge</label>
             <div style="display:flex; gap:6px;">
@@ -3140,10 +3254,11 @@
                     <p id="groupDetailDesc" style="font-size:13px; color:var(--md-on-surface-variant); margin:0;">Descripció</p>
                 </div>
             </div>
-            <div style="display:flex; gap:6px; margin:8px 0 12px;">
-                <button id="groupDetailEditBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0;"><i class="fas fa-edit"></i></button>
-                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0; color:#E30613;"><i class="fas fa-trash"></i></button>
-                <button id="groupDetailCloseBtn" class="fab-btn secondary" style="flex:1; padding:10px 12px; min-width:0;"><i class="fas fa-times"></i></button>
+            <div class="group-detail-header-actions">
+                <button id="groupDetailEditBtn" class="fab-btn secondary"><i class="fas fa-edit"></i></button>
+                <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="color:#E30613;"><i class="fas fa-trash"></i></button>
+                <button id="groupDetailCloseBtn" class="fab-btn secondary"><i class="fas fa-times"></i></button>
+                <button class="sort-btn-small" id="groupSortBtn"><i class="fas fa-sliders-h"></i></button>
             </div>
             <div id="groupDetailPins" class="group-detail-pins-grid"></div>
             <div id="groupDetailPinsEmpty" style="display:none; text-align:center; color:var(--md-on-surface-variant); padding:12px;">No hi ha pins en aquest grup</div>
@@ -3215,7 +3330,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.10.0 Mobile';
+        const APP_VERSION = '1.10.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3266,7 +3381,10 @@
             editingLineId: null,
             linesVisible: true,
             sortMode: 'recent', // recent | rating | alphabetical | distance
-            currentSearchQuery: ''
+            currentSearchQuery: '',
+            // Per al grup actual
+            currentGroupId: null,
+            groupSortMode: 'recent'
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -3274,6 +3392,7 @@
             ca: {
                 appTitle: "LibrePin", addPin: "Afegir pin", settings: "Arranjament", map: "Mapa", search: "Cerca", favorites: "Preferits", recent: "Recents",
                 name: "Nom", subtitle: "Subtítol", description: "Descripció", image: "URL de la imatge",
+                tags: "Etiquetes (separades per comes)",
                 buttons: "Botons personalitzats", addBtn: "Afegir botó",
                 transport: "És una parada de transport públic", services: "Serveis que circulen",
                 schedule: "Enllaços de consulta d'horari", cancel: "Cancel·la", save: "D'acord",
@@ -3319,7 +3438,7 @@
                 favAdded: "Afegit a preferits",
                 favRemoved: "Eliminat de preferits",
                 favoritesTitle: "Preferits",
-                favoritesSort: "Arrossega per ordenar",
+                favoritesSort: "Ordena els preferits",
                 mp3: "URL MP3 (anunci)",
                 playAudio: "Escoltar en veu alta",
                 editService: "Editar servei",
@@ -3488,11 +3607,16 @@
                 sortDistance: "Més a prop",
                 sortDistanceDesc: "Ordena per distància a la teva ubicació",
                 cancelSort: "Cancel·lar",
-                applySort: "Aplicar"
+                applySort: "Aplicar",
+                groupSortTitle: "Ordenar pins del grup",
+                sortFavorites: "Ordenar preferits",
+                sortFavoritesDesc: "Selecciona com ordenar els teus preferits",
+                favoritesSortBtn: "Ordenar"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
                 name: "Nombre", subtitle: "Subtítulo", description: "Descripción", image: "URL de la imagen",
+                tags: "Etiquetas (separadas por comas)",
                 buttons: "Botones personalizados", addBtn: "Añadir botón",
                 transport: "Es una parada de transporte público", services: "Servicios que circulan",
                 schedule: "Enlaces de consulta de horario", cancel: "Cancelar", save: "Aceptar",
@@ -3538,7 +3662,7 @@
                 favAdded: "Añadido a favoritos",
                 favRemoved: "Eliminado de favoritos",
                 favoritesTitle: "Favoritos",
-                favoritesSort: "Arrastra para ordenar",
+                favoritesSort: "Ordena los favoritos",
                 mp3: "URL MP3 (anuncio)",
                 playAudio: "Escuchar en voz alta",
                 editService: "Editar servicio",
@@ -3707,11 +3831,16 @@
                 sortDistance: "Más cerca",
                 sortDistanceDesc: "Ordena por distancia a tu ubicación",
                 cancelSort: "Cancelar",
-                applySort: "Aplicar"
+                applySort: "Aplicar",
+                groupSortTitle: "Ordenar pins del grupo",
+                sortFavorites: "Ordenar favoritos",
+                sortFavoritesDesc: "Selecciona cómo ordenar tus favoritos",
+                favoritesSortBtn: "Ordenar"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
                 name: "Name", subtitle: "Subtitle", description: "Description", image: "Image URL",
+                tags: "Tags (comma separated)",
                 buttons: "Custom buttons", addBtn: "Add button",
                 transport: "Is a public transport stop", services: "Services that run",
                 schedule: "Schedule consultation links", cancel: "Cancel", save: "Ok",
@@ -3757,7 +3886,7 @@
                 favAdded: "Added to favorites",
                 favRemoved: "Removed from favorites",
                 favoritesTitle: "Favorites",
-                favoritesSort: "Drag to reorder",
+                favoritesSort: "Sort favorites",
                 mp3: "MP3 URL (announcement)",
                 playAudio: "Play aloud",
                 editService: "Edit service",
@@ -3926,7 +4055,11 @@
                 sortDistance: "Closest",
                 sortDistanceDesc: "Sort by distance to your location",
                 cancelSort: "Cancel",
-                applySort: "Apply"
+                applySort: "Apply",
+                groupSortTitle: "Sort group pins",
+                sortFavorites: "Sort favorites",
+                sortFavoritesDesc: "Select how to sort your favorites",
+                favoritesSortBtn: "Sort"
             }
         };
 
@@ -4020,6 +4153,7 @@
                     if (data.viewMode) state.viewMode = data.viewMode;
                     if (data.lang) state.lang = data.lang;
                     if (data.sortMode) state.sortMode = data.sortMode;
+                    if (data.groupSortMode) state.groupSortMode = data.groupSortMode;
                     if (data.mapStartLocation) {
                         state.mapStartLocation = data.mapStartLocation;
                         state.currentLocation = data.mapStartLocation;
@@ -4052,6 +4186,7 @@
             updateSidebarGreeting();
             drawAllLines();
             updateSortUI();
+            updateModeBadge();
         }
 
         function saveData() {
@@ -4070,6 +4205,7 @@
                 viewMode: state.viewMode,
                 lang: state.lang,
                 sortMode: state.sortMode,
+                groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
             }));
@@ -4644,12 +4780,17 @@
             document.querySelector('#modeTransportCard .mode-name').innerText = t('modeTransportName');
             document.querySelector('#modeTransportCard .mode-desc').innerText = t('modeTransportDesc');
 
+            updateModeBadge();
             renderAllPins();
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
             renderFavorites();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             renderRecentPins();
             renderProfile();
+        }
+
+        function updateModeBadge() {
+            // El badge ya no se usa en la búsqueda, solo mantenemos el dot del perfil
         }
 
         function isPinVisible(pin) {
@@ -4749,20 +4890,61 @@
             renderRecentPins();
             renderGroups();
             updateFavoriteUI();
-            // Re-renderizar mapa para reflejar cambios en modo DND
             renderAllPins();
         }
 
         function getFavoritesOrdered() {
             const favPins = state.pins.filter(p => state.favorites.includes(p.id) && isPinVisible(p));
-            const orderMap = {};
-            state.favoritesOrder.forEach((id, idx) => { orderMap[id] = idx; });
-            favPins.sort((a, b) => {
-                const idxA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
-                const idxB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
-                return idxA - idxB;
-            });
-            return favPins;
+            const mode = state.sortMode || 'recent';
+            return sortPins(favPins, mode);
+        }
+
+        // ---------- SORT PINS (reusable) ----------
+        function sortPins(pins, mode) {
+            const sorted = [...pins];
+            switch (mode) {
+                case 'recent':
+                    sorted.sort((a, b) => {
+                        const aTime = a.lastAccessed || 0;
+                        const bTime = b.lastAccessed || 0;
+                        return bTime - aTime;
+                    });
+                    break;
+                case 'rating':
+                    sorted.sort((a, b) => {
+                        const aRating = a.rating || 0;
+                        const bRating = b.rating || 0;
+                        if (bRating !== aRating) return bRating - aRating;
+                        return a.name.localeCompare(b.name);
+                    });
+                    break;
+                case 'alphabetical':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'distance':
+                    if (state.userLocation) {
+                        const [userLat, userLng] = state.userLocation;
+                        sorted.sort((a, b) => {
+                            const dA = Math.sqrt(Math.pow(a.lat - userLat, 2) + Math.pow(a.lng - userLng, 2));
+                            const dB = Math.sqrt(Math.pow(b.lat - userLat, 2) + Math.pow(b.lng - userLng, 2));
+                            return dA - dB;
+                        });
+                    } else {
+                        sorted.sort((a, b) => {
+                            const aTime = a.lastAccessed || 0;
+                            const bTime = b.lastAccessed || 0;
+                            return bTime - aTime;
+                        });
+                    }
+                    break;
+                default:
+                    sorted.sort((a, b) => {
+                        const aTime = a.lastAccessed || 0;
+                        const bTime = b.lastAccessed || 0;
+                        return bTime - aTime;
+                    });
+            }
+            return sorted;
         }
 
         function renderFavorites() {
@@ -4784,9 +4966,8 @@
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
                 return `
-                <div class="pin-card" data-id="${pin.id}" draggable="true" data-index="${index}">
+                <div class="pin-card" data-id="${pin.id}" data-index="${index}">
                     <div class="fav-indicator"><i class="fas fa-heart"></i></div>
-                    <div style="cursor:grab; color:var(--md-on-surface-variant); font-size:14px; margin-bottom:4px;">⠿</div>
                     <img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'">
                     <div class="pin-name">${escapeHtml(pin.name)}</div>
                     ${subtitle}
@@ -4799,33 +4980,8 @@
                 </div>
             `}).join('');
 
-            let dragItem = null;
             container.querySelectorAll('.pin-card').forEach(el => {
-                el.addEventListener('dragstart', (e) => {
-                    dragItem = el;
-                    el.style.opacity = '0.5';
-                });
-                el.addEventListener('dragend', (e) => {
-                    el.style.opacity = '1';
-                });
-                el.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                });
-                el.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    if (dragItem && dragItem !== el) {
-                        const fromIndex = parseInt(dragItem.dataset.index);
-                        const toIndex = parseInt(el.dataset.index);
-                        const favIds = getFavoritesOrdered().map(p => p.id);
-                        const [removed] = favIds.splice(fromIndex, 1);
-                        favIds.splice(toIndex, 0, removed);
-                        state.favoritesOrder = favIds;
-                        saveData();
-                        renderFavorites();
-                    }
-                });
-                el.onclick = (e) => {
-                    if (e.target.closest('.drag-handle')) return;
+                el.onclick = () => {
                     const id = el.dataset.id;
                     openPinDetail(id);
                 };
@@ -5161,6 +5317,8 @@
             const group = state.groups.find(g => g.id === groupId);
             if (!group) return;
 
+            state.currentGroupId = groupId;
+
             group.lastAccessed = Date.now();
             saveData();
 
@@ -5175,41 +5333,12 @@
                 this.style.display = 'none';
             };
 
+            // Mostrar/ocultar botón de ordenación
+            const sortBtn = document.getElementById('groupSortBtn');
             const pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
-            pins.sort((a, b) => {
-                const aTime = a.lastAccessed || 0;
-                const bTime = b.lastAccessed || 0;
-                return bTime - aTime;
-            });
+            sortBtn.classList.toggle('visible', pins.length > 1);
 
-            const grid = document.getElementById('groupDetailPins');
-            const emptyMsg = document.getElementById('groupDetailPinsEmpty');
-
-            if (pins.length === 0) {
-                grid.innerHTML = '';
-                emptyMsg.style.display = 'block';
-            } else {
-                emptyMsg.style.display = 'none';
-                grid.innerHTML = pins.map(pin => {
-                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                    return `
-                        <div class="group-detail-pin-item" data-id="${pin.id}">
-                            <img src="${pin.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
-                            <div class="name">${escapeHtml(pin.name)}</div>
-                            ${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
-                            ${stars ? `<div style="font-size:12px; margin-top:2px;">${stars}</div>` : ''}
-                        </div>
-                    `;
-                }).join('');
-
-                grid.querySelectorAll('.group-detail-pin-item').forEach(el => {
-                    el.onclick = () => {
-                        const id = el.dataset.id;
-                        dialog.classList.remove('active');
-                        openPinDetail(id);
-                    };
-                });
-            }
+            renderGroupPins(groupId);
 
             document.getElementById('groupDetailEditBtn').onclick = () => {
                 dialog.classList.remove('active');
@@ -5231,10 +5360,89 @@
 
             document.getElementById('groupDetailCloseBtn').onclick = () => {
                 dialog.classList.remove('active');
+                state.currentGroupId = null;
             };
+
+            // Comportamiento de groupSortBtn: ciclo de ordenación sin popup
+            document.getElementById('groupSortBtn').onclick = cycleGroupSort;
 
             dialog.classList.add('active');
             updateAllTexts();
+        }
+
+        // Nueva función: ciclo de ordenación para grupos
+        function cycleGroupSort() {
+            const modes = ['recent', 'rating', 'alphabetical', 'distance'];
+            const currentIndex = modes.indexOf(state.groupSortMode);
+            const nextIndex = (currentIndex + 1) % modes.length;
+            const newMode = modes[nextIndex];
+
+            if (newMode === 'distance' && !state.userLocation) {
+                showToast('Obtenint ubicació...');
+                requestGpsLocation(true);
+                state.groupSortMode = newMode;
+                saveData();
+                renderGroupPins(state.currentGroupId);
+                updateAllTexts();
+                return;
+            }
+
+            state.groupSortMode = newMode;
+            saveData();
+            renderGroupPins(state.currentGroupId);
+            updateAllTexts();
+
+            const modeNames = {
+                recent: t('sortRecent'),
+                rating: t('sortRating'),
+                alphabetical: t('sortAlphabetical'),
+                distance: t('sortDistance')
+            };
+            showToast(modeNames[newMode] || newMode);
+        }
+
+        function renderGroupPins(groupId) {
+            const group = state.groups.find(g => g.id === groupId);
+            if (!group) return;
+
+            const grid = document.getElementById('groupDetailPins');
+            const emptyMsg = document.getElementById('groupDetailPinsEmpty');
+
+            let pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
+
+            const mode = state.groupSortMode || 'recent';
+            pins = sortPins(pins, mode);
+
+            if (pins.length === 0) {
+                grid.innerHTML = '';
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+                grid.innerHTML = pins.map(pin => {
+                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
+                    return `
+                        <div class="group-detail-pin-item" data-id="${pin.id}">
+                            <img src="${pin.imageUrl || 'https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/40/7C4DFF/FFFFFF?text=📍'">
+                            <div class="name">${escapeHtml(pin.name)}</div>
+                            ${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
+                            ${stars ? `<div style="font-size:12px; margin-top:2px;">${stars}</div>` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                grid.querySelectorAll('.group-detail-pin-item').forEach(el => {
+                    el.onclick = () => {
+                        const id = el.dataset.id;
+                        document.getElementById('groupDetailDialog').classList.remove('active');
+                        openPinDetail(id);
+                    };
+                });
+            }
+        }
+
+        function openGroupSortDialog(groupId) {
+            // Esta función ya no se usa, pero la mantenemos por compatibilidad
+            // Ahora el botón groupSortBtn usa cycleGroupSort
         }
 
         // ---------- RELATED PINS ----------
@@ -5578,7 +5786,6 @@
                 return;
             }
 
-            // Crear popup con animación rápida
             scheduleBtn.onclick = () => {
                 const overlay = document.createElement('div');
                 overlay.className = 'dialog-overlay active schedule-popup';
@@ -5613,7 +5820,6 @@
             scheduleBtn.innerHTML = `<i class="fas fa-clock"></i> ${t('scheduleBtn')}`;
         }
 
-        // Función para renderizar la targeta de ressenya
         function renderReviewCard(pin) {
             const card = document.getElementById('reviewCard');
             const starsEl = document.getElementById('reviewStars');
@@ -5623,19 +5829,15 @@
             const hasReviewTitle = pin.reviewTitle && pin.reviewTitle.trim().length > 0;
             const hasReviewText = pin.reviewText && pin.reviewText.trim().length > 0;
 
-            // Solo mostrar si hay reviewTitle o reviewText
             if (!hasReviewTitle && !hasReviewText) {
                 card.style.display = 'none';
-                // Si no hay reseña, mostramos detail-stars
                 document.getElementById('detailStars').style.display = 'block';
                 return;
             }
 
             card.style.display = 'block';
-            // Ocultar detail-stars cuando se muestra la targeta
             document.getElementById('detailStars').style.display = 'none';
 
-            // Limpiar clases anteriores
             card.className = 'review-card';
             const hasRating = pin.rating && pin.rating > 0;
             if (hasRating) {
@@ -5643,14 +5845,12 @@
                 starsEl.innerHTML = renderStarsHTML(pin.rating);
                 starsEl.style.display = 'block';
             } else {
-                // Si no tiene rating pero tiene texto, usar un fondo neutro
                 card.style.background = 'var(--md-surface-dim)';
                 card.style.borderColor = 'var(--md-outline)';
                 starsEl.innerHTML = '';
                 starsEl.style.display = 'none';
             }
 
-            // Título
             if (hasReviewTitle) {
                 titleEl.textContent = pin.reviewTitle;
                 titleEl.style.display = 'block';
@@ -5659,7 +5859,6 @@
                 titleEl.style.display = 'none';
             }
 
-            // Texto de la reseña
             if (hasReviewText) {
                 textEl.textContent = pin.reviewText;
                 textEl.style.display = 'block';
@@ -5835,7 +6034,6 @@
                 });
             }
 
-            // Renderitzar la targeta de ressenya (oculta detail-stars si cal)
             renderReviewCard(pin);
 
             const goBtn = document.getElementById('detailGoBtn');
@@ -5875,69 +6073,26 @@
 
         // ---------- SEARCH ----------
         function getSortedPins(pins) {
-            const sorted = [...pins];
-            const mode = state.sortMode || 'recent';
-
-            switch (mode) {
-                case 'recent':
-                    sorted.sort((a, b) => {
-                        const aTime = a.lastAccessed || 0;
-                        const bTime = b.lastAccessed || 0;
-                        return bTime - aTime;
-                    });
-                    break;
-                case 'rating':
-                    sorted.sort((a, b) => {
-                        const aRating = a.rating || 0;
-                        const bRating = b.rating || 0;
-                        if (bRating !== aRating) return bRating - aRating;
-                        // Si misma puntuación, orden alfabético
-                        return a.name.localeCompare(b.name);
-                    });
-                    break;
-                case 'alphabetical':
-                    sorted.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                case 'distance':
-                    if (state.userLocation) {
-                        const [userLat, userLng] = state.userLocation;
-                        sorted.sort((a, b) => {
-                            const dA = Math.sqrt(Math.pow(a.lat - userLat, 2) + Math.pow(a.lng - userLng, 2));
-                            const dB = Math.sqrt(Math.pow(b.lat - userLat, 2) + Math.pow(b.lng - userLng, 2));
-                            return dA - dB;
-                        });
-                    } else {
-                        // Fallback a recent si no hay ubicación
-                        sorted.sort((a, b) => {
-                            const aTime = a.lastAccessed || 0;
-                            const bTime = b.lastAccessed || 0;
-                            return bTime - aTime;
-                        });
-                    }
-                    break;
-                default:
-                    sorted.sort((a, b) => {
-                        const aTime = a.lastAccessed || 0;
-                        const bTime = b.lastAccessed || 0;
-                        return bTime - aTime;
-                    });
-            }
-            return sorted;
+            return sortPins(pins, state.sortMode || 'recent');
         }
 
         function renderSearchResults(filter = '') {
             const container = document.getElementById('searchResults');
             const empty = document.getElementById('searchEmpty');
-            const sortBtn = document.getElementById('sortBtn');
+            const sortBtn = document.getElementById('sortBtnSearch');
+            const modeBtn = document.getElementById('modeBtnSearch');
 
             state.currentSearchQuery = filter;
             const trimmedFilter = filter.trim();
 
-            // Mostrar/ocultar botón de ordenación
-            if (trimmedFilter.length >= 2) {
+            // Mostrar/ocultar botones de ordenación y modo con animación
+            const visible = trimmedFilter.length >= 2;
+            if (visible) {
                 sortBtn.classList.add('visible');
+                modeBtn.classList.add('visible');
             } else {
                 sortBtn.classList.remove('visible');
+                modeBtn.classList.remove('visible');
             }
 
             if (trimmedFilter.length < 2) {
@@ -5951,12 +6106,15 @@
             const f = trimmedFilter.toLowerCase();
             const visiblePins = getVisiblePins();
 
-            let filtered = visiblePins.filter(p =>
-                p.name.toLowerCase().includes(f) ||
-                (p.subtitle && p.subtitle.toLowerCase().includes(f))
-            );
+            let filtered = visiblePins.filter(p => {
+                // Buscar en nombre y subtítulo
+                const nameMatch = p.name.toLowerCase().includes(f);
+                const subtitleMatch = p.subtitle && p.subtitle.toLowerCase().includes(f);
+                // Buscar en etiquetas (tags)
+                const tagsMatch = p.tags && p.tags.some(tag => tag.toLowerCase().includes(f));
+                return nameMatch || subtitleMatch || tagsMatch;
+            });
 
-            // Aplicar ordenación
             filtered = getSortedPins(filtered);
 
             const totalResults = filtered.length;
@@ -6019,10 +6177,10 @@
 
         // ---------- SORT DIALOG ----------
         function openSortDialog() {
-            // Actualizar estado activo en el diálogo
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.sort === state.sortMode);
             });
+            document.getElementById('sortDialogTitle').innerText = t('sortDialogTitle');
             document.getElementById('sortDialog').classList.add('active');
             updateAllTexts();
         }
@@ -6036,10 +6194,8 @@
             if (selected) {
                 const newMode = selected.dataset.sort;
                 if (newMode === 'distance' && !state.userLocation) {
-                    // Si se selecciona distancia y no hay ubicación, pedir GPS
                     showToast('Obtenint ubicació...');
                     requestGpsLocation(true);
-                    // Guardar el modo seleccionado igualmente, se aplicará cuando se obtenga ubicación
                     state.sortMode = newMode;
                     saveData();
                     closeSortDialog();
@@ -6051,14 +6207,84 @@
                 saveData();
                 closeSortDialog();
                 renderSearchResults(state.currentSearchQuery);
+                renderFavorites();
                 updateSortUI();
             } else {
                 closeSortDialog();
             }
         }
 
+        // ---------- CYCLE SORT (without popup) ----------
+        function cycleSort() {
+            const modes = ['recent', 'rating', 'alphabetical', 'distance'];
+            const currentIndex = modes.indexOf(state.sortMode);
+            const nextIndex = (currentIndex + 1) % modes.length;
+            const newMode = modes[nextIndex];
+
+            if (newMode === 'distance' && !state.userLocation) {
+                showToast('Obtenint ubicació...');
+                requestGpsLocation(true);
+                state.sortMode = newMode;
+                saveData();
+                renderSearchResults(state.currentSearchQuery);
+                renderFavorites();
+                updateSortUI();
+                return;
+            }
+
+            state.sortMode = newMode;
+            saveData();
+            renderSearchResults(state.currentSearchQuery);
+            renderFavorites();
+            updateSortUI();
+            // Mostrar el nombre del modo en un toast
+            const modeNames = {
+                recent: t('sortRecent'),
+                rating: t('sortRating'),
+                alphabetical: t('sortAlphabetical'),
+                distance: t('sortDistance')
+            };
+            showToast(modeNames[newMode] || newMode);
+        }
+
+        // ---------- FAVORITES SORT ----------
+        function openFavoritesSortDialog() {
+            document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.sort === state.sortMode);
+            });
+            document.getElementById('sortDialogTitle').innerText = t('sortFavorites');
+            document.getElementById('sortDialog').classList.add('active');
+            updateAllTexts();
+
+            document.getElementById('sortDialogApply').onclick = () => {
+                const selected = document.querySelector('#sortOptions .sort-option.active');
+                if (selected) {
+                    const newMode = selected.dataset.sort;
+                    if (newMode === 'distance' && !state.userLocation) {
+                        showToast('Obtenint ubicació...');
+                        requestGpsLocation(true);
+                        state.sortMode = newMode;
+                        saveData();
+                        closeSortDialog();
+                        renderFavorites();
+                        updateSortUI();
+                        return;
+                    }
+                    state.sortMode = newMode;
+                    saveData();
+                    closeSortDialog();
+                    renderFavorites();
+                    updateSortUI();
+                } else {
+                    closeSortDialog();
+                }
+            };
+
+            document.getElementById('sortDialogCancel').onclick = closeSortDialog;
+        }
+
         function updateSortUI() {
-            const sortBtn = document.getElementById('sortBtn');
+            const sortBtn = document.getElementById('sortBtnSearch');
             const mode = state.sortMode || 'recent';
             const icons = {
                 recent: 'fa-clock',
@@ -6067,9 +6293,11 @@
                 distance: 'fa-location-dot'
             };
             sortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
-            // Actualizar también el diálogo
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.sort === mode);
+            });
+            document.querySelectorAll('#groupDetailDialog #sortOptions .sort-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.sort === state.groupSortMode);
             });
         }
 
@@ -6097,6 +6325,7 @@
             document.getElementById('pinNameInput').value = pinData?.name || '';
             document.getElementById('pinSubtitleInput').value = pinData?.subtitle || '';
             document.getElementById('pinDescInput').value = pinData?.description || '';
+            document.getElementById('pinTagsInput').value = pinData?.tags ? pinData.tags.join(', ') : '';
             document.getElementById('pinImageInput').value = pinData?.imageUrl || '';
             document.getElementById('pinLatInput').value = pinData?.lat !== undefined ? pinData.lat : '';
             document.getElementById('pinLngInput').value = pinData?.lng !== undefined ? pinData.lng : '';
@@ -6104,7 +6333,6 @@
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
 
-            // Nous camps de ressenya
             document.getElementById('pinReviewTitleInput').value = pinData?.reviewTitle || '';
             document.getElementById('pinReviewTextInput').value = pinData?.reviewText || '';
 
@@ -6310,15 +6538,19 @@
             const scheduleLinks = getScheduleLinks();
             const isOutside = document.getElementById('isOutsideEnvironment').checked;
 
-            // Recollir els nous camps de ressenya
             const reviewTitle = document.getElementById('pinReviewTitleInput').value.trim().slice(0, 50);
             const reviewText = document.getElementById('pinReviewTextInput').value.trim();
+
+            // Procesar etiquetas
+            const tagsStr = document.getElementById('pinTagsInput').value.trim();
+            const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t.length > 0) : [];
 
             const pinData = {
                 id: state.editingPinId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
                 name,
                 subtitle: document.getElementById('pinSubtitleInput').value.trim().slice(0, 100),
                 description: document.getElementById('pinDescInput').value.trim(),
+                tags: tags.length > 0 ? tags : null,
                 imageUrl: document.getElementById('pinImageInput').value.trim(),
                 customButtons: getCustomButtons(),
                 isTransportStop: isTransport,
@@ -6599,6 +6831,7 @@
                 viewMode: state.viewMode,
                 lang: state.lang,
                 sortMode: state.sortMode,
+                groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile
             };
@@ -6653,6 +6886,7 @@
             if (data.viewMode) state.viewMode = data.viewMode;
             if (data.lang) state.lang = data.lang;
             if (data.sortMode) state.sortMode = data.sortMode;
+            if (data.groupSortMode) state.groupSortMode = data.groupSortMode;
             if (data.mapStartLocation) {
                 state.mapStartLocation = data.mapStartLocation;
                 state.currentLocation = data.mapStartLocation;
@@ -6676,6 +6910,7 @@
             drawAllLines();
             updateModeUI();
             updateSortUI();
+            updateModeBadge();
             showToast(t('importSuccess'));
         }
 
@@ -6697,6 +6932,7 @@
                 state.viewMode = 'home';
                 state.lang = 'ca';
                 state.sortMode = 'recent';
+                state.groupSortMode = 'recent';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
                 state.profile = { name: 'Usuari', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
@@ -6716,6 +6952,7 @@
                 drawAllLines();
                 updateModeUI();
                 updateSortUI();
+                updateModeBadge();
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
@@ -6868,6 +7105,7 @@
 
             document.getElementById('favoritesTitle').innerText = t('favoritesTitle');
             document.getElementById('favoritesSortLabel').innerText = t('favoritesSort');
+            document.getElementById('favoritesSortBtnLabel').innerText = t('favoritesSortBtn');
             document.getElementById('recentTitle').innerText = t('recent');
             document.getElementById('recentSubtitle').innerText = t('last30');
 
@@ -6888,7 +7126,6 @@
             document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
             document.getElementById('legendEditLinesLabel').innerText = t('editLines');
 
-            // Update slider label
             updateSliderUI();
 
             const menuLabels = {
@@ -6936,12 +7173,9 @@
             document.getElementById('detailTitle').innerText = t('edit');
 
             document.getElementById('relatedPinsLabel').innerText = t('relatedPins');
-
-            // Labels nous per la ressenya
             document.getElementById('reviewTitleLabel').innerText = t('reviewTitle') + ' (màx 50)';
             document.getElementById('reviewTextLabel').innerText = t('reviewText');
 
-            // Labels per l'ordenació
             document.getElementById('sortDialogTitle').innerText = t('sortDialogTitle');
             document.querySelector('#sortOptions .sort-option[data-sort="recent"] .sort-name').innerText = t('sortRecent');
             document.querySelector('#sortOptions .sort-option[data-sort="recent"] .sort-desc').innerText = t('sortRecentDesc');
@@ -6964,6 +7198,7 @@
             document.getElementById('nameLabel').innerText = t('name') + ' *';
             document.getElementById('subtitleLabel').innerText = t('subtitle') + ' (max 100)';
             document.getElementById('descLabel').innerText = t('description');
+            document.getElementById('tagsLabel').innerText = t('tags');
             document.getElementById('imageLabel').innerText = t('image');
             document.getElementById('coordsLabel').innerText = t('coords');
             document.getElementById('ratingLabel').innerText = t('rating');
@@ -7088,6 +7323,7 @@
             }
             updateFavoriteUI();
             updateGlowColors();
+            updateModeBadge();
         }
 
         function applyTheme() {
@@ -7184,9 +7420,11 @@
                             state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
                         renderNearbyPins();
-                        // Si el modo de ordenación es distance, actualizar búsqueda
                         if (state.sortMode === 'distance') {
                             renderSearchResults(state.currentSearchQuery);
+                        }
+                        if (state.groupSortMode === 'distance' && state.currentGroupId) {
+                            renderGroupPins(state.currentGroupId);
                         }
                     },
                     (error) => {
@@ -7275,9 +7513,11 @@
                         }, 500);
                         state.gpsSplashResolve && state.gpsSplashResolve('success');
                         renderNearbyPins();
-                        // Si el modo de ordenación es distance, actualizar búsqueda
                         if (state.sortMode === 'distance') {
                             renderSearchResults(state.currentSearchQuery);
+                        }
+                        if (state.groupSortMode === 'distance' && state.currentGroupId) {
+                            renderGroupPins(state.currentGroupId);
                         }
                     }
                 },
@@ -7397,15 +7637,17 @@
                 state.searchLimit = 25;
                 const val = input.value;
                 renderSearchResults(val);
-                // Mostrar/ocultar botón de ordenación
-                document.getElementById('sortBtn').classList.toggle('visible', val.trim().length >= 2);
+                const visible = val.trim().length >= 2;
+                document.getElementById('sortBtnSearch').classList.toggle('visible', visible);
+                document.getElementById('modeBtnSearch').classList.toggle('visible', visible);
             });
 
             clearBtn.addEventListener('click', () => {
                 input.value = '';
                 clearBtn.style.display = 'none';
                 renderSearchResults('');
-                document.getElementById('sortBtn').classList.remove('visible');
+                document.getElementById('sortBtnSearch').classList.remove('visible');
+                document.getElementById('modeBtnSearch').classList.remove('visible');
                 input.focus();
             });
         }
@@ -7595,8 +7837,13 @@
             document.getElementById('modeDndCard').addEventListener('click', () => setViewMode('dnd'));
             document.getElementById('modeTransportCard').addEventListener('click', () => setViewMode('transport'));
 
-            // Setup sort button
-            document.getElementById('sortBtn').addEventListener('click', openSortDialog);
+            // Setup sort button en search - CYCLE
+            document.getElementById('sortBtnSearch').addEventListener('click', cycleSort);
+
+            // Setup mode button en search
+            document.getElementById('modeBtnSearch').addEventListener('click', () => {
+                switchTab('mode');
+            });
 
             // Setup sort dialog
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
@@ -7607,6 +7854,9 @@
             });
             document.getElementById('sortDialogCancel').addEventListener('click', closeSortDialog);
             document.getElementById('sortDialogApply').addEventListener('click', applySort);
+
+            // Setup favorites sort button
+            document.getElementById('favoritesSortBtn').addEventListener('click', openFavoritesSortDialog);
 
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
