@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+    <title>LibrePin Studio — Tag Forge for Transport</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/bV3drrr.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        :root {
+            --md-primary: #7C4DFF;
+            --md-primary-light: #B388FF;
+            --md-primary-dark: #4A2A8A;
+            --md-primary-container: #E8DEFF;
+            --md-surface: #FFFFFF;
+            --md-surface-dim: #F5F5F5;
+            --md-background: #F8F9FA;
+            --md-on-surface: #1C1B1F;
+            --md-on-surface-variant: #49454F;
+            --md-outline: #79747E;
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --md-elevation-2: 0 3px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+            --md-elevation-3: 0 8px 24px rgba(0,0,0,0.15);
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --splash-color: var(--md-primary);
+        }
+        [data-theme="dark"] {
+            --md-primary: #7C4DFF;
+            --md-primary-light: #B388FF;
+            --md-primary-dark: #4A2A8A;
+            --md-primary-container: #2A1A3A;
+            --md-surface: #1C1B1F;
+            --md-surface-dim: #2C2A2E;
+            --md-background: #0F0F14;
+            --md-on-surface: #E6E1E5;
+            --md-on-surface-variant: #CAC4D0;
+            --md-outline: #938F99;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--md-background);
+            color: var(--md-on-surface);
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            margin: 0;
+        }
+        .app-container {
+            max-width: 560px;
+            width: 100%;
+            background: var(--md-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--md-elevation-3);
+            padding: 28px 24px 32px;
+            transition: background 0.2s ease;
+            max-height: 98dvh;
+            overflow-y: auto;
+        }
+        .app-container::-webkit-scrollbar { width: 0; }
+        .app-container { scrollbar-width: none; }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-left .logo {
+            font-size: 28px;
+            color: var(--md-primary);
+        }
+        .header-left .title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--md-on-surface);
+        }
+        .header-left .title span {
+            color: var(--md-primary);
+        }
+        .header-left .version {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            opacity: 0.7;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .theme-toggle {
+            background: var(--md-surface-dim);
+            border: none;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--md-on-surface-variant);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .theme-toggle .label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            font-weight: 600;
+            font-size: 12px;
+            padding: 2px 14px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-md);
+            padding: 20px 18px;
+            margin-bottom: 16px;
+            transition: background 0.2s ease;
+        }
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--md-on-surface);
+        }
+        .card h3 i {
+            color: var(--md-primary);
+        }
+        .card p {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed var(--md-outline);
+            border-radius: var(--radius-sm);
+            padding: 28px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--md-surface);
+        }
+        .file-drop-zone:hover {
+            border-color: var(--md-primary);
+            background: var(--md-primary-container);
+        }
+        .file-drop-zone i {
+            font-size: 40px;
+            color: var(--md-primary);
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+        .file-drop-zone .main-text {
+            font-weight: 500;
+            font-size: 15px;
+            color: var(--md-on-surface);
+        }
+        .file-drop-zone .sub-text {
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+            margin-top: 4px;
+        }
+        .file-drop-zone .file-name {
+            margin-top: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--md-primary);
+            word-break: break-all;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface);
+            color: var(--md-on-surface);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
+        }
+        select {
+            appearance: auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 60px;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: var(--md-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            width: 100%;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .btn.secondary {
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+        }
+        .btn.secondary:active {
+            background: var(--md-outline);
+        }
+        .btn .icon {
+            font-size: 18px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .row .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+        }
+        .stats strong {
+            color: var(--md-on-surface);
+            font-weight: 600;
+        }
+
+        .log-area {
+            background: var(--md-surface);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            max-height: 140px;
+            overflow-y: auto;
+            font-size: 13px;
+            font-family: 'Inter', monospace;
+            color: var(--md-on-surface-variant);
+            border: 1px solid var(--md-outline);
+            margin-top: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+        .log-area .highlight {
+            color: var(--md-primary);
+            font-weight: 500;
+        }
+        .log-area .success {
+            color: #2E7D32;
+        }
+        .log-area .warn {
+            color: #E30613;
+        }
+        .log-area .info {
+            color: #2196F3;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--md-surface-dim);
+            border: 2px solid var(--md-outline);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+            transition: all 0.3s ease;
+        }
+        .step-dot.active {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+            color: white;
+        }
+        .step-dot.done {
+            background: var(--md-primary-container);
+            border-color: var(--md-primary);
+            color: var(--md-primary);
+        }
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: var(--md-outline);
+            min-width: 12px;
+            transition: background 0.3s ease;
+        }
+        .step-line.done {
+            background: var(--md-primary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .tag-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .tag-preview .tag {
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0 4px;
+            cursor: pointer;
+        }
+        .checkbox-row input[type="checkbox"] {
+            display: none;
+        }
+        .checkbox-row .custom-checkbox {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checkbox-row .custom-checkbox .check-icon {
+            font-size: 12px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        .checkbox-row input[type="checkbox"]:checked + .custom-checkbox {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .checkbox-row input[type="checkbox"]:checked + .custom-checkbox .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .checkbox-row .label {
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+        }
+        .checkbox-row .label-sub {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            font-weight: 400;
+        }
+
+        .service-selector-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+            margin: 8px 0 4px;
+            padding: 4px 0;
+        }
+        .service-selector-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--md-surface);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--md-outline);
+        }
+        .service-selector-item:active {
+            transform: scale(0.97);
+        }
+        .service-selector-item input[type="checkbox"] {
+            display: none;
+        }
+        .service-selector-item .custom-checkbox-sm {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--md-outline);
+            background: var(--md-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .service-selector-item .custom-checkbox-sm .check-icon-sm {
+            font-size: 11px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        .service-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+        .service-selector-item input[type="checkbox"]:checked + .custom-checkbox-sm .check-icon-sm {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .service-selector-item img {
+            width: 28px;
+            height: 28px;
+            border-radius: 0px;
+            object-fit: cover;
+        }
+        .service-selector-item .name {
+            font-size: 14px;
+            flex: 1;
+        }
+        .service-selector-item .service-id {
+            font-size: 11px;
+            color: var(--md-on-surface-variant);
+            opacity: 0.6;
+        }
+
+        .selected-services-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .selected-services-tags .tag {
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .selected-services-tags .tag .remove {
+            cursor: pointer;
+            opacity: 0.6;
+            font-size: 12px;
+        }
+        .selected-services-tags .tag .remove:hover {
+            opacity: 1;
+        }
+
+        .match-list {
+            max-height: 140px;
+            overflow-y: auto;
+            margin-top: 6px;
+            font-size: 13px;
+            background: var(--md-surface);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            border: 1px solid var(--md-outline);
+        }
+        .match-list .item {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(128,128,128,0.06);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .match-list .item:last-child {
+            border-bottom: none;
+        }
+        .match-list .item .badge {
+            font-size: 10px;
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            padding: 0 8px;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            .app-container { padding: 18px 14px 22px; }
+            .header-left .title { font-size: 17px; }
+            .header-left .logo { font-size: 24px; }
+            .theme-toggle .label { display: none; }
+            .row .btn { min-width: 80px; font-size: 14px; padding: 10px 16px; }
+            .step-dot { width: 28px; height: 28px; font-size: 11px; }
+            .card { padding: 16px 14px; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="app">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <span class="logo"><i class="fas fa-bus"></i></span>
+            <span class="title">LibrePin <span>Studio</span></span>
+            <span class="version">— Tag Forge for Transport</span>
+        </div>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+                <span class="label" id="themeLabel">Dark</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- STEP INDICATOR -->
+    <div class="step-indicator">
+        <div class="step-dot active" id="stepDot1">1</div>
+        <div class="step-line" id="stepLine1"></div>
+        <div class="step-dot" id="stepDot2">2</div>
+        <div class="step-line" id="stepLine2"></div>
+        <div class="step-dot" id="stepDot3">3</div>
+    </div>
+
+    <!-- STEP 1: LOAD DATASET -->
+    <div id="step1">
+        <div class="step-badge">STEP 1</div>
+        <h2 style="font-size:20px; font-weight:700; margin-bottom:4px;">Load your dataset</h2>
+        <p style="color:var(--md-on-surface-variant); margin-bottom:16px; font-size:14px;">
+            Upload a <strong>.json</strong> file exported from LibrePin.
+        </p>
+
+        <div class="card">
+            <div class="file-drop-zone" id="fileDropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="main-text">Drop your JSON here or click to browse</div>
+                <div class="sub-text">Supports any LibrePin export</div>
+                <div class="file-name" id="fileName"></div>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display:none;" />
+        </div>
+
+        <div id="datasetInfo" class="hidden">
+            <div class="card">
+                <h3><i class="fas fa-database"></i> Dataset loaded</h3>
+                <div class="stats">
+                    <span><strong id="pinCount">0</strong> pins</span>
+                    <span><strong id="serviceCount">0</strong> services</span>
+                    <span><strong id="transportStopCount">0</strong> transport stops</span>
+                </div>
+                <div class="log-area" id="loadLog">✔ Dataset loaded successfully.</div>
+            </div>
+        </div>
+
+        <button class="btn" id="step1NextBtn" disabled>
+            <i class="fas fa-arrow-right"></i> Next — Select services
+        </button>
+    </div>
+
+    <!-- STEP 2: SELECT SERVICES & TAGS -->
+    <div id="step2" class="hidden">
+        <div class="step-badge">STEP 2</div>
+        <h2 style="font-size:20px; font-weight:700; margin-bottom:4px;">Transport service filter</h2>
+        <p style="color:var(--md-on-surface-variant); margin-bottom:16px; font-size:14px;">
+            Select one or more transport services. All pins that have <strong>any</strong> of these services assigned will receive the tags.
+        </p>
+
+        <div class="card">
+            <h3><i class="fas fa-bus"></i> Select services</h3>
+            <p>Choose which services to filter by. Pins with at least one of these services will be tagged.</p>
+
+            <div style="position:relative;">
+                <input type="text" id="serviceSearchInput" placeholder="Search services..." style="margin-bottom:6px;" />
+            </div>
+
+            <div class="service-selector-grid" id="serviceSelectorGrid"></div>
+
+            <div class="selected-services-tags" id="selectedServicesTags"></div>
+            <div style="margin-top:6px; font-size:13px; color:var(--md-on-surface-variant);">
+                <span id="serviceMatchCount">0</span> pins match the selected services
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-tags"></i> Tags to apply</h3>
+            <p>Comma-separated tags. They will <strong>replace</strong> the existing tags on matching pins.</p>
+            <input type="text" id="tagsInput" placeholder="bus, metro, tram, train" />
+            <div class="tag-preview" id="tagPreview"></div>
+            <div class="checkbox-row" id="replaceToggle">
+                <input type="checkbox" id="replaceCheckbox" checked />
+                <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
+                <span class="label">
+                    <span id="replaceLabel">Replace all tags</span>
+                    <span class="label-sub">(uncheck to merge with existing tags)</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <button class="btn secondary" id="step2BackBtn"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="btn" id="step2ApplyBtn"><i class="fas fa-play"></i> Apply tags</button>
+        </div>
+
+        <div id="applyResult" class="hidden">
+            <div class="card">
+                <h3><i class="fas fa-check-circle" style="color:#2E7D32;"></i> Result</h3>
+                <div class="stats">
+                    <span><strong id="updatedCount">0</strong> pins updated</span>
+                    <span><strong id="skippedCount">0</strong> skipped</span>
+                </div>
+                <div class="log-area" id="applyLog"></div>
+                <div class="match-list" id="matchList"></div>
+            </div>
+            <button class="btn" id="step2DoneBtn"><i class="fas fa-arrow-right"></i> Next — Download</button>
+        </div>
+    </div>
+
+    <!-- STEP 3: DOWNLOAD / FINISH -->
+    <div id="step3" class="hidden">
+        <div class="step-badge">STEP 3</div>
+        <h2 style="font-size:20px; font-weight:700; margin-bottom:4px;">All done!</h2>
+        <p style="color:var(--md-on-surface-variant); margin-bottom:16px; font-size:14px;">
+            Your dataset has been updated. Download it or perform another operation.
+        </p>
+
+        <div class="card">
+            <h3><i class="fas fa-download"></i> Download updated dataset</h3>
+            <p>Save the modified JSON file to import back into LibrePin.</p>
+            <button class="btn" id="downloadBtn"><i class="fas fa-download"></i> Download .json</button>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-redo"></i> Another operation</h3>
+            <p>Reset and start over with a fresh dataset.</p>
+            <button class="btn secondary" id="resetBtn"><i class="fas fa-sync-alt"></i> Start over</button>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-info-circle"></i> Summary</h3>
+            <div class="stats">
+                <span><strong id="finalPinCount">0</strong> pins total</span>
+                <span><strong id="finalUpdatedCount">0</strong> updated</span>
+                <span><strong id="finalServiceCount">0</strong> services used</span>
+            </div>
+            <div class="log-area" id="finalLog"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- STATE ----------
+    let dataset = null;
+    let pins = [];
+    let modifiedPins = [];
+    let services = [];
+    let selectedServiceIds = [];
+    let updateCount = 0;
+    let skipCount = 0;
+    let darkMode = false;
+
+    // ---------- DOM REFS ----------
+    const $ = id => document.getElementById(id);
+    const step1 = $('step1');
+    const step2 = $('step2');
+    const step3 = $('step3');
+    const stepDot1 = $('stepDot1');
+    const stepDot2 = $('stepDot2');
+    const stepDot3 = $('stepDot3');
+    const stepLine1 = $('stepLine1');
+    const stepLine2 = $('stepLine2');
+    const fileDropZone = $('fileDropZone');
+    const fileInput = $('fileInput');
+    const fileName = $('fileName');
+    const datasetInfo = $('datasetInfo');
+    const pinCount = $('pinCount');
+    const serviceCount = $('serviceCount');
+    const transportStopCount = $('transportStopCount');
+    const loadLog = $('loadLog');
+    const step1NextBtn = $('step1NextBtn');
+    const serviceSearchInput = $('serviceSearchInput');
+    const serviceSelectorGrid = $('serviceSelectorGrid');
+    const selectedServicesTags = $('selectedServicesTags');
+    const serviceMatchCount = $('serviceMatchCount');
+    const tagsInput = $('tagsInput');
+    const tagPreview = $('tagPreview');
+    const replaceCheckbox = $('replaceCheckbox');
+    const replaceLabel = $('replaceLabel');
+    const step2BackBtn = $('step2BackBtn');
+    const step2ApplyBtn = $('step2ApplyBtn');
+    const applyResult = $('applyResult');
+    const updatedCount = $('updatedCount');
+    const skippedCount = $('skippedCount');
+    const applyLog = $('applyLog');
+    const matchList = $('matchList');
+    const step2DoneBtn = $('step2DoneBtn');
+    const downloadBtn = $('downloadBtn');
+    const resetBtn = $('resetBtn');
+    const finalPinCount = $('finalPinCount');
+    const finalUpdatedCount = $('finalUpdatedCount');
+    const finalServiceCount = $('finalServiceCount');
+    const finalLog = $('finalLog');
+    const themeToggle = $('themeToggle');
+    const themeIcon = $('themeIcon');
+    const themeLabel = $('themeLabel');
+
+    // ---------- THEME ----------
+    function setTheme(dark) {
+        darkMode = dark;
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        themeIcon.className = dark ? 'fas fa-sun' : 'fas fa-moon';
+        themeLabel.textContent = dark ? 'Light' : 'Dark';
+        localStorage.setItem('librepin_studio_transport_theme', dark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+        setTheme(!darkMode);
+    }
+
+    const savedTheme = localStorage.getItem('librepin_studio_transport_theme');
+    if (savedTheme === 'dark') setTheme(true);
+    else if (savedTheme === 'light') setTheme(false);
+    else {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // ---------- STEP NAVIGATION ----------
+    function goToStep(step) {
+        step1.classList.add('hidden');
+        step2.classList.add('hidden');
+        step3.classList.add('hidden');
+        stepDot1.classList.remove('active', 'done');
+        stepDot2.classList.remove('active', 'done');
+        stepDot3.classList.remove('active', 'done');
+        stepLine1.classList.remove('done');
+        stepLine2.classList.remove('done');
+
+        if (step === 1) {
+            step1.classList.remove('hidden');
+            stepDot1.classList.add('active');
+        } else if (step === 2) {
+            step2.classList.remove('hidden');
+            stepDot1.classList.add('done');
+            stepLine1.classList.add('done');
+            stepDot2.classList.add('active');
+            renderServiceSelector();
+            updateServiceMatchCount();
+        } else if (step === 3) {
+            step3.classList.remove('hidden');
+            stepDot1.classList.add('done');
+            stepDot2.classList.add('done');
+            stepLine1.classList.add('done');
+            stepLine2.classList.add('done');
+            stepDot3.classList.add('active');
+            finalPinCount.textContent = pins.length;
+            finalUpdatedCount.textContent = updateCount;
+            finalServiceCount.textContent = selectedServiceIds.length;
+            finalLog.textContent = `✅ Operation completed. ${updateCount} pins updated, ${skipCount} skipped.`;
+        }
+    }
+
+    // ---------- FILE LOADING ----------
+    function handleFile(file) {
+        if (!file) return;
+        fileName.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (!data.pins || !Array.isArray(data.pins)) {
+                    loadLog.innerHTML = '❌ <span class="warn">Invalid dataset: missing "pins" array.</span>';
+                    return;
+                }
+                dataset = data;
+                pins = data.pins || [];
+                services = data.services || [];
+                modifiedPins = pins.map(p => ({ ...p }));
+
+                const transportPins = pins.filter(p => p.isTransportStop === true);
+
+                pinCount.textContent = pins.length;
+                serviceCount.textContent = services.length;
+                transportStopCount.textContent = transportPins.length;
+
+                datasetInfo.classList.remove('hidden');
+                loadLog.innerHTML = '✅ <span class="success">Dataset loaded successfully.</span> ' +
+                    `<span class="highlight">${pins.length}</span> pins, ` +
+                    `<span class="highlight">${services.length}</span> services, ` +
+                    `<span class="highlight">${transportPins.length}</span> transport stops.`;
+                step1NextBtn.disabled = false;
+                renderServiceSelector();
+                updateServiceMatchCount();
+            } catch (err) {
+                loadLog.innerHTML = '❌ <span class="warn">Error parsing JSON: ' + err.message + '</span>';
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    fileDropZone.addEventListener('click', () => fileInput.click());
+    fileDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--md-primary)';
+        fileDropZone.style.background = 'var(--md-primary-container)';
+    });
+    fileDropZone.addEventListener('dragleave', () => {
+        fileDropZone.style.borderColor = 'var(--md-outline)';
+        fileDropZone.style.background = 'var(--md-surface)';
+    });
+    fileDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--md-outline)';
+        fileDropZone.style.background = 'var(--md-surface)';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    step1NextBtn.addEventListener('click', () => {
+        if (!dataset) return;
+        updateCount = 0;
+        skipCount = 0;
+        modifiedPins = pins.map(p => ({ ...p }));
+        selectedServiceIds = [];
+        applyResult.classList.add('hidden');
+        applyLog.textContent = '';
+        matchList.innerHTML = '';
+        renderServiceSelector();
+        updateServiceMatchCount();
+        goToStep(2);
+    });
+
+    // ---------- SERVICE SELECTOR ----------
+    function renderServiceSelector(filter = '') {
+        const grid = serviceSelectorGrid;
+        grid.innerHTML = '';
+
+        const filteredServices = services.filter(s => {
+            const name = s.name.toLowerCase();
+            const id = s.id.toLowerCase();
+            const f = filter.toLowerCase().trim();
+            return !f || name.includes(f) || id.includes(f);
+        });
+
+        if (filteredServices.length === 0) {
+            grid.innerHTML = `<p style="text-align:center;color:var(--md-on-surface-variant);padding:12px;font-size:14px;">No services found</p>`;
+            return;
+        }
+
+        filteredServices.forEach(svc => {
+            const div = document.createElement('div');
+            div.className = 'service-selector-item';
+            const checked = selectedServiceIds.includes(svc.id) ? 'checked' : '';
+            div.innerHTML = `
+                <input type="checkbox" class="service-selector-checkbox" value="${svc.id}" ${checked}>
+                <span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>
+                ${svc.icon ? `<img src="${svc.icon}" onerror="this.style.display='none'">` : '<span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px;">🚌</span>'}
+                <span class="name">${svc.name}</span>
+                <span class="service-id">${svc.id}</span>
+            `;
+            grid.appendChild(div);
+
+            const checkbox = div.querySelector('input[type="checkbox"]');
+            const customCheck = div.querySelector('.custom-checkbox-sm');
+            div.addEventListener('click', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change'));
+            });
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    customCheck.style.background = 'var(--md-primary)';
+                    customCheck.style.borderColor = 'var(--md-primary)';
+                    customCheck.querySelector('.check-icon-sm').style.opacity = '1';
+                    customCheck.querySelector('.check-icon-sm').style.transform = 'scale(1)';
+                    if (!selectedServiceIds.includes(svc.id)) {
+                        selectedServiceIds.push(svc.id);
+                    }
+                } else {
+                    customCheck.style.background = 'var(--md-surface)';
+                    customCheck.style.borderColor = 'var(--md-outline)';
+                    customCheck.querySelector('.check-icon-sm').style.opacity = '0';
+                    customCheck.querySelector('.check-icon-sm').style.transform = 'scale(0)';
+                    selectedServiceIds = selectedServiceIds.filter(id => id !== svc.id);
+                }
+                renderSelectedServicesTags();
+                updateServiceMatchCount();
+            });
+            if (checked) {
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
+
+        renderSelectedServicesTags();
+    }
+
+    serviceSearchInput.addEventListener('input', (e) => {
+        renderServiceSelector(e.target.value);
+    });
+
+    function renderSelectedServicesTags() {
+        const container = selectedServicesTags;
+        container.innerHTML = '';
+        selectedServiceIds.forEach(id => {
+            const svc = services.find(s => s.id === id);
+            if (svc) {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.innerHTML = `
+                    ${svc.icon ? `<img src="${svc.icon}" style="width:14px;height:14px;object-fit:contain;vertical-align:middle;">` : ''}
+                    ${svc.name}
+                    <span class="remove" data-id="${id}">✕</span>
+                `;
+                container.appendChild(tag);
+                tag.querySelector('.remove').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectedServiceIds = selectedServiceIds.filter(sid => sid !== id);
+                    renderServiceSelector(serviceSearchInput.value);
+                    updateServiceMatchCount();
+                });
+            }
+        });
+        if (selectedServiceIds.length === 0) {
+            container.innerHTML = '<span style="font-size:13px;color:var(--md-on-surface-variant);opacity:0.6;">No services selected</span>';
+        }
+    }
+
+    function updateServiceMatchCount() {
+        if (selectedServiceIds.length === 0) {
+            serviceMatchCount.textContent = '0';
+            return;
+        }
+        const matching = pins.filter(p =>
+            p.isTransportStop === true &&
+            p.services &&
+            p.services.some(sid => selectedServiceIds.includes(sid))
+        );
+        serviceMatchCount.textContent = matching.length;
+    }
+
+    // ---------- TAG PREVIEW ----------
+    function updateTagPreview() {
+        const raw = tagsInput.value.trim();
+        const tags = raw ? raw.split(',').map(t => t.trim()).filter(t => t.length > 0) : [];
+        tagPreview.innerHTML = tags.map(t => `<span class="tag">${t}</span>`).join('');
+    }
+    tagsInput.addEventListener('input', updateTagPreview);
+
+    replaceCheckbox.addEventListener('change', () => {
+        const checked = replaceCheckbox.checked;
+        replaceLabel.textContent = checked ? 'Replace all tags' : 'Merge with existing tags';
+        document.querySelector('#replaceToggle .label-sub').textContent =
+            checked ? '(uncheck to merge with existing tags)' : '(checked will replace all tags)';
+    });
+
+    // ---------- APPLY TAGS ----------
+    step2ApplyBtn.addEventListener('click', () => {
+        if (selectedServiceIds.length === 0) {
+            applyLog.innerHTML = '⚠️ <span class="warn">Please select at least one transport service.</span>';
+            applyResult.classList.remove('hidden');
+            return;
+        }
+
+        const rawTags = tagsInput.value.trim();
+        if (!rawTags) {
+            applyLog.innerHTML = '⚠️ <span class="warn">Please enter at least one tag.</span>';
+            applyResult.classList.remove('hidden');
+            return;
+        }
+        const tags = rawTags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+        if (tags.length === 0) {
+            applyLog.innerHTML = '⚠️ <span class="warn">Please enter valid tags.</span>';
+            applyResult.classList.remove('hidden');
+            return;
+        }
+
+        const replace = replaceCheckbox.checked;
+        let updated = 0;
+        let skipped = 0;
+        const logLines = [];
+        const matchItems = [];
+
+        const matchingPins = pins.filter(p =>
+            p.isTransportStop === true &&
+            p.services &&
+            p.services.some(sid => selectedServiceIds.includes(sid))
+        );
+
+        if (matchingPins.length === 0) {
+            applyLog.innerHTML = '⚠️ <span class="warn">No pins match the selected services.</span>';
+            applyResult.classList.remove('hidden');
+            return;
+        }
+
+        matchingPins.forEach(p => {
+            const pinIdx = modifiedPins.findIndex(mp => mp.id === p.id);
+            if (pinIdx === -1) return;
+            const pin = modifiedPins[pinIdx];
+            const oldTags = pin.tags || [];
+            if (replace) {
+                pin.tags = tags.slice();
+            } else {
+                const merged = [...oldTags];
+                tags.forEach(t => {
+                    if (!merged.includes(t)) merged.push(t);
+                });
+                pin.tags = merged;
+            }
+            updated++;
+            logLines.push(`✔ ${p.name} → ${pin.tags.join(', ')}`);
+            matchItems.push(`<span class="badge">${p.services.filter(sid => selectedServiceIds.includes(sid)).length} services</span> ${p.name}`);
+        });
+
+        updateCount = updated;
+        skipCount = skipped;
+        updatedCount.textContent = updated;
+        skippedCount.textContent = skipped;
+
+        const logPreview = logLines.slice(0, 10).join('\n');
+        const more = logLines.length > 10 ? `\n... and ${logLines.length - 10} more` : '';
+        applyLog.innerHTML = logPreview + more;
+
+        matchList.innerHTML = matchItems.map(item => `<div class="item">${item}</div>`).join('');
+
+        applyResult.classList.remove('hidden');
+    });
+
+    step2DoneBtn.addEventListener('click', () => {
+        if (dataset && modifiedPins) {
+            dataset.pins = modifiedPins;
+        }
+        goToStep(3);
+    });
+
+    step2BackBtn.addEventListener('click', () => {
+        goToStep(1);
+    });
+
+    // ---------- STEP 3 ----------
+    downloadBtn.addEventListener('click', () => {
+        if (!dataset) return;
+        const json = JSON.stringify(dataset, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const timestamp = new Date().toISOString().slice(0, 10);
+        a.download = `librepin_transport_tagged_${timestamp}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    resetBtn.addEventListener('click', () => {
+        if (confirm('Start over? All unsaved changes will be lost.')) {
+            dataset = null;
+            pins = [];
+            modifiedPins = [];
+            services = [];
+            selectedServiceIds = [];
+            updateCount = 0;
+            skipCount = 0;
+            datasetInfo.classList.add('hidden');
+            fileName.textContent = '';
+            fileInput.value = '';
+            step1NextBtn.disabled = true;
+            serviceSearchInput.value = '';
+            tagsInput.value = '';
+            tagPreview.innerHTML = '';
+            applyResult.classList.add('hidden');
+            applyLog.textContent = '';
+            matchList.innerHTML = '';
+            loadLog.textContent = 'Awaiting dataset...';
+            goToStep(1);
+        }
+    });
+
+    // ---------- INIT ----------
+    goToStep(1);
+    updateTagPreview();
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            if (!step2.classList.contains('hidden')) {
+                step2ApplyBtn.click();
+            }
+        }
+    });
+
+    console.log('🚍 LibrePin Studio — Tag Forge for Transport loaded');
+</script>
+</body>
+</html>
