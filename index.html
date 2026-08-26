@@ -46,7 +46,6 @@
             --sidebar-width: 280px;
             --bottom-nav-height: 60px;
             
-            /* Colors de les estrelles */
             --star-color-1: #E30613;
             --star-color-2: #FF8C00;
             --star-color-3: #FFB300;
@@ -80,7 +79,6 @@
         * { scrollbar-width: none; }
 
         .app-container {
-            max-width: 500px;
             margin: 0 auto;
             height: 100dvh;
             background: var(--md-background);
@@ -88,6 +86,55 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (min-aspect-ratio: 16/9) and (min-width: 768px) {
+            .app-container {
+                border-left: 1px solid rgba(128,128,128,0.1);
+                border-right: 1px solid rgba(128,128,128,0.1);
+                box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            }
+            .bottom-nav {
+                padding: 8px 16px 16px;
+            }
+            .nav-item {
+                padding: 8px 16px;
+                font-size: 11px;
+            }
+            .nav-item i {
+                font-size: 24px;
+            }
+            .top-bar {
+                padding: 12px 16px;
+                min-height: 64px;
+            }
+            .top-bar .app-title {
+                font-size: 22px;
+            }
+            .pin-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 16px;
+                padding: 16px 20px;
+            }
+            .groups-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 14px;
+                padding: 14px 16px;
+            }
+            .dialog-card {
+                max-width: 520px;
+                border-radius: var(--radius-lg);
+            }
+            .dialog-overlay {
+                align-items: center;
+            }
+            .dialog-overlay.active .dialog-card {
+                transform: translateY(0) scale(1);
+                border-radius: var(--radius-lg);
+            }
+            .sidebar {
+                width: 300px;
+            }
         }
 
         /* --- SPLASH SCREEN --- */
@@ -324,6 +371,108 @@
             opacity: 0.8;
             margin-top: 1px;
         }
+
+        /* Quick Mark section - right after greeting */
+        .quick-mark-section {
+            padding: 4px 0 0;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+        }
+        .quick-mark-section .quick-header {
+            padding: 6px 20px 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--md-on-surface-variant);
+            opacity: 0.7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quick-mark-section .quick-header .quick-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .quick-mark-section .quick-header .quick-add-btn {
+            background: none;
+            border: none;
+            color: var(--md-primary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 8px;
+            border-radius: 40px;
+        }
+        .quick-mark-section .quick-header .quick-add-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.9);
+        }
+        .quick-mark-section .quick-header .quick-delete-btn {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 8px;
+            border-radius: 40px;
+            opacity: 0.6;
+        }
+        .quick-mark-section .quick-header .quick-delete-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.9);
+        }
+        .quick-mark-section .quick-header .quick-delete-btn:hover {
+            opacity: 1;
+        }
+
+        .quick-mark-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+        }
+        .quick-mark-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.98);
+        }
+        .quick-mark-btn img {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            object-fit: contain;
+            flex-shrink: 0;
+            background: var(--md-surface-dim);
+        }
+        .quick-mark-btn .quick-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .quick-mark-empty {
+            padding: 8px 20px 12px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--md-on-surface-variant);
+            opacity: 0.6;
+        }
+
+        /* Separator after quick marks */
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(128,128,128,0.1);
+            margin: 6px 20px;
+        }
+
         .sidebar .sidebar-item {
             display: flex;
             align-items: center;
@@ -349,11 +498,6 @@
             font-size: 20px;
             width: 28px;
             color: var(--md-primary);
-        }
-        .sidebar .sidebar-divider {
-            height: 1px;
-            background: rgba(128,128,128,0.1);
-            margin: 6px 20px;
         }
         .sidebar .sidebar-footer {
             margin-top: auto;
@@ -553,7 +697,6 @@
         .search-results-page {
             padding-top: 0;
         }
-        /* Search header with sort and mode buttons */
         .search-header {
             padding: 12px 16px;
             background: var(--md-surface);
@@ -632,9 +775,6 @@
             transform: scale(0.9);
             background: var(--md-surface-dim);
         }
-        .search-wrapper .header-btn .badge-dot {
-            display: none;
-        }
 
         @keyframes searchBtnAppear {
             0% { opacity: 0; transform: scale(0.8); }
@@ -680,6 +820,25 @@
         .pin-card .pin-name { font-weight: 600; margin: 8px 0 2px; font-size: 15px; }
         .pin-card .pin-subtitle { font-size: 12px; color: var(--md-on-surface-variant); margin-bottom: 4px; }
         .pin-card .pin-stars { font-size: 16px; letter-spacing: 2px; margin: 4px 0; }
+        .pin-card .pin-distance { font-size: 11px; color: var(--md-on-surface-variant); margin: 2px 0; }
+        .pin-card .pin-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .pin-card .pin-tags .tag {
+            font-size: 9px;
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: 1px solid var(--md-primary);
+            opacity: 0.8;
+        }
         .pin-card .pin-services {
             display: flex;
             justify-content: center;
@@ -947,13 +1106,32 @@
         .detail-avatar:hover { transform: scale(1.03); }
         .detail-name { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
         .detail-subtitle { font-size: 16px; color: var(--md-on-surface-variant); margin-bottom: 8px; }
-        .detail-desc { color: var(--md-on-surface-variant); margin-bottom: 12px; font-size: 16px; }
         .detail-stars { font-size: 22px; margin-bottom: 12px; letter-spacing: 3px; }
+        .detail-desc { color: var(--md-on-surface-variant); margin-bottom: 12px; font-size: 16px; }
 
-        /* --- TARGETA DE RESSENYA --- */
+        /* --- ETIQUETAS EN DETALLE --- */
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .detail-tags .tag {
+            font-size: 12px;
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-weight: 500;
+            border: 1px solid var(--md-primary);
+            opacity: 0.85;
+        }
+
+        /* --- TARGETA DE RESSENYA - MOVED TO BOTTOM --- */
         .review-card {
             border-radius: var(--radius-md);
             padding: 16px 18px;
+            margin-top: 16px;
             margin-bottom: 14px;
             transition: all 0.3s ease;
             border: 1px solid rgba(0,0,0,0.06);
@@ -976,7 +1154,6 @@
             letter-spacing: 2px;
             margin-bottom: 4px;
         }
-        /* Colors pastel per rating */
         .review-card.rating-1 { background: #FDE8E8; border-color: #E30613; }
         .review-card.rating-2 { background: #FFF0D6; border-color: #FF8C00; }
         .review-card.rating-3 { background: #FFF8D6; border-color: #FFB300; }
@@ -1228,6 +1405,10 @@
             box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
         }
         .dialog-card textarea { border-radius: var(--radius-sm); min-height: 60px; resize: vertical; }
+        .dialog-card select {
+            appearance: auto;
+            cursor: pointer;
+        }
 
         /* --- CHECKBOXES --- */
         .checkbox-row {
@@ -2297,7 +2478,6 @@
             from { transform: translateX(-50%) translateY(20px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
-        /* Animació ràpida pel popup d'horaris */
         @keyframes schedulePopupIn {
             0% { opacity: 0; transform: scale(0.92) translateY(8px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
@@ -2373,25 +2553,6 @@
             #settingsLanguage .card .lang-options {
                 flex-direction: column;
             }
-        }
-
-        /* --- NEARBY PAGE --- */
-        #nearbyPage .nearby-header {
-            padding: 16px 18px 8px;
-            background: var(--md-surface);
-            border-bottom: 1px solid rgba(128,128,128,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        #nearbyPage .nearby-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        #nearbyPage .nearby-header p {
-            font-size: 12px;
-            color: var(--md-on-surface-variant);
-            margin-top: 4px;
         }
 
         /* --- MODE PAGE --- */
@@ -2561,6 +2722,245 @@
             color: var(--md-on-surface-variant);
             margin-top: 4px;
         }
+
+        /* Quick Mark buttons in sidebar */
+        .quick-mark-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+        }
+        .quick-mark-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.98);
+        }
+        .quick-mark-btn img {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            object-fit: contain;
+            flex-shrink: 0;
+            background: var(--md-surface-dim);
+        }
+        .quick-mark-btn .quick-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .quick-mark-empty {
+            padding: 8px 20px 12px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--md-on-surface-variant);
+            opacity: 0.6;
+        }
+
+        /* Quick mark section - moved after greeting */
+        .quick-mark-section {
+            padding: 4px 0 0;
+        }
+        .quick-mark-section .quick-header {
+            padding: 6px 20px 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--md-on-surface-variant);
+            opacity: 0.7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quick-mark-section .quick-header .quick-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .quick-mark-section .quick-header .quick-add-btn {
+            background: none;
+            border: none;
+            color: var(--md-primary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 8px;
+            border-radius: 40px;
+        }
+        .quick-mark-section .quick-header .quick-add-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.9);
+        }
+        .quick-mark-section .quick-header .quick-delete-btn {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 8px;
+            border-radius: 40px;
+            opacity: 0.6;
+        }
+        .quick-mark-section .quick-header .quick-delete-btn:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.9);
+        }
+        .quick-mark-section .quick-header .quick-delete-btn:hover {
+            opacity: 1;
+        }
+
+        /* Quick mark dialog */
+        .quick-mark-dialog .quick-mark-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--md-surface-dim);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid var(--md-primary);
+        }
+        .quick-mark-dialog .quick-mark-item:active {
+            transform: scale(0.97);
+        }
+        .quick-mark-dialog .quick-mark-item:hover {
+            background: var(--md-primary-container);
+        }
+        .quick-mark-dialog .quick-mark-item img {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            object-fit: contain;
+            background: var(--md-surface);
+            flex-shrink: 0;
+        }
+        .quick-mark-dialog .quick-mark-item .quick-info {
+            flex: 1;
+        }
+        .quick-mark-dialog .quick-mark-item .quick-info .quick-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .quick-mark-dialog .quick-mark-item .quick-info .quick-text-preview {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            opacity: 0.7;
+        }
+        .quick-mark-dialog .quick-mark-item .quick-delete-btn {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px 8px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+        .quick-mark-dialog .quick-mark-item .quick-delete-btn:active {
+            transform: scale(0.8);
+            background: var(--md-surface);
+        }
+
+        /* No cluster warning */
+        .warning-note {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            background: rgba(227,6,19,0.08);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            margin-top: 8px;
+            border-left: 3px solid #E30613;
+        }
+        .warning-note i {
+            color: #E30613;
+            margin-right: 6px;
+        }
+
+        /* Sort button icons for groups and favorites */
+        .sort-icon-btn {
+            background: none;
+            border: none;
+            color: var(--md-on-surface-variant);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        .sort-icon-btn:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+        .sort-icon-btn.visible {
+            display: block;
+        }
+
+        /* Delete Quick Mark Popup styles */
+        .delete-qm-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--md-surface-dim);
+            margin-bottom: 8px;
+            border-left: 3px solid var(--md-on-surface-variant);
+        }
+        .delete-qm-item .qm-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .delete-qm-item .qm-info img {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            object-fit: contain;
+            background: var(--md-surface);
+        }
+        .delete-qm-item .qm-info .qm-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .delete-qm-item .delete-qm-btn {
+            background: none;
+            border: none;
+            color: #E30613;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+        .delete-qm-item .delete-qm-btn:active {
+            transform: scale(0.8);
+            background: var(--md-surface);
+        }
+        .delete-qm-empty {
+            text-align: center;
+            color: var(--md-on-surface-variant);
+            font-style: italic;
+            padding: 16px 0;
+            font-size: 14px;
+        }
+
+        #settingsAppearance .card:has(#mapStyleLabel) { display: none !important; }
+
+        #detailTags { display: none !important; }
+
+        .pin-card .pin-tags { display: none !important; }
     </style>
 </head>
 <body>
@@ -2598,8 +2998,20 @@
                         <div class="greeting-sub" id="greetingSub">On anem avui?</div>
                     </div>
                 </div>
+                <!-- Quick Mark section - right after greeting -->
+                <div class="quick-mark-section" id="quickMarkSection">
+                    <div class="quick-header">
+                        <span id="quickMarkHeader"><i class="fas fa-bolt"></i> Marcatge ràpid</span>
+                        <div class="quick-actions">
+                            <button class="quick-delete-btn" id="quickMarkDeleteBtn" title="Eliminar marcatge ràpid"><i class="fas fa-trash"></i></button>
+                            <button class="quick-add-btn" id="quickMarkAddBtn"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div id="quickMarkList"></div>
+                </div>
+                <!-- Separator after quick marks -->
+                <!-- Rest of sidebar items -->
                 <div style="padding: 4px 0;">
-                    <button class="sidebar-item" id="sidebarNearby"><i class="fas fa-location-dot"></i> <span id="sidebarNearbyLabel">A prop meu</span></button>
                     <button class="sidebar-item" id="sidebarRecent"><i class="fas fa-clock"></i> <span id="sidebarRecentLabel">Recents</span></button>
                     <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
                     <button class="sidebar-item" id="sidebarLegend"><i class="fas fa-route"></i> <span id="sidebarLegendLabel">Llegendes de línies</span></button>
@@ -2608,7 +3020,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.10.1</span>
+                    <span>v1.11</span>
                 </div>
             </div>
         </div>
@@ -2689,23 +3101,6 @@
                     <i class="fas fa-heart" style="color:#FFB300;"></i>
                     <h3 id="noFavoritesLabel">No tens preferits</h3>
                     <p id="addFavoriteLabel">Afageix un pin com a preferit des de la seva pàgina</p>
-                </div>
-            </div>
-
-            <!-- NEARBY -->
-            <div id="nearbyPage" class="page">
-                <div class="nearby-header">
-                    <h3><i class="fas fa-location-dot" style="color:var(--md-primary);"></i> <span id="nearbyTitle">A prop meu</span></h3>
-                    <p id="nearbySubtitle">Els 20 pins més propers a la teva ubicació</p>
-                    <button class="fab-btn small secondary" id="nearbyRefreshBtn" style="margin-top:8px; padding:6px 16px; font-size:12px; width:100%;">
-                        <i class="fas fa-sync-alt"></i> <span id="nearbyRefreshLabel">Actualitzar ubicació</span>
-                    </button>
-                </div>
-                <div id="nearbyGrid" class="pin-grid"></div>
-                <div id="nearbyEmpty" class="empty-state" style="display:none;">
-                    <i class="fas fa-location-dot"></i>
-                    <h3 id="nearbyNoPins">No hi ha pins a prop</h3>
-                    <p id="nearbyNoPinsDesc">Esperant ubicació GPS...</p>
                 </div>
             </div>
 
@@ -2856,6 +3251,17 @@
                     <label style="font-size:15px; font-weight:500;" id="accentLabel">Color d'accent</label>
                     <div class="color-options" id="accentColors"></div>
                 </div>
+                <div class="card">
+                    <label style="font-size:15px; font-weight:500;">Agrupació de pins</label>
+                    <div class="checkbox-row" onclick="toggleCheckbox('noClusterCheckbox')">
+                        <input type="checkbox" id="noClusterCheckbox">
+                        <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
+                        <label for="noClusterCheckbox" style="margin:0; font-size:15px; cursor:pointer;">No agrupar els pins</label>
+                    </div>
+                    <div class="warning-note">
+                        <i class="fas fa-exclamation-triangle"></i> Desactivar l'agrupació pot causar lag o mal funcionament amb molts pins.
+                    </div>
+                </div>
             </div>
 
             <div id="settingsLanguage" class="settings-subpage">
@@ -2884,6 +3290,26 @@
                         <input type="text" id="newServiceName" placeholder="Name" style="flex:1; min-width:80px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
                         <input type="text" id="newServiceIcon" placeholder="Icon (Image URL)" style="flex:2; min-width:100px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
                         <button id="addServiceBtn" class="fab-btn small" style="flex:0; padding:10px 16px;"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK MARK SETTINGS -->
+            <div id="settingsQuickMark" class="settings-subpage">
+                <div class="sub-header">
+                    <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
+                    <h3 id="quickMarkSettingsTitle">Marcatge ràpid</h3>
+                </div>
+                <div class="card">
+                    <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:12px;" id="quickMarkSettingsSub">Gestiona els botons de marcatge ràpid</p>
+                    <button class="fab-btn small glow" id="quickMarkAddSettingsBtn" style="margin-bottom:12px; width:100%;">
+                        <i class="fas fa-plus"></i> <span id="quickMarkAddSettingsLabel">Afegir marcatge ràpid</span>
+                    </button>
+                    <div id="quickMarkSettingsList"></div>
+                    <div id="quickMarkSettingsEmpty" class="empty-state" style="display:none; padding:20px;">
+                        <i class="fas fa-bolt"></i>
+                        <h3 id="noQuickMarkLabel">No hi ha marcatges ràpids</h3>
+                        <p id="noQuickMarkDesc">Crea el teu primer marcatge ràpid</p>
                     </div>
                 </div>
             </div>
@@ -2943,7 +3369,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.10.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.11 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2959,11 +3385,13 @@
                     <button class="back-btn" id="detailDeletePinBtn" style="color:var(--md-on-surface-variant);"><i class="fas fa-trash"></i></button>
                 </div>
                 <div class="detail-content" id="detailContent">
-                    <img class="detail-avatar" id="detailImage" src="" alt="">
+                    <img class="detail-avatar" id="detailImage" src="" alt="" style="display:none;">
                     <div class="detail-name" id="detailName">-</div>
                     <div class="detail-subtitle" id="detailSubtitle"></div>
                     <div class="detail-stars" id="detailStars"></div>
                     <div class="detail-desc" id="detailDesc">-</div>
+                    <!-- ETIQUETAS EN DETALLE -->
+                    <div class="detail-tags" id="detailTags"></div>
                     <div class="detail-services-wrapper" id="detailServicesWrapper">
                         <div class="detail-services-icons" id="detailServicesIcons"></div>
                         <div class="detail-services-list" id="detailServicesList"></div>
@@ -2973,12 +3401,6 @@
                         </button>
                     </div>
                     <div class="detail-buttons" id="detailButtons"></div>
-                    <!-- TARGETA DE RESSENYA -->
-                    <div id="reviewCard" class="review-card" style="display:none;">
-                        <div class="review-stars" id="reviewStars"></div>
-                        <div class="review-title" id="reviewTitle"></div>
-                        <div class="review-text" id="reviewText"></div>
-                    </div>
                     <div class="detail-actions">
                         <button class="fab-btn glow" id="detailGoBtn"><i class="fas fa-directions"></i> <span id="detailGoLabel">Ves-hi</span></button>
                         <button class="fab-btn purple glow" id="detailScheduleBtn" style="display:none;"><i class="fas fa-clock"></i> <span id="detailScheduleLabel">Consultar horari</span></button>
@@ -2986,6 +3408,12 @@
                         <button class="fab-btn secondary" id="detailMapBtn"><i class="fas fa-map-marker-alt"></i> <span id="detailMapLabel">Veure al mapa</span></button>
                         <button class="fab-btn secondary" id="detailGoFromBtn"><i class="fas fa-route"></i> <span id="detailGoFromLabel">Ir desde</span></button>
                         <button class="fab-btn secondary" id="detailSeeAlsoBtn" style="display:none;"><i class="fas fa-layer-group"></i> <span id="detailSeeAlsoLabel">Vegeu també</span></button>
+                    </div>
+                    <!-- REVIEW CARD - MOVED TO BOTTOM (before related pins) -->
+                    <div id="reviewCard" class="review-card" style="display:none;">
+                        <div class="review-stars" id="reviewStars"></div>
+                        <div class="review-title" id="reviewTitle"></div>
+                        <div class="review-text" id="reviewText"></div>
                     </div>
                     <div class="related-pins-section" id="relatedPinsSection" style="display:none;">
                         <h4><i class="fas fa-link" style="color:var(--md-primary);"></i> <span id="relatedPinsLabel">Pins relacionats</span></h4>
@@ -3062,7 +3490,7 @@
             <label id="descLabel">Descripció</label>
             <textarea id="pinDescInput" placeholder="Description"></textarea>
 
-            <!-- NOU CAMP: ETIQUETES -->
+            <!-- ETIQUETAS -->
             <label id="tagsLabel">Etiquetes (separades per comes)</label>
             <input type="text" id="pinTagsInput" placeholder="restaurant, cheap..." style="font-size:14px;">
 
@@ -3217,6 +3645,43 @@
         </div>
     </div>
 
+    <!-- Dialog: Quick Mark Add/Edit -->
+    <div id="quickMarkDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3 id="quickMarkDialogTitle">Afegir marcatge ràpid</h3>
+            <label id="quickMarkTitleLabel">Títol *</label>
+            <input type="text" id="quickMarkTitleInput" placeholder="Title">
+
+            <label id="quickMarkIconLabel">URL Icona</label>
+            <input type="text" id="quickMarkIconInput" placeholder="https://example.com/icon.png">
+
+            <label id="quickMarkTextLabel">Text per buscar *</label>
+            <input type="text" id="quickMarkTextInput" placeholder="Text to be typed in the search bar">
+
+            <label id="quickMarkPositionLabel" style="margin-top:6px;">Posició a la llista</label>
+            <select id="quickMarkPositionSelect" style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:16px; font-family:inherit; outline:none;">
+                <option value="end">Al final de la llista</option>
+            </select>
+
+            <div class="dialog-actions">
+                <button id="quickMarkDialogCancel" class="fab-btn secondary"><span id="quickMarkCancelLabel">Cancel·lar</span></button>
+                <button id="quickMarkDialogSave" class="fab-btn glow"><span id="quickMarkSaveLabel">Guardar</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialog: Delete Quick Mark -->
+    <div id="deleteQuickMarkDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3><i class="fas fa-trash" style="color:#E30613;"></i> <span id="deleteQmTitle">Eliminar marcatge ràpid</span></h3>
+            <p style="font-size:14px; color:var(--md-on-surface-variant); margin-bottom:12px;" id="deleteQmDesc">Selecciona el marcatge ràpid que vols eliminar:</p>
+            <div id="deleteQmList" style="margin-bottom:16px;"></div>
+            <div class="dialog-actions">
+                <button class="fab-btn secondary" id="deleteQmCancel"><span id="deleteQmCancelLabel">Cancel·lar</span></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dialog: Edit Service -->
     <div id="editServiceDialog" class="dialog-overlay">
         <div class="dialog-card">
@@ -3258,7 +3723,7 @@
                 <button id="groupDetailEditBtn" class="fab-btn secondary"><i class="fas fa-edit"></i></button>
                 <button id="groupDetailDeleteBtn" class="fab-btn secondary" style="color:#E30613;"><i class="fas fa-trash"></i></button>
                 <button id="groupDetailCloseBtn" class="fab-btn secondary"><i class="fas fa-times"></i></button>
-                <button class="sort-btn-small" id="groupSortBtn"><i class="fas fa-sliders-h"></i></button>
+                <button class="sort-icon-btn" id="groupSortBtn"><i class="fas fa-sliders-h"></i></button>
             </div>
             <div id="groupDetailPins" class="group-detail-pins-grid"></div>
             <div id="groupDetailPinsEmpty" style="display:none; text-align:center; color:var(--md-on-surface-variant); padding:12px;">No hi ha pins en aquest grup</div>
@@ -3330,7 +3795,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.10.1 Mobile';
+        const APP_VERSION = '1.11 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3340,10 +3805,11 @@
             favoritesOrder: [],
             groups: [],
             lines: [],
-            lang: 'ca',
+            quickMarks: [],
+            lang: 'en',
             darkMode: false,
-            mapStyle: 'light',
-            accentColor: '#7C4DFF',
+            mapStyle: 'color',
+            accentColor: '#9a398d',
             viewMode: 'home',
             map: null,
             markerCluster: null,
@@ -3364,7 +3830,7 @@
             editingGroupId: null,
             tempGroupPins: [],
             profile: {
-                name: 'Usuari',
+                name: 'User',
                 avatar: DEFAULT_AVATAR,
                 pronouns: '',
                 subtitle: ''
@@ -3380,11 +3846,13 @@
             lineVisibility: {},
             editingLineId: null,
             linesVisible: true,
-            sortMode: 'recent', // recent | rating | alphabetical | distance
+            sortMode: 'recent',
             currentSearchQuery: '',
-            // Per al grup actual
             currentGroupId: null,
-            groupSortMode: 'recent'
+            groupSortMode: 'recent',
+            noCluster: false,
+            editingQuickMarkId: null,
+            quickMarkPosition: 'end'
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -3546,14 +4014,8 @@
                 modeCloseLabel: "Tancar",
                 outsideEnvLabel: "Fora del meu entorn",
                 outsideEnvSub: " ",
-                nearbyTitle: "A prop meu",
-                nearbySubtitle: "Els 20 pins més propers a la teva ubicació",
-                nearbyRefresh: "Actualitzar ubicació",
-                nearbyNoPins: "No hi ha pins a prop",
-                nearbyNoPinsDesc: "Esperant ubicació GPS...",
                 modePageTitle: "Mode de visualització",
                 modePageSubtitle: "Selecciona com vols veure els pins",
-                sidebarNearby: "A prop meu",
                 sidebarRecent: "Recents",
                 sidebarMode: "Mode de visualització",
                 sidebarLegend: "Llegendes de línies",
@@ -3611,7 +4073,34 @@
                 groupSortTitle: "Ordenar pins del grup",
                 sortFavorites: "Ordenar preferits",
                 sortFavoritesDesc: "Selecciona com ordenar els teus preferits",
-                favoritesSortBtn: "Ordenar"
+                favoritesSortBtn: "Ordenar",
+                quickMark: "Marcatge ràpid",
+                quickMarkSettings: "Marcatge ràpid",
+                quickMarkSettingsSub: "Gestiona els botons de marcatge ràpid",
+                quickMarkAdd: "Afegir marcatge ràpid",
+                quickMarkTitle: "Títol",
+                quickMarkIcon: "URL Icona",
+                quickMarkText: "Text per buscar",
+                quickMarkAdded: "Marcatge ràpid afegit",
+                quickMarkUpdated: "Marcatge ràpid actualitzat",
+                quickMarkDeleted: "Marcatge ràpid eliminat",
+                confirmDeleteQuickMark: "Eliminar aquest marcatge ràpid?",
+                noQuickMark: "No hi ha marcatges ràpids",
+                noQuickMarkDesc: "Crea el teu primer marcatge ràpid",
+                quickMarkHeader: "Marcatge ràpid",
+                studioWarning: "Aquestes funcions són avançades. Es recomana fer una còpia de seguretat del Dataset abans de continuar.",
+                studioContinue: "Continuar",
+                studioCancel: "Cancel·lar",
+                noClusterLabel: "No agrupar els pins",
+                noClusterWarning: "Desactivar l'agrupació pot causar lag o mal funcionament amb molts pins.",
+                deleteQmTitle: "Eliminar marcatge ràpid",
+                deleteQmDesc: "Selecciona el marcatge ràpid que vols eliminar:",
+                deleteQmCancel: "Cancel·lar",
+                noQuickMarksToDelete: "No hi ha marcatges ràpids per eliminar",
+                quickMarkPosition: "Posició a la llista",
+                quickMarkPositionEnd: "Al final de la llista",
+                quickMarkPositionAbove: "Sobre el marcatge ràpid",
+                distanceLabel: "Distància: "
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -3770,14 +4259,8 @@
                 modeCloseLabel: "Cerrar",
                 outsideEnvLabel: "Fuera de tu entorno",
                 outsideEnvSub: " ",
-                nearbyTitle: "Cerca de mí",
-                nearbySubtitle: "Los 20 pins más cercanos a tu ubicación",
-                nearbyRefresh: "Actualizar ubicación",
-                nearbyNoPins: "No hay pins cerca",
-                nearbyNoPinsDesc: "Esperando ubicación GPS...",
                 modePageTitle: "Modo de visualización",
                 modePageSubtitle: "Selecciona cómo quieres ver los pins",
-                sidebarNearby: "Cerca de mí",
                 sidebarRecent: "Recientes",
                 sidebarMode: "Modo de visualización",
                 sidebarLegend: "Leyendas de líneas",
@@ -3835,7 +4318,34 @@
                 groupSortTitle: "Ordenar pins del grupo",
                 sortFavorites: "Ordenar favoritos",
                 sortFavoritesDesc: "Selecciona cómo ordenar tus favoritos",
-                favoritesSortBtn: "Ordenar"
+                favoritesSortBtn: "Ordenar",
+                quickMark: "Marcaje rápido",
+                quickMarkSettings: "Marcaje rápido",
+                quickMarkSettingsSub: "Gestiona los botones de marcaje rápido",
+                quickMarkAdd: "Añadir marcaje rápido",
+                quickMarkTitle: "Título",
+                quickMarkIcon: "URL Icono",
+                quickMarkText: "Texto para buscar",
+                quickMarkAdded: "Marcaje rápido añadido",
+                quickMarkUpdated: "Marcaje rápido actualizado",
+                quickMarkDeleted: "Marcaje rápido eliminado",
+                confirmDeleteQuickMark: "¿Eliminar este marcaje rápido?",
+                noQuickMark: "No hay marcajes rápidos",
+                noQuickMarkDesc: "Crea tu primer marcaje rápido",
+                quickMarkHeader: "Marcaje rápido",
+                studioWarning: "Estas funciones son avanzadas. Se recomienda hacer una copia de seguridad del Dataset antes de continuar.",
+                studioContinue: "Continuar",
+                studioCancel: "Cancelar",
+                noClusterLabel: "No agrupar los pins",
+                noClusterWarning: "Desactivar la agrupación puede causar lag o mal funcionamiento con muchos pins.",
+                deleteQmTitle: "Eliminar marcaje rápido",
+                deleteQmDesc: "Selecciona el marcaje rápido que quieres eliminar:",
+                deleteQmCancel: "Cancelar",
+                noQuickMarksToDelete: "No hay marcajes rápidos para eliminar",
+                quickMarkPosition: "Posición en la lista",
+                quickMarkPositionEnd: "Al final de la lista",
+                quickMarkPositionAbove: "Encima del marcaje rápido",
+                distanceLabel: "Distancia: "
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -3994,14 +4504,8 @@
                 modeCloseLabel: "Close",
                 outsideEnvLabel: "Outside your environment",
                 outsideEnvSub: " ",
-                nearbyTitle: "Near me",
-                nearbySubtitle: "The 20 closest pins to your location",
-                nearbyRefresh: "Refresh location",
-                nearbyNoPins: "No pins nearby",
-                nearbyNoPinsDesc: "Waiting for GPS location...",
                 modePageTitle: "View mode",
                 modePageSubtitle: "Select how you want to see the pins",
-                sidebarNearby: "Near me",
                 sidebarRecent: "Recent",
                 sidebarMode: "View mode",
                 sidebarLegend: "Line legends",
@@ -4059,7 +4563,34 @@
                 groupSortTitle: "Sort group pins",
                 sortFavorites: "Sort favorites",
                 sortFavoritesDesc: "Select how to sort your favorites",
-                favoritesSortBtn: "Sort"
+                favoritesSortBtn: "Sort",
+                quickMark: "Quick mark",
+                quickMarkSettings: "Quick mark",
+                quickMarkSettingsSub: "Manage your quick mark buttons",
+                quickMarkAdd: "Add quick mark",
+                quickMarkTitle: "Title",
+                quickMarkIcon: "Icon URL",
+                quickMarkText: "Search text",
+                quickMarkAdded: "Quick mark added",
+                quickMarkUpdated: "Quick mark updated",
+                quickMarkDeleted: "Quick mark deleted",
+                confirmDeleteQuickMark: "Delete this quick mark?",
+                noQuickMark: "No quick marks",
+                noQuickMarkDesc: "Create your first quick mark",
+                quickMarkHeader: "Quick mark",
+                studioWarning: "These are advanced features. It is recommended to make a backup of the Dataset before continuing.",
+                studioContinue: "Continue",
+                studioCancel: "Cancel",
+                noClusterLabel: "Do not cluster pins",
+                noClusterWarning: "Disabling clustering may cause lag or malfunction with many pins.",
+                deleteQmTitle: "Delete quick mark",
+                deleteQmDesc: "Select the quick mark you want to delete:",
+                deleteQmCancel: "Cancel",
+                noQuickMarksToDelete: "No quick marks to delete",
+                quickMarkPosition: "Position in the list",
+                quickMarkPositionEnd: "At the end of the list",
+                quickMarkPositionAbove: "Above the quick mark",
+                distanceLabel: "Distance: "
             }
         };
 
@@ -4071,6 +4602,22 @@
                 el.checked = !el.checked;
                 el.dispatchEvent(new Event('change'));
             }
+        }
+
+        // Show reload splash
+        function showReloadSplash() {
+            const overlay = document.createElement('div');
+            overlay.className = 'reload-overlay';
+            overlay.innerHTML = `
+                <div class="icon"><i class="fas fa-sync-alt fa-spin"></i></div>
+                <h2>${state.lang === 'ca' ? 'Recàrrega necessària' : state.lang === 'es' ? 'Recarga necesaria' : 'Reload required'}</h2>
+                <p>${state.lang === 'ca' ? 'Si us plau, tanca i torna a obrir l\'aplicació per aplicar els canvis.' : state.lang === 'es' ? 'Por favor, cierra y vuelve a abrir la aplicación para aplicar los cambios.' : 'Please close and reopen the app to apply changes.'}</p>
+            `;
+            document.body.appendChild(overlay);
+            localStorage.setItem('librepin_show_reload_overlay', 'true');
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
         }
 
         // ---------- FUNCIONS PER LES ESTRELLES ----------
@@ -4145,6 +4692,7 @@
                     state.favoritesOrder = data.favoritesOrder || [];
                     state.groups = data.groups || [];
                     state.lines = data.lines || [];
+                    state.quickMarks = data.quickMarks || [];
                     state.lineVisibility = data.lineVisibility || {};
                     state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
                     if (data.accentColor) state.accentColor = data.accentColor;
@@ -4162,6 +4710,7 @@
                         state.profile = data.profile;
                         state.profileLoaded = true;
                     }
+                    if (data.noCluster !== undefined) state.noCluster = data.noCluster;
                 }
             } catch (e) {}
             if (state.services.length === 0) {
@@ -4182,11 +4731,19 @@
             renderProfile();
             renderLinesList();
             renderLegend();
+            renderQuickMarks();
             updateModeUI();
             updateSidebarGreeting();
             drawAllLines();
             updateSortUI();
             updateModeBadge();
+            document.getElementById('noClusterCheckbox').checked = state.noCluster;
+            document.getElementById('noClusterCheckbox').addEventListener('change', function() {
+                state.noCluster = this.checked;
+                saveData();
+                renderAllPins();
+                showReloadSplash();
+            });
         }
 
         function saveData() {
@@ -4197,6 +4754,7 @@
                 favoritesOrder: state.favoritesOrder,
                 groups: state.groups,
                 lines: state.lines,
+                quickMarks: state.quickMarks,
                 lineVisibility: state.lineVisibility,
                 linesVisible: state.linesVisible,
                 accentColor: state.accentColor,
@@ -4207,7 +4765,8 @@
                 sortMode: state.sortMode,
                 groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
-                profile: state.profile
+                profile: state.profile,
+                noCluster: state.noCluster
             }));
         }
 
@@ -4253,9 +4812,6 @@
                     if (data.pinId) {
                         openPinDetail(data.pinId);
                     }
-                    break;
-                case 'nearby':
-                    switchTab('nearby');
                     break;
                 case 'mode':
                     switchTab('mode');
@@ -4304,6 +4860,7 @@
                     updateAllTexts();
                     renderAllPins();
                     updateGlowColors();
+                    showReloadSplash();
                 };
                 container.appendChild(div);
             });
@@ -4355,7 +4912,6 @@
             if (!mapDiv) return;
             if (state.map) state.map.remove();
 
-            // Use canvas renderer for better performance with many markers
             const map = L.map('mainMap', {
                 center: state.currentLocation,
                 zoom: 13,
@@ -4450,7 +5006,6 @@
 
             if (!state.linesVisible) return;
 
-            // Dibujar líneas en orden inverso: la primera de la lista se dibuja encima
             const reversedLines = [...state.lines].reverse();
 
             reversedLines.forEach(line => {
@@ -4528,7 +5083,6 @@
                 </div>
             `).join('');
 
-            // Drag and drop for reordering lines
             let dragItem = null;
             container.querySelectorAll('.line-item').forEach(el => {
                 el.draggable = true;
@@ -4650,7 +5204,6 @@
                     width,
                     points
                 };
-                // Insertar al principio de la lista (posición 0)
                 state.lines.unshift(newLine);
                 state.lineVisibility[newLine.id] = true;
                 showToast(t('lineAdded'));
@@ -4752,7 +5305,6 @@
 
         // ---------- MODE UI ----------
         function updateModeUI() {
-            // Actualizar el dot del perfil según el modo
             const dot = document.getElementById('profileModeDot');
             document.querySelectorAll('.mode-option-card').forEach(c => c.classList.remove('active'));
 
@@ -4770,7 +5322,6 @@
                 document.getElementById('modeTransportCard').classList.add('active');
             }
 
-            // Actualizar textos de los modos
             document.querySelector('#modeHomeCard .mode-name').innerText = t('modeHomeName');
             document.querySelector('#modeHomeCard .mode-desc').innerText = t('modeHomeDesc');
             document.querySelector('#modeAwayCard .mode-name').innerText = t('modeAwayName');
@@ -4789,9 +5340,7 @@
             renderProfile();
         }
 
-        function updateModeBadge() {
-            // El badge ya no se usa en la búsqueda, solo mantenemos el dot del perfil
-        }
+        function updateModeBadge() {}
 
         function isPinVisible(pin) {
             if (state.viewMode === 'home') {
@@ -4801,7 +5350,6 @@
             } else if (state.viewMode === 'transport') {
                 return pin.isTransportStop === true;
             }
-            // away mode - mostrar todos
             return true;
         }
 
@@ -4826,29 +5374,66 @@
 
         // ---------- PINS ----------
         function renderAllPins() {
-            if (!state.map || !state.markerCluster) return;
-            state.markerCluster.clearLayers();
+            if (!state.map) return;
+
+            if (state.markerCluster) {
+                state.markerCluster.clearLayers();
+            }
             state.markers = {};
 
             const visiblePins = getVisiblePins();
 
-            visiblePins.forEach(pin => {
-                if (!pin.lat || !pin.lng) return;
-                const icon = getPinIcon(pin);
-                const marker = L.marker([pin.lat, pin.lng], { icon })
-                    .on('click', () => {
-                        pin.lastAccessed = Date.now();
-                        saveData();
-                        openPinDetail(pin.id);
+            if (state.noCluster) {
+                visiblePins.forEach(pin => {
+                    if (!pin.lat || !pin.lng) return;
+                    const icon = getPinIcon(pin);
+                    const marker = L.marker([pin.lat, pin.lng], { icon })
+                        .on('click', () => {
+                            pin.lastAccessed = Date.now();
+                            saveData();
+                            openPinDetail(pin.id);
+                        });
+                    marker.bindPopup(`<strong>${pin.name}</strong>`);
+                    marker.addTo(state.map);
+                    state.markers[pin.id] = marker;
+                });
+            } else {
+                if (!state.markerCluster) {
+                    state.markerCluster = L.markerClusterGroup({
+                        chunkedLoading: true,
+                        maxClusterRadius: 50,
+                        spiderfyOnMaxZoom: true,
+                        showCoverageOnHover: false,
+                        zoomToBoundsOnClick: true,
+                        iconCreateFunction: function(cluster) {
+                            return L.divIcon({
+                                html: `<div style="background-color:${state.accentColor};color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">${cluster.getChildCount()}</div>`,
+                                className: 'marker-cluster-custom',
+                                iconSize: [36, 36],
+                                iconAnchor: [18, 36]
+                            });
+                        }
                     });
-                marker.bindPopup(`<strong>${pin.name}</strong>`);
-                state.markerCluster.addLayer(marker);
-                state.markers[pin.id] = marker;
-            });
+                    state.map.addLayer(state.markerCluster);
+                }
+                visiblePins.forEach(pin => {
+                    if (!pin.lat || !pin.lng) return;
+                    const icon = getPinIcon(pin);
+                    const marker = L.marker([pin.lat, pin.lng], { icon })
+                        .on('click', () => {
+                            pin.lastAccessed = Date.now();
+                            saveData();
+                            openPinDetail(pin.id);
+                        });
+                    marker.bindPopup(`<strong>${pin.name}</strong>`);
+                    state.markerCluster.addLayer(marker);
+                    state.markers[pin.id] = marker;
+                });
+            }
         }
 
         function addPinToMap(pin) {
-            if (!state.map || !state.markerCluster) return;
+            if (!state.map) return;
             if (!isPinVisible(pin)) return;
             const icon = getPinIcon(pin);
             const marker = L.marker([pin.lat, pin.lng], { icon })
@@ -4858,13 +5443,39 @@
                     openPinDetail(pin.id);
                 });
             marker.bindPopup(`<strong>${pin.name}</strong>`);
-            state.markerCluster.addLayer(marker);
+            if (state.noCluster) {
+                marker.addTo(state.map);
+            } else {
+                if (!state.markerCluster) {
+                    state.markerCluster = L.markerClusterGroup({
+                        chunkedLoading: true,
+                        maxClusterRadius: 50,
+                        spiderfyOnMaxZoom: true,
+                        showCoverageOnHover: false,
+                        zoomToBoundsOnClick: true,
+                        iconCreateFunction: function(cluster) {
+                            return L.divIcon({
+                                html: `<div style="background-color:${state.accentColor};color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">${cluster.getChildCount()}</div>`,
+                                className: 'marker-cluster-custom',
+                                iconSize: [36, 36],
+                                iconAnchor: [18, 36]
+                            });
+                        }
+                    });
+                    state.map.addLayer(state.markerCluster);
+                }
+                state.markerCluster.addLayer(marker);
+            }
             state.markers[pin.id] = marker;
         }
 
         function updatePinOnMap(pin) {
             if (state.markers[pin.id]) {
-                state.markerCluster.removeLayer(state.markers[pin.id]);
+                if (state.noCluster) {
+                    state.map.removeLayer(state.markers[pin.id]);
+                } else if (state.markerCluster) {
+                    state.markerCluster.removeLayer(state.markers[pin.id]);
+                }
                 delete state.markers[pin.id];
             }
             addPinToMap(pin);
@@ -4899,7 +5510,6 @@
             return sortPins(favPins, mode);
         }
 
-        // ---------- SORT PINS (reusable) ----------
         function sortPins(pins, mode) {
             const sorted = [...pins];
             switch (mode) {
@@ -5333,10 +5943,9 @@
                 this.style.display = 'none';
             };
 
-            // Mostrar/ocultar botón de ordenación
             const sortBtn = document.getElementById('groupSortBtn');
             const pins = group.pinIds ? state.pins.filter(p => group.pinIds.includes(p.id) && isPinVisible(p)) : [];
-            sortBtn.classList.toggle('visible', pins.length > 1);
+            sortBtn.style.display = pins.length > 1 ? 'block' : 'none';
 
             renderGroupPins(groupId);
 
@@ -5363,42 +5972,51 @@
                 state.currentGroupId = null;
             };
 
-            // Comportamiento de groupSortBtn: ciclo de ordenación sin popup
-            document.getElementById('groupSortBtn').onclick = cycleGroupSort;
+            document.getElementById('groupSortBtn').onclick = () => {
+                const modes = ['recent', 'rating', 'alphabetical', 'distance'];
+                const currentIndex = modes.indexOf(state.groupSortMode || 'recent');
+                const nextIndex = (currentIndex + 1) % modes.length;
+                const newMode = modes[nextIndex];
+
+                if (newMode === 'distance' && !state.userLocation) {
+                    showToast('Obtenint ubicació...');
+                    requestGpsLocation(true);
+                    state.groupSortMode = newMode;
+                    saveData();
+                    renderGroupPins(groupId);
+                    updateGroupSortIcon();
+                    return;
+                }
+
+                state.groupSortMode = newMode;
+                saveData();
+                renderGroupPins(groupId);
+                updateGroupSortIcon();
+                const modeNames = {
+                    recent: t('sortRecent'),
+                    rating: t('sortRating'),
+                    alphabetical: t('sortAlphabetical'),
+                    distance: t('sortDistance')
+                };
+                showToast(modeNames[newMode] || newMode);
+            };
 
             dialog.classList.add('active');
             updateAllTexts();
+            updateGroupSortIcon();
         }
 
-        // Nueva función: ciclo de ordenación para grupos
-        function cycleGroupSort() {
-            const modes = ['recent', 'rating', 'alphabetical', 'distance'];
-            const currentIndex = modes.indexOf(state.groupSortMode);
-            const nextIndex = (currentIndex + 1) % modes.length;
-            const newMode = modes[nextIndex];
-
-            if (newMode === 'distance' && !state.userLocation) {
-                showToast('Obtenint ubicació...');
-                requestGpsLocation(true);
-                state.groupSortMode = newMode;
-                saveData();
-                renderGroupPins(state.currentGroupId);
-                updateAllTexts();
-                return;
-            }
-
-            state.groupSortMode = newMode;
-            saveData();
-            renderGroupPins(state.currentGroupId);
-            updateAllTexts();
-
-            const modeNames = {
-                recent: t('sortRecent'),
-                rating: t('sortRating'),
-                alphabetical: t('sortAlphabetical'),
-                distance: t('sortDistance')
+        function updateGroupSortIcon() {
+            const btn = document.getElementById('groupSortBtn');
+            if (!btn) return;
+            const mode = state.groupSortMode || 'recent';
+            const icons = {
+                recent: 'fa-clock',
+                rating: 'fa-star',
+                alphabetical: 'fa-sort-alpha-down',
+                distance: 'fa-location-dot'
             };
-            showToast(modeNames[newMode] || newMode);
+            btn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
         }
 
         function renderGroupPins(groupId) {
@@ -5438,11 +6056,6 @@
                     };
                 });
             }
-        }
-
-        function openGroupSortDialog(groupId) {
-            // Esta función ya no se usa, pero la mantenemos por compatibilidad
-            // Ahora el botón groupSortBtn usa cycleGroupSort
         }
 
         // ---------- RELATED PINS ----------
@@ -5982,12 +6595,33 @@
 
             pushHistory('detail', { pinId: pinId });
 
-            document.getElementById('detailImage').src = pin.imageUrl || 'https://via.placeholder.com/80/7C4DFF/FFFFFF?text=📍';
-            document.getElementById('detailImage').style.display = 'block';
+            const imgEl = document.getElementById('detailImage');
+            if (pin.imageUrl && pin.imageUrl.trim()) {
+                imgEl.src = pin.imageUrl;
+                imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
             document.getElementById('detailName').innerText = pin.name;
             document.getElementById('detailSubtitle').innerText = pin.subtitle || '';
             document.getElementById('detailSubtitle').style.display = pin.subtitle ? 'block' : 'none';
             document.getElementById('detailDesc').innerText = pin.description || '';
+
+            // RENDER TAGS
+            const tagsContainer = document.getElementById('detailTags');
+            tagsContainer.innerHTML = '';
+            if (pin.tags && pin.tags.length > 0) {
+                pin.tags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'tag';
+                    span.textContent = tag;
+                    tagsContainer.appendChild(span);
+                });
+                tagsContainer.style.display = 'flex';
+            } else {
+                tagsContainer.style.display = 'none';
+            }
 
             const starsContainer = document.getElementById('detailStars');
             if (pin.rating && pin.rating > 0) {
@@ -6085,7 +6719,6 @@
             state.currentSearchQuery = filter;
             const trimmedFilter = filter.trim();
 
-            // Mostrar/ocultar botones de ordenación y modo con animación
             const visible = trimmedFilter.length >= 2;
             if (visible) {
                 sortBtn.classList.add('visible');
@@ -6107,10 +6740,8 @@
             const visiblePins = getVisiblePins();
 
             let filtered = visiblePins.filter(p => {
-                // Buscar en nombre y subtítulo
                 const nameMatch = p.name.toLowerCase().includes(f);
                 const subtitleMatch = p.subtitle && p.subtitle.toLowerCase().includes(f);
-                // Buscar en etiquetas (tags)
                 const tagsMatch = p.tags && p.tags.some(tag => tag.toLowerCase().includes(f));
                 return nameMatch || subtitleMatch || tagsMatch;
             });
@@ -6132,11 +6763,26 @@
             empty.style.display = 'none';
 
             const resultsToShow = filtered.slice(start, end);
+            
+            const isDistanceMode = state.sortMode === 'distance';
+            
             container.innerHTML = resultsToShow.map(pin => {
                 const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                 const isFav = isFavorite(pin.id);
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
+                
+                // Tags en la tarjeta
+                const tagsHtml = pin.tags && pin.tags.length > 0 ? 
+                    `<div class="pin-tags">${pin.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}${pin.tags.length > 3 ? `<span class="tag" style="font-size:8px;">+${pin.tags.length - 3}</span>` : ''}</div>` : '';
+                
+                let distanceHtml = '';
+                if (isDistanceMode && state.userLocation) {
+                    const d = Math.sqrt(Math.pow(pin.lat - state.userLocation[0], 2) + Math.pow(pin.lng - state.userLocation[1], 2));
+                    const km = (d * 111).toFixed(1);
+                    distanceHtml = `<div class="pin-distance">${t('distanceLabel')}${km} km</div>`;
+                }
+                
                 return `
                 <div class="pin-card" data-id="${pin.id}">
                     ${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}
@@ -6144,6 +6790,8 @@
                     <div class="pin-name">${escapeHtml(pin.name)}</div>
                     ${subtitle}
                     ${stars ? `<div class="pin-stars">${stars}</div>` : ''}
+                    ${distanceHtml}
+                    ${tagsHtml}
                     ${outsideBadge}
                     ${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => {
                         const svc = state.services.find(s => s.id === sid);
@@ -6175,7 +6823,7 @@
             });
         }
 
-        // ---------- SORT DIALOG ----------
+        // ---------- SORT DIALOG (only for search) ----------
         function openSortDialog() {
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.sort === state.sortMode);
@@ -6200,6 +6848,7 @@
                     saveData();
                     closeSortDialog();
                     renderSearchResults(state.currentSearchQuery);
+                    renderFavorites();
                     updateSortUI();
                     return;
                 }
@@ -6237,7 +6886,6 @@
             renderSearchResults(state.currentSearchQuery);
             renderFavorites();
             updateSortUI();
-            // Mostrar el nombre del modo en un toast
             const modeNames = {
                 recent: t('sortRecent'),
                 rating: t('sortRating'),
@@ -6247,40 +6895,34 @@
             showToast(modeNames[newMode] || newMode);
         }
 
-        // ---------- FAVORITES SORT ----------
-        function openFavoritesSortDialog() {
-            document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.sort === state.sortMode);
-            });
-            document.getElementById('sortDialogTitle').innerText = t('sortFavorites');
-            document.getElementById('sortDialog').classList.add('active');
-            updateAllTexts();
+        // ---------- FAVORITES SORT (cycle) ----------
+        function cycleFavoritesSort() {
+            const modes = ['recent', 'rating', 'alphabetical', 'distance'];
+            const currentIndex = modes.indexOf(state.sortMode);
+            const nextIndex = (currentIndex + 1) % modes.length;
+            const newMode = modes[nextIndex];
 
-            document.getElementById('sortDialogApply').onclick = () => {
-                const selected = document.querySelector('#sortOptions .sort-option.active');
-                if (selected) {
-                    const newMode = selected.dataset.sort;
-                    if (newMode === 'distance' && !state.userLocation) {
-                        showToast('Obtenint ubicació...');
-                        requestGpsLocation(true);
-                        state.sortMode = newMode;
-                        saveData();
-                        closeSortDialog();
-                        renderFavorites();
-                        updateSortUI();
-                        return;
-                    }
-                    state.sortMode = newMode;
-                    saveData();
-                    closeSortDialog();
-                    renderFavorites();
-                    updateSortUI();
-                } else {
-                    closeSortDialog();
-                }
+            if (newMode === 'distance' && !state.userLocation) {
+                showToast('Obtenint ubicació...');
+                requestGpsLocation(true);
+                state.sortMode = newMode;
+                saveData();
+                renderFavorites();
+                updateSortUI();
+                return;
+            }
+
+            state.sortMode = newMode;
+            saveData();
+            renderFavorites();
+            updateSortUI();
+            const modeNames = {
+                recent: t('sortRecent'),
+                rating: t('sortRating'),
+                alphabetical: t('sortAlphabetical'),
+                distance: t('sortDistance')
             };
-
-            document.getElementById('sortDialogCancel').onclick = closeSortDialog;
+            showToast(modeNames[newMode] || newMode);
         }
 
         function updateSortUI() {
@@ -6292,13 +6934,16 @@
                 alphabetical: 'fa-sort-alpha-down',
                 distance: 'fa-location-dot'
             };
-            sortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
+            if (sortBtn) sortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
+            
+            const favSortBtn = document.getElementById('favoritesSortBtn');
+            if (favSortBtn) favSortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i> <span id="favoritesSortBtnLabel">${t('favoritesSortBtn')}</span>`;
+            
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.sort === mode);
             });
-            document.querySelectorAll('#groupDetailDialog #sortOptions .sort-option').forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.sort === state.groupSortMode);
-            });
+            
+            updateGroupSortIcon();
         }
 
         function escapeHtml(str) {
@@ -6461,6 +7106,7 @@
                     el.style.color = '#ddd';
                 }
             });
+            document.getElementById('clearStarsBtn').style.display = selectedRating > 0 ? 'inline-flex' : 'none';
         }
 
         function addCustomButtonRow(label = '', url = '') {
@@ -6601,7 +7247,11 @@
             const confirmed = await showConfirmDialog(t('confirmDelete'));
             if (confirmed) {
                 if (state.markers[pinId]) {
-                    state.markerCluster.removeLayer(state.markers[pinId]);
+                    if (state.noCluster) {
+                        state.map.removeLayer(state.markers[pinId]);
+                    } else if (state.markerCluster) {
+                        state.markerCluster.removeLayer(state.markers[pinId]);
+                    }
                     delete state.markers[pinId];
                 }
                 state.pins.forEach(p => {
@@ -6823,6 +7473,7 @@
                 favoritesOrder: state.favoritesOrder,
                 groups: state.groups,
                 lines: state.lines,
+                quickMarks: state.quickMarks,
                 lineVisibility: state.lineVisibility,
                 linesVisible: state.linesVisible,
                 accentColor: state.accentColor,
@@ -6833,7 +7484,8 @@
                 sortMode: state.sortMode,
                 groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
-                profile: state.profile
+                profile: state.profile,
+                noCluster: state.noCluster
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -6878,6 +7530,7 @@
             state.favoritesOrder = data.favoritesOrder || [];
             state.groups = data.groups || [];
             state.lines = data.lines || [];
+            state.quickMarks = data.quickMarks || [];
             state.lineVisibility = data.lineVisibility || {};
             state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
             if (data.accentColor) state.accentColor = data.accentColor;
@@ -6895,6 +7548,7 @@
                 state.profile = data.profile;
                 state.profileLoaded = true;
             }
+            if (data.noCluster !== undefined) state.noCluster = data.noCluster;
             saveData();
             applyAccentColor();
             applyTheme();
@@ -6907,10 +7561,12 @@
             renderProfile();
             renderLinesList();
             renderLegend();
+            renderQuickMarks();
             drawAllLines();
             updateModeUI();
             updateSortUI();
             updateModeBadge();
+            document.getElementById('noClusterCheckbox').checked = state.noCluster;
             showToast(t('importSuccess'));
         }
 
@@ -6924,19 +7580,21 @@
                 state.favoritesOrder = [];
                 state.groups = [];
                 state.lines = [];
+                state.quickMarks = [];
                 state.lineVisibility = {};
                 state.linesVisible = true;
-                state.accentColor = '#7C4DFF';
+                state.accentColor = '#9a398d';
                 state.darkMode = false;
-                state.mapStyle = 'light';
+                state.mapStyle = 'color';
                 state.viewMode = 'home';
-                state.lang = 'ca';
+                state.lang = 'en';
                 state.sortMode = 'recent';
                 state.groupSortMode = 'recent';
                 state.mapStartLocation = BARCELONA_CENTER;
                 state.currentLocation = BARCELONA_CENTER;
-                state.profile = { name: 'Usuari', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
+                state.profile = { name: 'User', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
                 state.profileLoaded = false;
+                state.noCluster = false;
                 saveData();
                 applyAccentColor();
                 applyTheme();
@@ -6949,10 +7607,12 @@
                 renderProfile();
                 renderLinesList();
                 renderLegend();
+                renderQuickMarks();
                 drawAllLines();
                 updateModeUI();
                 updateSortUI();
                 updateModeBadge();
+                document.getElementById('noClusterCheckbox').checked = false;
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
@@ -7057,6 +7717,10 @@
                 target.scrollTop = 0;
             }
             pushHistory('settings', { subpage: subpageId });
+            
+            if (subpageId === 'quickmark') {
+                renderQuickMarkSettings();
+            }
         }
 
         function hideSettingsSubpage() {
@@ -7073,6 +7737,7 @@
                 { key: 'appearance', icon: 'fa-palette', label: 'appearanceBtn' },
                 { key: 'language', icon: 'fa-globe', label: 'langBtn' },
                 { key: 'services', icon: 'fa-bus', label: 'servicesBtn' },
+                { key: 'quickmark', icon: 'fa-bolt', label: 'quickMarkSettings' },
                 { key: 'recent', icon: 'fa-clock', label: 'recent' },
                 { key: 'lines', icon: 'fa-draw-polygon', label: 'lines' },
                 { key: 'reload', icon: 'fa-sync-alt', label: 'reloadApp' },
@@ -7126,6 +7791,25 @@
             document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
             document.getElementById('legendEditLinesLabel').innerText = t('editLines');
 
+            document.getElementById('quickMarkSettingsTitle').innerText = t('quickMarkSettings');
+            document.getElementById('quickMarkSettingsSub').innerText = t('quickMarkSettingsSub');
+            document.getElementById('quickMarkAddSettingsLabel').innerText = t('quickMarkAdd');
+            document.getElementById('noQuickMarkLabel').innerText = t('noQuickMark');
+            document.getElementById('noQuickMarkDesc').innerText = t('noQuickMarkDesc');
+            document.getElementById('quickMarkHeader').innerText = t('quickMarkHeader');
+
+            // Quick mark dialog
+            document.getElementById('quickMarkDialogTitle').innerText = state.editingQuickMarkId ? t('edit') : t('quickMarkAdd');
+            document.getElementById('quickMarkTitleLabel').innerText = t('quickMarkTitle') + ' *';
+            document.getElementById('quickMarkIconLabel').innerText = t('quickMarkIcon');
+            document.getElementById('quickMarkTextLabel').innerText = t('quickMarkText') + ' *';
+            document.getElementById('quickMarkPositionLabel').innerText = t('quickMarkPosition');
+            
+            // Delete quick mark dialog
+            document.getElementById('deleteQmTitle').innerText = t('deleteQmTitle');
+            document.getElementById('deleteQmDesc').innerText = t('deleteQmDesc');
+            document.getElementById('deleteQmCancelLabel').innerText = t('deleteQmCancel');
+
             updateSliderUI();
 
             const menuLabels = {
@@ -7134,6 +7818,7 @@
                 appearance: 'appearanceBtn',
                 language: 'langBtn',
                 services: 'servicesBtn',
+                quickmark: 'quickMarkSettings',
                 recent: 'recent',
                 lines: 'lines',
                 reload: 'reloadApp',
@@ -7259,12 +7944,6 @@
             document.getElementById('outsideEnvMain').innerText = t('outsideEnvLabel');
             document.getElementById('outsideEnvSub').innerText = t('outsideEnvSub');
 
-            document.getElementById('nearbyTitle').innerText = t('nearbyTitle');
-            document.getElementById('nearbySubtitle').innerText = t('nearbySubtitle');
-            document.getElementById('nearbyRefreshLabel').innerText = t('nearbyRefresh');
-            document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
-            document.getElementById('nearbyNoPinsDesc').innerText = t('nearbyNoPinsDesc');
-
             document.getElementById('modePageTitle').innerText = t('modePageTitle');
             document.getElementById('modePageSubtitle').innerText = t('modePageSubtitle');
             document.querySelector('#modeHomeCard .mode-name').innerText = t('modeHomeName');
@@ -7277,7 +7956,6 @@
             document.querySelector('#modeTransportCard .mode-desc').innerText = t('modeTransportDesc');
             document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
 
-            document.getElementById('sidebarNearbyLabel').innerText = t('sidebarNearby');
             document.getElementById('sidebarRecentLabel').innerText = t('sidebarRecent');
             document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
             document.getElementById('sidebarLegendLabel').innerText = t('sidebarLegend');
@@ -7285,6 +7963,19 @@
             document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
 
             document.getElementById('lineIconLabel').innerText = t('lineIcon');
+
+            // Quick mark dialog texts
+            document.getElementById('quickMarkDialogTitle').innerText = state.editingQuickMarkId ? t('edit') : t('quickMarkAdd');
+            document.getElementById('quickMarkTitleLabel').innerText = t('quickMarkTitle') + ' *';
+            document.getElementById('quickMarkIconLabel').innerText = t('quickMarkIcon');
+            document.getElementById('quickMarkTextLabel').innerText = t('quickMarkText') + ' *';
+            document.getElementById('quickMarkPositionLabel').innerText = t('quickMarkPosition');
+            document.getElementById('quickMarkCancelLabel').innerText = t('cancel');
+            document.getElementById('quickMarkSaveLabel').innerText = t('save');
+
+            // No cluster warning
+            document.querySelector('#settingsAppearance .warning-note').innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${t('noClusterWarning')}`;
+            document.querySelector('#settingsAppearance .checkbox-row label').innerHTML = t('noClusterLabel');
 
             updateSidebarGreeting();
 
@@ -7316,6 +8007,7 @@
             renderProfile();
             renderLinesList();
             renderLegend();
+            renderQuickMarks();
             updateSeeAlsoButton();
             if (document.getElementById('pinDialog').classList.contains('active')) {
                 renderSelectedServicesTags();
@@ -7362,7 +8054,6 @@
             }
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'settings') hideSettingsSubpage();
-            if (tabId === 'nearby') renderNearbyPins();
             if (tabId === 'legend') renderLegend();
 
             pushHistory(tabId);
@@ -7419,7 +8110,6 @@
                             });
                             state.userMarker = L.marker([lat, lng], { icon: userIcon }).addTo(state.map);
                         }
-                        renderNearbyPins();
                         if (state.sortMode === 'distance') {
                             renderSearchResults(state.currentSearchQuery);
                         }
@@ -7512,7 +8202,6 @@
                             splash.className = '';
                         }, 500);
                         state.gpsSplashResolve && state.gpsSplashResolve('success');
-                        renderNearbyPins();
                         if (state.sortMode === 'distance') {
                             renderSearchResults(state.currentSearchQuery);
                         }
@@ -7541,71 +8230,6 @@
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
             );
-        }
-
-        // ---------- NEARBY ----------
-        function getNearbyPins() {
-            if (!state.userLocation) return [];
-            const [userLat, userLng] = state.userLocation;
-            const visible = getVisiblePins();
-            const withDistance = visible.map(p => {
-                const d = Math.sqrt(Math.pow(p.lat - userLat, 2) + Math.pow(p.lng - userLng, 2));
-                return { ...p, distance: d };
-            });
-            withDistance.sort((a, b) => a.distance - b.distance);
-            return withDistance.slice(0, 20);
-        }
-
-        function renderNearbyPins() {
-            const container = document.getElementById('nearbyGrid');
-            const empty = document.getElementById('nearbyEmpty');
-            const nearby = getNearbyPins();
-
-            if (!state.userLocation) {
-                container.innerHTML = '';
-                empty.style.display = 'block';
-                document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
-                document.getElementById('nearbyNoPinsDesc').innerText = t('nearbyNoPinsDesc');
-                return;
-            }
-
-            if (nearby.length === 0) {
-                container.innerHTML = '';
-                empty.style.display = 'block';
-                document.getElementById('nearbyNoPins').innerText = t('nearbyNoPins');
-                document.getElementById('nearbyNoPinsDesc').innerText = '';
-                return;
-            }
-            empty.style.display = 'none';
-
-            container.innerHTML = nearby.map(pin => {
-                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                const isFav = isFavorite(pin.id);
-                const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
-                const distance = pin.distance ? (pin.distance * 111).toFixed(1) : '?';
-                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
-                return `
-                <div class="pin-card" data-id="${pin.id}">
-                    ${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}
-                    <img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'">
-                    <div class="pin-name">${escapeHtml(pin.name)}</div>
-                    ${subtitle}
-                    ${stars ? `<div class="pin-stars">${stars}</div>` : ''}
-                    <div style="font-size:11px; color:var(--md-on-surface-variant);">${distance} km</div>
-                    ${outsideBadge}
-                    ${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => {
-                        const svc = state.services.find(s => s.id === sid);
-                        return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : '';
-                    }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}
-                </div>
-            `}).join('');
-
-            container.querySelectorAll('.pin-card').forEach(el => {
-                el.onclick = () => {
-                    const id = el.dataset.id;
-                    openPinDetail(id);
-                };
-            });
         }
 
         // ---------- RECENTER MAP ----------
@@ -7677,6 +8301,316 @@
                     btn.textContent = label;
                 }
             });
+        }
+
+        // ---------- QUICK MARK FUNCTIONS ----------
+        function renderQuickMarks() {
+            const container = document.getElementById('quickMarkList');
+            
+            if (state.quickMarks.length === 0) {
+                container.innerHTML = `<div class="quick-mark-empty">${state.lang === 'ca' ? "Encara no s'han creat marcatges ràpids" : state.lang === 'es' ? 'Aún no se han creado marcajes rápidos' : 'No quick marks have been created yet'}</div>`;
+                return;
+            }
+            
+            container.innerHTML = state.quickMarks.map(qm => `
+                <button class="quick-mark-btn" data-id="${qm.id}">
+                    ${qm.icon ? `<img src="${qm.icon}" onerror="this.style.display='none'">` : '<span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</span>'}
+                    <span class="quick-label">${escapeHtml(qm.title)}</span>
+                </button>
+            `).join('');
+
+            container.querySelectorAll('.quick-mark-btn').forEach(el => {
+                el.onclick = () => {
+                    const id = el.dataset.id;
+                    const qm = state.quickMarks.find(q => q.id === id);
+                    if (qm) {
+                        toggleSidebar();
+                        switchTab('search');
+                        const input = document.getElementById('globalSearchInput');
+                        input.value = qm.text;
+                        input.dispatchEvent(new Event('input'));
+                        input.focus();
+                        input.select();
+                    }
+                };
+            });
+        }
+
+        function renderQuickMarkSettings() {
+            const container = document.getElementById('quickMarkSettingsList');
+            const empty = document.getElementById('quickMarkSettingsEmpty');
+
+            if (state.quickMarks.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                document.getElementById('noQuickMarkLabel').innerText = t('noQuickMark');
+                document.getElementById('noQuickMarkDesc').innerText = t('noQuickMarkDesc');
+                return;
+            }
+            empty.style.display = 'none';
+
+            container.innerHTML = state.quickMarks.map((qm, index) => `
+                <div class="line-item" style="border-left-color: var(--md-primary);" data-index="${index}">
+                    <div class="line-header">
+                        <span class="drag-handle-line" style="cursor:grab;">⠿</span>
+                        ${qm.icon ? `<img src="${qm.icon}" style="width:24px;height:24px;border-radius:4px;object-fit:contain;">` : '<span style="font-size:18px;">⚡</span>'}
+                        <span class="line-name">${escapeHtml(qm.title)}</span>
+                        <div class="line-actions">
+                            <button class="edit-quickmark-btn" data-id="${qm.id}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-quickmark-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="line-details">
+                        <span>${escapeHtml(qm.text)}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.edit-quickmark-btn').forEach(btn => {
+                btn.onclick = () => openQuickMarkDialog(btn.dataset.id);
+            });
+            container.querySelectorAll('.delete-quickmark-btn').forEach(btn => {
+                btn.onclick = () => deleteQuickMark(btn.dataset.id);
+            });
+
+            // Drag and drop reorder
+            let dragItem = null;
+            container.querySelectorAll('.line-item').forEach(el => {
+                el.draggable = true;
+                el.addEventListener('dragstart', (e) => {
+                    dragItem = el;
+                    el.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', el.dataset.index);
+                });
+                el.addEventListener('dragend', (e) => {
+                    el.classList.remove('dragging');
+                    document.querySelectorAll('.line-item').forEach(item => item.classList.remove('drag-over'));
+                });
+                el.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    document.querySelectorAll('.line-item').forEach(item => item.classList.remove('drag-over'));
+                    el.classList.add('drag-over');
+                });
+                el.addEventListener('dragleave', (e) => {
+                    el.classList.remove('drag-over');
+                });
+                el.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    el.classList.remove('drag-over');
+                    if (dragItem && dragItem !== el) {
+                        const fromIndex = parseInt(dragItem.dataset.index);
+                        const toIndex = parseInt(el.dataset.index);
+                        if (fromIndex !== toIndex) {
+                            const [removed] = state.quickMarks.splice(fromIndex, 1);
+                            state.quickMarks.splice(toIndex, 0, removed);
+                            saveData();
+                            renderQuickMarkSettings();
+                            renderQuickMarks();
+                        }
+                    }
+                    dragItem = null;
+                });
+            });
+        }
+
+        function updateQuickMarkPositionSelect() {
+            const select = document.getElementById('quickMarkPositionSelect');
+            const currentQm = state.editingQuickMarkId ? state.quickMarks.find(q => q.id === state.editingQuickMarkId) : null;
+            
+            select.innerHTML = '';
+            
+            // Opción "Al final"
+            const endOption = document.createElement('option');
+            endOption.value = 'end';
+            endOption.textContent = t('quickMarkPositionEnd');
+            select.appendChild(endOption);
+            
+            // Opciones para cada quick mark existente (excepto el que se está editando)
+            state.quickMarks.forEach(qm => {
+                if (qm.id === state.editingQuickMarkId) return;
+                const option = document.createElement('option');
+                option.value = qm.id;
+                option.textContent = `${t('quickMarkPositionAbove')} "${qm.title}"`;
+                select.appendChild(option);
+            });
+            
+            // Si estamos editando, intentar restaurar la posición guardada
+            if (state.editingQuickMarkId && state.quickMarkPosition && state.quickMarkPosition !== 'end') {
+                const exists = state.quickMarks.some(q => q.id === state.quickMarkPosition);
+                if (exists) {
+                    select.value = state.quickMarkPosition;
+                } else {
+                    select.value = 'end';
+                }
+            } else {
+                select.value = 'end';
+            }
+        }
+
+        function openQuickMarkDialog(id = null) {
+            const isEditing = !!id;
+            const qm = isEditing ? state.quickMarks.find(q => q.id === id) : null;
+
+            state.editingQuickMarkId = id || null;
+            if (isEditing && qm) {
+                const idx = state.quickMarks.indexOf(qm);
+                if (idx > 0) {
+                    const prevQm = state.quickMarks[idx - 1];
+                    state.quickMarkPosition = prevQm.id;
+                } else {
+                    state.quickMarkPosition = 'end';
+                }
+            } else {
+                state.quickMarkPosition = 'end';
+            }
+
+            document.getElementById('quickMarkDialogTitle').innerText = isEditing ? t('edit') : t('quickMarkAdd');
+            document.getElementById('quickMarkTitleInput').value = qm?.title || '';
+            document.getElementById('quickMarkIconInput').value = qm?.icon || '';
+            document.getElementById('quickMarkTextInput').value = qm?.text || '';
+            
+            updateQuickMarkPositionSelect();
+            
+            document.getElementById('quickMarkDialog').classList.add('active');
+            updateAllTexts();
+        }
+
+        function closeQuickMarkDialog() {
+            document.getElementById('quickMarkDialog').classList.remove('active');
+            state.editingQuickMarkId = null;
+            state.quickMarkPosition = 'end';
+        }
+
+        function saveQuickMarkFromDialog() {
+            const title = document.getElementById('quickMarkTitleInput').value.trim();
+            const icon = document.getElementById('quickMarkIconInput').value.trim();
+            const text = document.getElementById('quickMarkTextInput').value.trim();
+            const position = document.getElementById('quickMarkPositionSelect').value;
+
+            if (!title) {
+                showToast(t('quickMarkTitle') + ' ' + (state.lang === 'ca' ? 'és obligatori' : state.lang === 'es' ? 'es obligatorio' : 'is required'), true);
+                return;
+            }
+            if (!text) {
+                showToast(t('quickMarkText') + ' ' + (state.lang === 'ca' ? 'és obligatori' : state.lang === 'es' ? 'es obligatorio' : 'is required'), true);
+                return;
+            }
+
+            const newQm = {
+                id: state.editingQuickMarkId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                title,
+                icon: icon || null,
+                text
+            };
+
+            if (state.editingQuickMarkId) {
+                const idx = state.quickMarks.findIndex(q => q.id === state.editingQuickMarkId);
+                if (idx >= 0) {
+                    state.quickMarks.splice(idx, 1);
+                    if (position === 'end' || !state.quickMarks.some(q => q.id === position)) {
+                        state.quickMarks.push(newQm);
+                    } else {
+                        const targetIdx = state.quickMarks.findIndex(q => q.id === position);
+                        state.quickMarks.splice(targetIdx + 1, 0, newQm);
+                    }
+                    showToast(t('quickMarkUpdated'));
+                }
+            } else {
+                if (position === 'end' || !state.quickMarks.some(q => q.id === position)) {
+                    state.quickMarks.push(newQm);
+                } else {
+                    const targetIdx = state.quickMarks.findIndex(q => q.id === position);
+                    state.quickMarks.splice(targetIdx + 1, 0, newQm);
+                }
+                showToast(t('quickMarkAdded'));
+            }
+
+            saveData();
+            closeQuickMarkDialog();
+            renderQuickMarks();
+            renderQuickMarkSettings();
+        }
+
+        async function deleteQuickMark(id) {
+            const confirmed = await showConfirmDialog(t('confirmDeleteQuickMark'));
+            if (confirmed) {
+                state.quickMarks = state.quickMarks.filter(q => q.id !== id);
+                saveData();
+                renderQuickMarks();
+                renderQuickMarkSettings();
+                showToast(t('quickMarkDeleted'));
+            }
+        }
+
+        // ---------- DELETE QUICK MARK FROM SIDEBAR ----------
+        function openDeleteQuickMarkDialog() {
+            const dialog = document.getElementById('deleteQuickMarkDialog');
+            const list = document.getElementById('deleteQmList');
+            
+            if (state.quickMarks.length === 0) {
+                list.innerHTML = `<div class="delete-qm-empty">${t('noQuickMarksToDelete')}</div>`;
+                dialog.classList.add('active');
+                return;
+            }
+            
+            list.innerHTML = state.quickMarks.map(qm => `
+                <div class="delete-qm-item">
+                    <div class="qm-info">
+                        ${qm.icon ? `<img src="${qm.icon}" onerror="this.style.display='none'">` : '<span style="font-size:18px;">⚡</span>'}
+                        <span class="qm-name">${escapeHtml(qm.title)}</span>
+                    </div>
+                    <button class="delete-qm-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+            
+            list.querySelectorAll('.delete-qm-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    const id = btn.dataset.id;
+                    const confirmed = await showConfirmDialog(t('confirmDeleteQuickMark'));
+                    if (confirmed) {
+                        state.quickMarks = state.quickMarks.filter(q => q.id !== id);
+                        saveData();
+                        renderQuickMarks();
+                        renderQuickMarkSettings();
+                        showToast(t('quickMarkDeleted'));
+                        openDeleteQuickMarkDialog();
+                    }
+                };
+            });
+            
+            dialog.classList.add('active');
+            updateAllTexts();
+        }
+
+        function closeDeleteQuickMarkDialog() {
+            document.getElementById('deleteQuickMarkDialog').classList.remove('active');
+        }
+
+        // ---------- STUDIO CONFIRM ----------
+        function openStudio() {
+            const overlay = document.createElement('div');
+            overlay.className = 'dialog-overlay active';
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `
+                <div class="dialog-card">
+                    <h3><i class="fas fa-paint-brush" style="color:var(--md-primary);"></i> Studio</h3>
+                    <p style="margin:12px 0; font-size:15px; color:var(--md-on-surface-variant);">${t('studioWarning')}</p>
+                    <div class="dialog-actions" style="display:flex; gap:8px; margin-top:12px;">
+                        <button class="fab-btn secondary" id="studioCancelBtn">${t('studioCancel')}</button>
+                        <button class="fab-btn glow" id="studioContinueBtn">${t('studioContinue')}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            overlay.querySelector('#studioCancelBtn').onclick = () => overlay.remove();
+            overlay.querySelector('#studioContinueBtn').onclick = () => {
+                overlay.remove();
+                window.open('https://www.google.com', '_blank');
+            };
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
         }
 
         // ---------- INIT ----------
@@ -7805,7 +8739,7 @@
                 pushHistory('map');
             } else {
                 const hash = window.location.hash.slice(1);
-                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail', 'nearby', 'mode', 'legend'];
+                const knownPages = ['map', 'search', 'groups', 'favorites', 'settings', 'detail', 'mode', 'legend'];
                 if (knownPages.includes(hash)) {
                     const parts = hash.split('?');
                     const page = parts[0];
@@ -7845,7 +8779,7 @@
                 switchTab('mode');
             });
 
-            // Setup sort dialog
+            // Setup sort dialog (only for search)
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.addEventListener('click', function() {
                     document.querySelectorAll('#sortOptions .sort-option').forEach(o => o.classList.remove('active'));
@@ -7855,8 +8789,36 @@
             document.getElementById('sortDialogCancel').addEventListener('click', closeSortDialog);
             document.getElementById('sortDialogApply').addEventListener('click', applySort);
 
-            // Setup favorites sort button
-            document.getElementById('favoritesSortBtn').addEventListener('click', openFavoritesSortDialog);
+            // Setup favorites sort button - CYCLE
+            document.getElementById('favoritesSortBtn').addEventListener('click', cycleFavoritesSort);
+
+            // Quick mark dialog buttons
+            document.getElementById('quickMarkDialogCancel').onclick = closeQuickMarkDialog;
+            document.getElementById('quickMarkDialogSave').onclick = saveQuickMarkFromDialog;
+
+            // Delete quick mark dialog buttons
+            document.getElementById('deleteQmCancel').onclick = closeDeleteQuickMarkDialog;
+            document.getElementById('deleteQuickMarkDialog').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeDeleteQuickMarkDialog();
+            });
+
+            document.getElementById('quickMarkAddBtn').addEventListener('click', () => {
+                toggleSidebar();
+                openQuickMarkDialog(null);
+            });
+            document.getElementById('quickMarkAddSettingsBtn').addEventListener('click', () => openQuickMarkDialog(null));
+            
+            // Botón de eliminar quick mark en la barra lateral
+            document.getElementById('quickMarkDeleteBtn').addEventListener('click', () => {
+                toggleSidebar();
+                openDeleteQuickMarkDialog();
+            });
+
+            // Studio button
+            document.getElementById('sidebarStudio').addEventListener('click', () => {
+                toggleSidebar();
+                openStudio();
+            });
 
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
@@ -7866,16 +8828,6 @@
             document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
             document.getElementById('sidebarOverlay').addEventListener('click', (e) => {
                 if (e.target === e.currentTarget) toggleSidebar();
-            });
-
-            document.getElementById('sidebarNearby').addEventListener('click', () => {
-                toggleSidebar();
-                switchTab('nearby');
-                if (state.userLocation) {
-                    renderNearbyPins();
-                } else {
-                    requestGpsLocation(true);
-                }
             });
 
             document.getElementById('sidebarRecent').addEventListener('click', () => {
@@ -7893,11 +8845,6 @@
                 toggleSidebar();
                 switchTab('legend');
                 renderLegend();
-            });
-
-            document.getElementById('sidebarStudio').addEventListener('click', () => {
-                toggleSidebar();
-                window.open('https://www.google.com', '_blank');
             });
 
             document.getElementById('sidebarSettings').addEventListener('click', () => {
@@ -8098,16 +9045,11 @@
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog' || id === 'quickMarkDialog' || id === 'deleteQuickMarkDialog') {
                             dialog.classList.remove('active');
                         }
                     }
                 });
-            });
-
-            document.getElementById('nearbyRefreshBtn').addEventListener('click', () => {
-                requestGpsLocation(true);
-                setTimeout(renderNearbyPins, 500);
             });
 
             updateMapStartIndicator();
@@ -8162,6 +9104,13 @@
                 }
             });
         };
+
+        // Sobrescribir la función clearStarsBtn
+        document.getElementById('clearStarsBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            selectedRating = 0;
+            updateStarsUI();
+        });
 
         init();
     </script>
