@@ -45,7 +45,7 @@
             --map-tiles: light;
             --sidebar-width: 280px;
             --bottom-nav-height: 60px;
-            
+
             --star-color-1: #E30613;
             --star-color-2: #FF8C00;
             --star-color-3: #FFB300;
@@ -2961,6 +2961,8 @@
         #detailTags { display: none !important; }
 
         .pin-card .pin-tags { display: none !important; }
+
+        .settings-section-btn[data-sub="quickmark"] { display: none !important; }
     </style>
 </head>
 <body>
@@ -3020,7 +3022,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.11</span>
+                    <span>v1.11.1</span>
                 </div>
             </div>
         </div>
@@ -3369,7 +3371,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.11 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.11.1 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -3795,7 +3797,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.11 Mobile';
+        const APP_VERSION = '1.11.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         let state = {
@@ -3867,7 +3869,7 @@
                 edit: "Editar", delete: "Eliminar", back: "Tornar",
                 export: "Exportar", import: "Importar", clear: "Esborrar",
                 settingsTitle: "Arranjament", servicesTitle: "Serveis de transport",
-                dataTitle: "Dades", langTitle: "Idioma", accentTitle: "Color de l'app",
+                dataTitle: "Dades", langTitle: "Llengua", accentTitle: "Color de l'app",
                 confirmDelete: "Eliminar aquest pin?",
                 confirmDeleteAll: "Esborrar totes les dades? Aquesta acció no es pot desfer.",
                 noPins: "No hi ha pins",
@@ -3896,7 +3898,7 @@
                 dark: "Fosc",
                 light: "Clar",
                 appearanceBtn: "Aparença",
-                langBtn: "Idioma",
+                langBtn: "Llengua",
                 servicesBtn: "Serveis de transport",
                 dataBtn: "Dades",
                 aboutBtn: "Quant a",
@@ -3956,8 +3958,8 @@
                 profilePronouns: "Pronoms (màx 50 caràcters)",
                 profileSubtitle: "Subtítol",
                 profileSaved: "Perfil guardat",
-                importData: "Importar dades",
-                exportData: "Exportar dades",
+                importData: "Importar dataset",
+                exportData: "Exportar dataset",
                 overwriteProfile: "Aquest perfil ja existeix. Vols sobreescriure'l?",
                 goFrom: "Traça una ruta",
                 selectOrigin: "Selecciona el pin d'origen",
@@ -4127,7 +4129,7 @@
                 serviceAdded: "Servicio añadido",
                 serviceRemoved: "Eliminar servicio",
                 selectImage: "Selecciona una imagen",
-                addHere: "¿Añadir aquí?",
+                addHere: "¿Aquí?",
                 viewOnMap: "Ver en el mapa",
                 go: "Ir",
                 noResults: "No se encontraron resultados",
@@ -4201,8 +4203,8 @@
                 profilePronouns: "Pronombres (máx 50 caracteres)",
                 profileSubtitle: "Subtítulo",
                 profileSaved: "Perfil guardado",
-                importData: "Importar datos",
-                exportData: "Exportar datos",
+                importData: "Importar dataset",
+                exportData: "Exportar dataset",
                 overwriteProfile: "Este perfil ya existe. ¿Quieres sobrescribirlo?",
                 goFrom: "Trazar ruta",
                 selectOrigin: "Selecciona el pin de origen",
@@ -4372,7 +4374,7 @@
                 serviceAdded: "Service added",
                 serviceRemoved: "Remove service",
                 selectImage: "Select an image",
-                addHere: "Add here?",
+                addHere: "Here?",
                 viewOnMap: "View on map",
                 go: "Go",
                 noResults: "No results found",
@@ -4446,8 +4448,8 @@
                 profilePronouns: "Pronouns (max 50 chars)",
                 profileSubtitle: "Subtitle",
                 profileSaved: "Profile saved",
-                importData: "Import data",
-                exportData: "Export data",
+                importData: "Import dataset",
+                exportData: "Export dataset",
                 overwriteProfile: "This profile already exists. Do you want to overwrite it?",
                 goFrom: "Go from",
                 selectOrigin: "Select origin pin",
@@ -6536,8 +6538,8 @@
                     const fav = isFavorite(pin.id);
                     const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                     return `
-                        <div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" 
-                             data-id="${pin.id}" 
+                        <div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}"
+                             data-id="${pin.id}"
                              style="display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:${isCurrent ? 'var(--md-primary-container)' : 'var(--md-surface-dim)'}; cursor:${isCurrent ? 'default' : 'pointer'}; transition:0.2s; opacity:${isCurrent ? '0.6' : '1'};">
                             <img src="${pin.imageUrl || 'https://via.placeholder.com/36/7C4DFF/FFFFFF?text=📍'}" style="width:36px;height:36px;border-radius:var(--radius-sm);object-fit:cover;background:var(--md-surface);">
                             <div style="flex:1; min-width:0;">
@@ -6763,26 +6765,26 @@
             empty.style.display = 'none';
 
             const resultsToShow = filtered.slice(start, end);
-            
+
             const isDistanceMode = state.sortMode === 'distance';
-            
+
             container.innerHTML = resultsToShow.map(pin => {
                 const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                 const isFav = isFavorite(pin.id);
                 const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                 const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
-                
+
                 // Tags en la tarjeta
-                const tagsHtml = pin.tags && pin.tags.length > 0 ? 
+                const tagsHtml = pin.tags && pin.tags.length > 0 ?
                     `<div class="pin-tags">${pin.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}${pin.tags.length > 3 ? `<span class="tag" style="font-size:8px;">+${pin.tags.length - 3}</span>` : ''}</div>` : '';
-                
+
                 let distanceHtml = '';
                 if (isDistanceMode && state.userLocation) {
                     const d = Math.sqrt(Math.pow(pin.lat - state.userLocation[0], 2) + Math.pow(pin.lng - state.userLocation[1], 2));
                     const km = (d * 111).toFixed(1);
                     distanceHtml = `<div class="pin-distance">${t('distanceLabel')}${km} km</div>`;
                 }
-                
+
                 return `
                 <div class="pin-card" data-id="${pin.id}">
                     ${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}
@@ -6935,14 +6937,14 @@
                 distance: 'fa-location-dot'
             };
             if (sortBtn) sortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i>`;
-            
+
             const favSortBtn = document.getElementById('favoritesSortBtn');
             if (favSortBtn) favSortBtn.innerHTML = `<i class="fas ${icons[mode] || 'fa-sliders-h'}"></i> <span id="favoritesSortBtnLabel">${t('favoritesSortBtn')}</span>`;
-            
+
             document.querySelectorAll('#sortOptions .sort-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.sort === mode);
             });
-            
+
             updateGroupSortIcon();
         }
 
@@ -7717,7 +7719,7 @@
                 target.scrollTop = 0;
             }
             pushHistory('settings', { subpage: subpageId });
-            
+
             if (subpageId === 'quickmark') {
                 renderQuickMarkSettings();
             }
@@ -7804,7 +7806,7 @@
             document.getElementById('quickMarkIconLabel').innerText = t('quickMarkIcon');
             document.getElementById('quickMarkTextLabel').innerText = t('quickMarkText') + ' *';
             document.getElementById('quickMarkPositionLabel').innerText = t('quickMarkPosition');
-            
+
             // Delete quick mark dialog
             document.getElementById('deleteQmTitle').innerText = t('deleteQmTitle');
             document.getElementById('deleteQmDesc').innerText = t('deleteQmDesc');
@@ -8306,12 +8308,12 @@
         // ---------- QUICK MARK FUNCTIONS ----------
         function renderQuickMarks() {
             const container = document.getElementById('quickMarkList');
-            
+
             if (state.quickMarks.length === 0) {
                 container.innerHTML = `<div class="quick-mark-empty">${state.lang === 'ca' ? "Encara no s'han creat marcatges ràpids" : state.lang === 'es' ? 'Aún no se han creado marcajes rápidos' : 'No quick marks have been created yet'}</div>`;
                 return;
             }
-            
+
             container.innerHTML = state.quickMarks.map(qm => `
                 <button class="quick-mark-btn" data-id="${qm.id}">
                     ${qm.icon ? `<img src="${qm.icon}" onerror="this.style.display='none'">` : '<span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</span>'}
@@ -8418,15 +8420,15 @@
         function updateQuickMarkPositionSelect() {
             const select = document.getElementById('quickMarkPositionSelect');
             const currentQm = state.editingQuickMarkId ? state.quickMarks.find(q => q.id === state.editingQuickMarkId) : null;
-            
+
             select.innerHTML = '';
-            
+
             // Opción "Al final"
             const endOption = document.createElement('option');
             endOption.value = 'end';
             endOption.textContent = t('quickMarkPositionEnd');
             select.appendChild(endOption);
-            
+
             // Opciones para cada quick mark existente (excepto el que se está editando)
             state.quickMarks.forEach(qm => {
                 if (qm.id === state.editingQuickMarkId) return;
@@ -8435,7 +8437,7 @@
                 option.textContent = `${t('quickMarkPositionAbove')} "${qm.title}"`;
                 select.appendChild(option);
             });
-            
+
             // Si estamos editando, intentar restaurar la posición guardada
             if (state.editingQuickMarkId && state.quickMarkPosition && state.quickMarkPosition !== 'end') {
                 const exists = state.quickMarks.some(q => q.id === state.quickMarkPosition);
@@ -8470,9 +8472,9 @@
             document.getElementById('quickMarkTitleInput').value = qm?.title || '';
             document.getElementById('quickMarkIconInput').value = qm?.icon || '';
             document.getElementById('quickMarkTextInput').value = qm?.text || '';
-            
+
             updateQuickMarkPositionSelect();
-            
+
             document.getElementById('quickMarkDialog').classList.add('active');
             updateAllTexts();
         }
@@ -8548,13 +8550,13 @@
         function openDeleteQuickMarkDialog() {
             const dialog = document.getElementById('deleteQuickMarkDialog');
             const list = document.getElementById('deleteQmList');
-            
+
             if (state.quickMarks.length === 0) {
                 list.innerHTML = `<div class="delete-qm-empty">${t('noQuickMarksToDelete')}</div>`;
                 dialog.classList.add('active');
                 return;
             }
-            
+
             list.innerHTML = state.quickMarks.map(qm => `
                 <div class="delete-qm-item">
                     <div class="qm-info">
@@ -8564,7 +8566,7 @@
                     <button class="delete-qm-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button>
                 </div>
             `).join('');
-            
+
             list.querySelectorAll('.delete-qm-btn').forEach(btn => {
                 btn.onclick = async () => {
                     const id = btn.dataset.id;
@@ -8579,7 +8581,7 @@
                     }
                 };
             });
-            
+
             dialog.classList.add('active');
             updateAllTexts();
         }
@@ -8807,7 +8809,7 @@
                 openQuickMarkDialog(null);
             });
             document.getElementById('quickMarkAddSettingsBtn').addEventListener('click', () => openQuickMarkDialog(null));
-            
+
             // Botón de eliminar quick mark en la barra lateral
             document.getElementById('quickMarkDeleteBtn').addEventListener('click', () => {
                 toggleSidebar();
