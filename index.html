@@ -178,6 +178,169 @@
             50% { transform: scale(1.08); }
         }
 
+        /* --- WELCOME SCREEN --- */
+        #welcomeScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--md-surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            padding: 30px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            color: var(--md-on-surface);
+        }
+        #welcomeScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #welcomeScreen .welcome-logo {
+            font-size: 64px;
+            color: var(--md-primary);
+            margin-bottom: 12px;
+        }
+        #welcomeScreen .welcome-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin-bottom: 4px;
+        }
+        #welcomeScreen .welcome-sub {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        #welcomeScreen .welcome-form {
+            width: 100%;
+            max-width: 340px;
+        }
+        #welcomeScreen .welcome-form label {
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+            color: var(--md-on-surface-variant);
+        }
+        #welcomeScreen .welcome-form select,
+        #welcomeScreen .welcome-form input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            margin-bottom: 16px;
+            transition: border-color 0.3s ease;
+        }
+        #welcomeScreen .welcome-form select:focus,
+        #welcomeScreen .welcome-form input:focus {
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 4px rgba(124,77,255,0.15);
+        }
+        #welcomeScreen .welcome-form .lang-option-welcome {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #welcomeScreen .welcome-form .lang-option-welcome img {
+            width: 28px;
+            height: 20px;
+            border-radius: 3px;
+            object-fit: cover;
+        }
+        #welcomeScreen .fab-btn {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        /* --- TUTORIAL DIALOG --- */
+        #tutorialDialog .dialog-card {
+            text-align: center;
+        }
+        #tutorialDialog .tutorial-icon {
+            font-size: 56px;
+            color: var(--md-primary);
+            margin-bottom: 12px;
+        }
+        #tutorialDialog .tutorial-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        #tutorialDialog .tutorial-actions .fab-btn {
+            flex: 1;
+        }
+
+        /* --- IMPORT DIALOG --- */
+        #importDialog .import-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+        }
+        #importDialog .import-preview img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--md-primary);
+        }
+        #importDialog .import-preview .info {
+            flex: 1;
+        }
+        #importDialog .import-preview .info .name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        #importDialog .import-preview .info .sub {
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+        }
+        #importDialog .import-warning {
+            background: rgba(227,6,19,0.08);
+            border-left: 3px solid #E30613;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+            margin: 8px 0;
+        }
+        #importDialog .import-timer {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--md-primary);
+            text-align: center;
+            padding: 8px 0;
+        }
+        #importDialog .import-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        #importDialog .import-actions .fab-btn {
+            flex: 1;
+        }
+        #importDialog .import-actions .fab-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface-variant);
+            box-shadow: none !important;
+        }
+
         /* --- TOP BAR --- */
         .top-bar {
             background: var(--md-surface);
@@ -2956,11 +3119,21 @@
             font-size: 14px;
         }
 
-        #settingsAppearance .card:has(#mapStyleLabel) { display: none !important; }
-
-        #detailTags { display: none !important; }
-
-        .pin-card .pin-tags { display: none !important; }
+        /* ---- BANDERAS EN IDIOMA ---- */
+        .lang-option .flag-icon {
+            width: 28px;
+            height: 20px;
+            border-radius: 3px;
+            object-fit: cover;
+            margin-right: 8px;
+        }
+        .lang-option-welcome .flag-icon {
+            width: 28px;
+            height: 20px;
+            border-radius: 3px;
+            object-fit: cover;
+            margin-right: 8px;
+        }
 
         .settings-section-btn[data-sub="quickmark"] { display: none !important; }
     </style>
@@ -2972,6 +3145,54 @@
         <div class="splash-icon"><i class="fas fa-map-pin"></i></div>
         <div class="splash-title">LibrePin</div>
         <div class="splash-sub">Loading...</div>
+    </div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcomeScreen" class="hidden">
+        <div class="welcome-logo"><i class="fas fa-map-pin"></i></div>
+        <div class="welcome-title" id="welcomeTitle">LibrePin</div>
+        <div class="welcome-sub" id="welcomeSub">Benvingut/da! Tria el teu idioma i nom</div>
+        <div class="welcome-form">
+            <label for="welcomeNameLabel" id="welcomeNameLabel">Nom d'usuari / Username</label>
+            <input type="text" id="welcomeName" placeholder="El teu nom..." value="Usuari">
+            <button class="fab-btn glow" id="welcomeStartBtn"><i class="fas fa-rocket"></i> <span id="welcomeStartLabel">Start</span></button>
+        </div>
+    </div>
+
+    <!-- TUTORIAL DIALOG -->
+    <div id="tutorialDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <div class="tutorial-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h3 id="tutorialTitle">Vols veure un tutorial?</h3>
+            <p id="tutorialDesc" style="color:var(--md-on-surface-variant); margin:8px 0 16px;">És la teva primera vegada a LibrePin. Un tutorial t'ajudarà a entendre totes les funcions.</p>
+            <div class="tutorial-actions">
+                <button class="fab-btn secondary" id="tutorialNoBtn"><span id="tutorialNoLabel">Ara no</span></button>
+                <button class="fab-btn glow" id="tutorialYesBtn"><span id="tutorialYesLabel">Sí, vull</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPORT DIALOG -->
+    <div id="importDialog" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3 id="importTitle"><i class="fas fa-file-import" style="color:var(--md-primary);"></i> Importar dataset</h3>
+            <div class="import-preview" id="importPreview">
+                <img id="importAvatar" src="" alt="Avatar">
+                <div class="info">
+                    <div class="name" id="importName">-</div>
+                    <div class="sub" id="importSub">-</div>
+                </div>
+            </div>
+            <div class="import-warning" id="importWarning">
+                <i class="fas fa-exclamation-triangle" style="color:#E30613;"></i>
+                Es recomana fer una còpia de seguretat del dataset actual abans de continuar.
+            </div>
+            <div class="import-timer" id="importTimer">5s</div>
+            <div class="import-actions">
+                <button class="fab-btn secondary" id="importCancelBtn" disabled><span id="importCancelLabel">Cancel·lar</span></button>
+                <button class="fab-btn glow" id="importConfirmBtn" disabled><span id="importConfirmLabel">Carregar</span></button>
+            </div>
+        </div>
     </div>
 
     <div class="app-container">
@@ -3018,11 +3239,12 @@
                     <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
                     <button class="sidebar-item" id="sidebarLegend"><i class="fas fa-route"></i> <span id="sidebarLegendLabel">Llegendes de línies</span></button>
                     <button class="sidebar-item" id="sidebarStudio"><i class="fas fa-paint-brush"></i> <span id="sidebarStudioLabel">Studio</span></button>
+                    <button class="sidebar-item" id="sidebarTutorial"><i class="fas fa-question-circle"></i> <span id="sidebarTutorialLabel">Ajuda</span></button>
                     <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Arranjament</span></button>
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.11.1</span>
+                    <span>v1.12</span>
                 </div>
             </div>
         </div>
@@ -3199,8 +3421,8 @@
                     </div>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:8px; padding:0 4px;">
-                    <button class="fab-btn secondary" id="profileDataExportBtn" style="justify-content:center;"><i class="fas fa-download"></i> <span id="profileDataExportLabel">Exportar grups</span></button>
-                    <button class="fab-btn secondary" id="profileDataImportBtn" style="justify-content:center;"><i class="fas fa-upload"></i> <span id="profileDataImportLabel">Importar grups</span></button>
+                    <button class="fab-btn secondary" id="profileDataExportBtn" style="justify-content:center;"><i class="fas fa-download"></i> <span id="profileDataExportLabel">Exportar dataset</span></button>
+                    <button class="fab-btn secondary" id="profileDataImportBtn" style="justify-content:center;"><i class="fas fa-upload"></i> <span id="profileDataImportLabel">Importar dataset</span></button>
                     <input type="file" id="profileDataImportInput" accept=".json" style="display:none;">
                     <button class="fab-btn secondary" id="profileDataClearBtn" style="justify-content:center; color:#E30613;"><i class="fas fa-trash"></i> <span id="profileDataClearLabel">Esborrar totes les dades</span></button>
                 </div>
@@ -3269,13 +3491,19 @@
             <div id="settingsLanguage" class="settings-subpage">
                 <div class="sub-header">
                     <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
-                    <h3 id="langTitle">Idioma</h3>
+                    <h3 id="langTitle">Llengua</h3>
                 </div>
                 <div class="card">
                     <div class="lang-options" style="display:flex; flex-direction:column; gap:8px;">
-                        <button class="fab-btn secondary lang-option" data-lang="ca" style="width:100%; font-size:15px; padding:12px; justify-content:center;">Català</button>
-                        <button class="fab-btn secondary lang-option" data-lang="es" style="width:100%; font-size:15px; padding:12px; justify-content:center;">Español</button>
-                        <button class="fab-btn secondary lang-option" data-lang="en" style="width:100%; font-size:15px; padding:12px; justify-content:center;">English</button>
+                        <button class="fab-btn secondary lang-option" data-lang="ca" style="width:100%; font-size:15px; padding:12px; justify-content:center;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Catalonia.svg/330px-Flag_of_Catalonia.svg.png" class="flag-icon"> Català
+                        </button>
+                        <button class="fab-btn secondary lang-option" data-lang="es" style="width:100%; font-size:15px; padding:12px; justify-content:center;">
+                            <img src="https://flagcdn.com/w40/es.png" class="flag-icon"> Español
+                        </button>
+                        <button class="fab-btn secondary lang-option" data-lang="en" style="width:100%; font-size:15px; padding:12px; justify-content:center;">
+                            <img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> English
+                        </button>
                     </div>
                 </div>
             </div>
@@ -3296,8 +3524,8 @@
                 </div>
             </div>
 
-            <!-- QUICK MARK SETTINGS -->
-            <div id="settingsQuickMark" class="settings-subpage">
+            <!-- QUICK MARK SETTINGS (hidden) -->
+            <div id="settingsQuickMark" class="settings-subpage" style="display:none;">
                 <div class="sub-header">
                     <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
                     <h3 id="quickMarkSettingsTitle">Marcatge ràpid</h3>
@@ -3371,7 +3599,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.11.1 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.12 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -3554,7 +3782,7 @@
                 <label id="servicesLabel">Serveis que circulen</label>
                 <button id="servicesSelectorBtn" class="fab-btn secondary" style="width:100%; margin-top:4px; padding:10px;"><i class="fas fa-bus"></i> <span id="servicesSelectorLabel">Seleccionar serveis</span></button>
                 <div id="selectedServicesTags" style="margin-top:6px; display:flex; flex-wrap:wrap; gap:4px;"></div>
-                <label id="scheduleLabel" style="margin-top:6px;">Enllaços de consulta d'horari</label>
+                <label id="scheduleLinksLabel" style="margin-top:6px;">Enllaços de consulta d'horari</label>
                 <div id="scheduleLinksContainer">
                     <div style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">
                         <input type="text" class="schedule-link-title" placeholder="Títol" style="flex:1; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
@@ -3797,8 +4025,30 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.11.1 Mobile';
+        const APP_VERSION = '1.12 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
+
+        // Traducciones para la pantalla de bienvenida (solo las necesarias en tiempo real)
+        const WELCOME_TRANSLATIONS = {
+            ca: {
+                title: 'LibrePin',
+                subtitle: 'Et donem la benvinguda al teu nou mapa!',
+                nameLabel: "Nom d'usuari",
+                startLabel: 'Start'
+            },
+            es: {
+                title: 'LibrePin',
+                subtitle: '¡Te damos la bienvenida a tu nuevo mapa!',
+                nameLabel: 'Nombre de usuario',
+                startLabel: 'Start'
+            },
+            en: {
+                title: 'LibrePin',
+                subtitle: 'Welcome to your own map!',
+                nameLabel: 'Username',
+                startLabel: 'Start'
+            }
+        };
 
         let state = {
             pins: [],
@@ -3808,7 +4058,7 @@
             groups: [],
             lines: [],
             quickMarks: [],
-            lang: 'en',
+            lang: 'ca',
             darkMode: false,
             mapStyle: 'color',
             accentColor: '#9a398d',
@@ -3854,7 +4104,10 @@
             groupSortMode: 'recent',
             noCluster: false,
             editingQuickMarkId: null,
-            quickMarkPosition: 'end'
+            quickMarkPosition: 'end',
+            isFirstLaunch: true,
+            pendingImportData: null,
+            importTimerInterval: null
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -4022,6 +4275,7 @@
                 sidebarMode: "Mode de visualització",
                 sidebarLegend: "Llegendes de línies",
                 sidebarStudio: "Studio",
+                sidebarTutorial: "Ajuda",
                 sidebarSettings: "Arranjament",
                 greetingMorning: "Bon dia",
                 greetingAfternoon: "Bona tarda",
@@ -4102,7 +4356,15 @@
                 quickMarkPosition: "Posició a la llista",
                 quickMarkPositionEnd: "Al final de la llista",
                 quickMarkPositionAbove: "Sobre el marcatge ràpid",
-                distanceLabel: "Distància: "
+                distanceLabel: "Distància: ",
+                importWarning: "Es recomana fer una còpia de seguretat del dataset actual abans de continuar.",
+                importConfirm: "Carregar",
+                importCancel: "Cancel·lar",
+                importTitle: "Importar dataset",
+                tutorialTitle: "Vols veure un tutorial?",
+                tutorialDesc: "És la teva primera vegada a LibrePin. Un tutorial t'ajudarà a entendre totes les funcions.",
+                tutorialYes: "Sí, vull",
+                tutorialNo: "Ara no"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -4267,6 +4529,7 @@
                 sidebarMode: "Modo de visualización",
                 sidebarLegend: "Leyendas de líneas",
                 sidebarStudio: "Studio",
+                sidebarTutorial: "Ayuda",
                 sidebarSettings: "Ajustes",
                 greetingMorning: "Buenos días",
                 greetingAfternoon: "Buenas tardes",
@@ -4347,7 +4610,15 @@
                 quickMarkPosition: "Posición en la lista",
                 quickMarkPositionEnd: "Al final de la lista",
                 quickMarkPositionAbove: "Encima del marcaje rápido",
-                distanceLabel: "Distancia: "
+                distanceLabel: "Distancia: ",
+                importWarning: "Se recomienda hacer una copia de seguridad del dataset actual antes de continuar.",
+                importConfirm: "Cargar",
+                importCancel: "Cancelar",
+                importTitle: "Importar dataset",
+                tutorialTitle: "¿Quieres ver un tutorial?",
+                tutorialDesc: "Es tu primera vez en LibrePin. Un tutorial te ayudará a entender todas las funciones.",
+                tutorialYes: "Sí, quiero",
+                tutorialNo: "Ahora no"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -4512,6 +4783,7 @@
                 sidebarMode: "View mode",
                 sidebarLegend: "Line legends",
                 sidebarStudio: "Studio",
+                sidebarTutorial: "Help",
                 sidebarSettings: "Settings",
                 greetingMorning: "Good morning",
                 greetingAfternoon: "Good afternoon",
@@ -4592,7 +4864,15 @@
                 quickMarkPosition: "Position in the list",
                 quickMarkPositionEnd: "At the end of the list",
                 quickMarkPositionAbove: "Above the quick mark",
-                distanceLabel: "Distance: "
+                distanceLabel: "Distance: ",
+                importWarning: "It is recommended to make a backup of the current dataset before continuing.",
+                importConfirm: "Load",
+                importCancel: "Cancel",
+                importTitle: "Import dataset",
+                tutorialTitle: "Do you want to see a tutorial?",
+                tutorialDesc: "It's your first time in LibrePin. A tutorial will help you understand all the features.",
+                tutorialYes: "Yes, I want",
+                tutorialNo: "Not now"
             }
         };
 
@@ -4713,6 +4993,7 @@
                         state.profileLoaded = true;
                     }
                     if (data.noCluster !== undefined) state.noCluster = data.noCluster;
+                    if (data.isFirstLaunch !== undefined) state.isFirstLaunch = data.isFirstLaunch;
                 }
             } catch (e) {}
             if (state.services.length === 0) {
@@ -4768,7 +5049,8 @@
                 groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile,
-                noCluster: state.noCluster
+                noCluster: state.noCluster,
+                isFirstLaunch: state.isFirstLaunch
             }));
         }
 
@@ -7487,7 +7769,8 @@
                 groupSortMode: state.groupSortMode,
                 mapStartLocation: state.mapStartLocation,
                 profile: state.profile,
-                noCluster: state.noCluster
+                noCluster: state.noCluster,
+                isFirstLaunch: state.isFirstLaunch
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -7505,16 +7788,50 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (data.pins && data.services) {
-                        const hasData = state.pins.length > 0 || state.services.length > 0 || state.favorites.length > 0 || state.groups.length > 0 || state.lines.length > 0;
-                        if (hasData) {
-                            showConfirmDialog(t('overwriteProfile')).then(confirmed => {
-                                if (confirmed) {
-                                    applyImportedData(data);
-                                }
-                            });
-                        } else {
-                            applyImportedData(data);
+                        // Mostrar previsualización del dataset
+                        const preview = document.getElementById('importPreview');
+                        document.getElementById('importAvatar').src = data.profile?.avatar || DEFAULT_AVATAR;
+                        document.getElementById('importName').textContent = data.profile?.name || 'Unknown';
+                        const pinCount = data.pins ? data.pins.length : 0;
+                        document.getElementById('importSub').textContent = `${pinCount} pins • ${data.groups ? data.groups.length : 0} groups`;
+
+                        // Guardar datos para importar
+                        state.pendingImportData = data;
+
+                        // Mostrar diálogo de importación
+                        const dialog = document.getElementById('importDialog');
+                        dialog.classList.add('active');
+
+                        // Deshabilitar botones inicialmente
+                        document.getElementById('importCancelBtn').disabled = true;
+                        document.getElementById('importConfirmBtn').disabled = true;
+
+                        // Iniciar timer de 5 segundos
+                        let seconds = 5;
+                        const timerEl = document.getElementById('importTimer');
+                        const confirmBtn = document.getElementById('importConfirmBtn');
+                        const cancelBtn = document.getElementById('importCancelBtn');
+                        confirmBtn.disabled = true;
+                        cancelBtn.disabled = true;
+                        timerEl.textContent = `${seconds}s`;
+
+                        // Limpiar intervalo previo si existe
+                        if (state.importTimerInterval) {
+                            clearInterval(state.importTimerInterval);
                         }
+
+                        state.importTimerInterval = setInterval(() => {
+                            seconds--;
+                            if (seconds <= 0) {
+                                clearInterval(state.importTimerInterval);
+                                state.importTimerInterval = null;
+                                timerEl.textContent = '✓';
+                                confirmBtn.disabled = false;
+                                cancelBtn.disabled = false;
+                            } else {
+                                timerEl.textContent = `${seconds}s`;
+                            }
+                        }, 1000);
                     } else {
                         showToast('Invalid file format', true);
                     }
@@ -7523,6 +7840,28 @@
                 }
             };
             reader.readAsText(file);
+        }
+
+        function confirmImport() {
+            if (!state.pendingImportData) return;
+            const data = state.pendingImportData;
+            applyImportedData(data);
+            document.getElementById('importDialog').classList.remove('active');
+            state.pendingImportData = null;
+            // Limpiar intervalo si existe
+            if (state.importTimerInterval) {
+                clearInterval(state.importTimerInterval);
+                state.importTimerInterval = null;
+            }
+        }
+
+        function cancelImport() {
+            document.getElementById('importDialog').classList.remove('active');
+            state.pendingImportData = null;
+            if (state.importTimerInterval) {
+                clearInterval(state.importTimerInterval);
+                state.importTimerInterval = null;
+            }
         }
 
         function applyImportedData(data) {
@@ -7551,6 +7890,7 @@
                 state.profileLoaded = true;
             }
             if (data.noCluster !== undefined) state.noCluster = data.noCluster;
+            if (data.isFirstLaunch !== undefined) state.isFirstLaunch = data.isFirstLaunch;
             saveData();
             applyAccentColor();
             applyTheme();
@@ -7570,6 +7910,7 @@
             updateModeBadge();
             document.getElementById('noClusterCheckbox').checked = state.noCluster;
             showToast(t('importSuccess'));
+            showReloadSplash();
         }
 
         // ---------- CLEAR DATA ----------
@@ -7597,6 +7938,7 @@
                 state.profile = { name: 'User', avatar: DEFAULT_AVATAR, pronouns: '', subtitle: '' };
                 state.profileLoaded = false;
                 state.noCluster = false;
+                state.isFirstLaunch = true;
                 saveData();
                 applyAccentColor();
                 applyTheme();
@@ -7619,6 +7961,7 @@
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
                 showToast(t('clearSuccess'));
+                showReloadSplash();
             }
         }
 
@@ -7739,7 +8082,6 @@
                 { key: 'appearance', icon: 'fa-palette', label: 'appearanceBtn' },
                 { key: 'language', icon: 'fa-globe', label: 'langBtn' },
                 { key: 'services', icon: 'fa-bus', label: 'servicesBtn' },
-                { key: 'quickmark', icon: 'fa-bolt', label: 'quickMarkSettings' },
                 { key: 'recent', icon: 'fa-clock', label: 'recent' },
                 { key: 'lines', icon: 'fa-draw-polygon', label: 'lines' },
                 { key: 'reload', icon: 'fa-sync-alt', label: 'reloadApp' },
@@ -7812,6 +8154,19 @@
             document.getElementById('deleteQmDesc').innerText = t('deleteQmDesc');
             document.getElementById('deleteQmCancelLabel').innerText = t('deleteQmCancel');
 
+            // Import dialog
+            document.getElementById('importDialog').querySelector('h3').innerHTML = `<i class="fas fa-file-import" style="color:var(--md-primary);"></i> ${t('importTitle')}`;
+            document.querySelector('#importDialog .import-warning').innerHTML = `<i class="fas fa-exclamation-triangle" style="color:#E30613;"></i> ${t('importWarning')}`;
+            document.getElementById('importConfirmBtn').innerHTML = `<i class="fas fa-upload"></i> ${t('importConfirm')}`;
+            document.getElementById('importCancelBtn').innerHTML = t('importCancel');
+
+            // Tutorial dialog
+            document.querySelector('#tutorialDialog h3').innerHTML = t('tutorialTitle');
+            document.querySelector('#tutorialDialog .tutorial-icon').innerHTML = '<i class="fas fa-graduation-cap"></i>';
+            document.querySelector('#tutorialDialog p').innerHTML = t('tutorialDesc');
+            document.getElementById('tutorialYesBtn').innerHTML = t('tutorialYes');
+            document.getElementById('tutorialNoBtn').innerHTML = t('tutorialNo');
+
             updateSliderUI();
 
             const menuLabels = {
@@ -7820,7 +8175,6 @@
                 appearance: 'appearanceBtn',
                 language: 'langBtn',
                 services: 'servicesBtn',
-                quickmark: 'quickMarkSettings',
                 recent: 'recent',
                 lines: 'lines',
                 reload: 'reloadApp',
@@ -7888,13 +8242,13 @@
             document.getElementById('tagsLabel').innerText = t('tags');
             document.getElementById('imageLabel').innerText = t('image');
             document.getElementById('coordsLabel').innerText = t('coords');
-            document.getElementById('ratingLabel').innerText = t('rating');
+            document.getElementById('ratingLabel').innerText = t('rating') + ' (1-5)';
             document.getElementById('buttonsLabel').innerText = t('buttons');
             document.getElementById('addBtnLabel').innerText = t('addBtn');
             document.getElementById('transportLabel').innerText = t('transport');
             document.getElementById('servicesLabel').innerText = t('services');
             document.getElementById('servicesSelectorLabel').innerText = t('selectServices');
-            document.getElementById('scheduleLabel').innerText = t('schedule');
+            document.getElementById('scheduleLinksLabel').innerText = t('schedule');
             document.getElementById('mp3Label').innerText = t('mp3');
             document.getElementById('relatedLabel').innerText = t('relatedPins');
             document.getElementById('relatedPinsDialogLabel').innerText = t('assignRelated');
@@ -7962,6 +8316,7 @@
             document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
             document.getElementById('sidebarLegendLabel').innerText = t('sidebarLegend');
             document.getElementById('sidebarStudioLabel').innerText = t('sidebarStudio');
+            document.getElementById('sidebarTutorialLabel').innerText = t('sidebarTutorial');
             document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
 
             document.getElementById('lineIconLabel').innerText = t('lineIcon');
@@ -8615,6 +8970,60 @@
             overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
         }
 
+        // ---------- TUTORIAL ----------
+        function openTutorial() {
+            window.open('https://librepin.github.io/tutorial', '_blank');
+        }
+
+        // ---------- WELCOME SCREEN ----------
+        function showWelcome() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            welcomeScreen.classList.remove('hidden');
+
+            // Cargar nombre actual
+            const nameInput = document.getElementById('welcomeName');
+            if (state.profile.name) nameInput.value = state.profile.name;
+
+            // Actualizar textos según idioma actual
+            updateWelcomeTexts(state.lang);
+
+            document.getElementById('welcomeStartBtn').onclick = () => {
+                const newName = document.getElementById('welcomeName').value.trim() || 'Usuari';
+
+                state.profile.name = newName;
+                state.isFirstLaunch = false;
+                saveData();
+
+                welcomeScreen.classList.add('hidden');
+
+                // Mostrar tutorial si es primera vez
+                showTutorialDialog();
+            };
+        }
+
+        function updateWelcomeTexts(lang) {
+            const t = WELCOME_TRANSLATIONS[lang] || WELCOME_TRANSLATIONS.ca;
+            document.getElementById('welcomeTitle').textContent = t.title;
+            document.getElementById('welcomeSub').textContent = t.subtitle;
+            document.getElementById('welcomeNameLabel').textContent = t.nameLabel;
+            document.getElementById('welcomeStartLabel').textContent = t.startLabel;
+            document.getElementById('welcomeStartBtn').innerHTML = `<i class="fas fa-rocket"></i> ${t.startLabel}`;
+        }
+
+        function showTutorialDialog() {
+            const dialog = document.getElementById('tutorialDialog');
+            dialog.classList.add('active');
+
+            document.getElementById('tutorialYesBtn').onclick = () => {
+                dialog.classList.remove('active');
+                openTutorial();
+            };
+
+            document.getElementById('tutorialNoBtn').onclick = () => {
+                dialog.classList.remove('active');
+            };
+        }
+
         // ---------- INIT ----------
         function init() {
             // VERIFICAR SI DEBE MOSTRAR EL OVERLAY DE RECARGA
@@ -8820,6 +9229,19 @@
             document.getElementById('sidebarStudio').addEventListener('click', () => {
                 toggleSidebar();
                 openStudio();
+            });
+
+            // Tutorial button
+            document.getElementById('sidebarTutorial').addEventListener('click', () => {
+                toggleSidebar();
+                openTutorial();
+            });
+
+            // Import dialog buttons
+            document.getElementById('importCancelBtn').addEventListener('click', cancelImport);
+            document.getElementById('importConfirmBtn').addEventListener('click', confirmImport);
+            document.getElementById('importDialog').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) cancelImport();
             });
 
             setTimeout(() => updateGlowColors(), 100);
@@ -9047,7 +9469,7 @@
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog' || id === 'quickMarkDialog' || id === 'deleteQuickMarkDialog') {
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog' || id === 'quickMarkDialog' || id === 'deleteQuickMarkDialog' || id === 'tutorialDialog') {
                             dialog.classList.remove('active');
                         }
                     }
@@ -9067,6 +9489,13 @@
             window.addEventListener('resize', () => {
                 if (state.map) setTimeout(() => state.map.invalidateSize(), 200);
             });
+
+            // Mostrar pantalla de bienvenida si es primera vez
+            if (state.isFirstLaunch !== false) {
+                setTimeout(() => {
+                    showWelcome();
+                }, 1200);
+            }
 
             console.log('LibrePin v' + APP_VERSION + ' initialized! 🗺️');
         }
