@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ca" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>LibrePin Studio</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/MSoYWQS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- RESET AND BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --md-primary: #9a398d;
+            --md-primary-light: #c454a7;
+            --md-primary-dark: #6a2260;
+            --md-primary-container: #f0e0ed;
+            --md-surface: #FFFFFF;
+            --md-surface-dim: #F5F5F5;
+            --md-background: #F8F9FA;
+            --md-on-surface: #1C1B1F;
+            --md-on-surface-variant: #49454F;
+            --md-outline: #79747E;
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --md-elevation-2: 0 3px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+            --md-elevation-3: 0 8px 24px rgba(0,0,0,0.15);
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+        }
+
+        [data-theme="dark"] {
+            --md-primary: #9a398d;
+            --md-primary-light: #c454a7;
+            --md-primary-dark: #6a2260;
+            --md-primary-container: #2a1a2a;
+            --md-surface: #1C1B1F;
+            --md-surface-dim: #2C2A2E;
+            --md-background: #0F0F14;
+            --md-on-surface: #E6E1E5;
+            --md-on-surface-variant: #CAC4D0;
+            --md-outline: #938F99;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--md-background);
+            color: var(--md-on-surface);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- TOP BAR (minimal) --- */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            background: var(--md-surface);
+            border-bottom: 1px solid rgba(128,128,128,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .top-bar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--md-primary);
+            text-decoration: none;
+        }
+
+        .top-bar .brand i {
+            font-size: 22px;
+        }
+
+        .top-bar .lang-select {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .top-bar .lang-select:focus {
+            border-color: var(--md-primary);
+        }
+
+        .top-bar .theme-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .top-bar .theme-btn:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+
+        .top-bar .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- HERO CONTENT --- */
+        .hero {
+            text-align: center;
+            max-width: 600px;
+            padding: 80px 20px 40px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero .logo {
+            font-size: 80px;
+            color: var(--md-primary);
+            margin-bottom: 16px;
+            display: block;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            color: var(--md-on-surface-variant);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            background: var(--md-primary-container);
+            color: var(--md-primary);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 20px;
+            border-radius: 40px;
+            margin-top: 12px;
+            border: 1px solid var(--md-primary);
+            opacity: 0.8;
+        }
+
+        .hero .footer-note {
+            margin-top: 40px;
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            opacity: 0.5;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 500px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero .logo {
+                font-size: 60px;
+            }
+            .hero .subtitle {
+                font-size: 16px;
+            }
+            .top-bar {
+                padding: 12px 16px;
+            }
+            .top-bar .brand {
+                font-size: 16px;
+            }
+            .top-bar .brand i {
+                font-size: 18px;
+            }
+            .hero {
+                padding: 70px 16px 30px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero h1 {
+                font-size: 26px;
+            }
+            .hero .logo {
+                font-size: 48px;
+            }
+            .hero .subtitle {
+                font-size: 14px;
+            }
+            .top-bar .brand {
+                font-size: 14px;
+            }
+            .top-bar .brand i {
+                font-size: 16px;
+            }
+            .top-bar .lang-select {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <a href="#" class="brand" id="brandLink">
+            <i class="fas fa-map-pin"></i>
+            <span id="brandText">LibrePin Studio</span>
+        </a>
+        <div class="actions">
+            <button class="theme-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+            <select class="lang-select" id="langSelect">
+                <option value="ca">Català</option>
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <span class="logo"><i class="fas fa-paint-brush"></i></span>
+        <h1 id="mainTitle">LibrePin Studio</h1>
+        <p class="subtitle" id="subtitleText">Properament / Próximamente / Coming soon</p>
+        <div class="badge" id="badgeText">🚀 En desenvolupament · En desarrollo · In development</div>
+        <div class="footer-note">© 2026 · LibrePin</div>
+    </div>
+
+    <script>
+        // ---------- TRANSLATIONS ----------
+        const translations = {
+            ca: {
+                brand: 'LibrePin Studio',
+                title: 'LibrePin Studio',
+                subtitle: 'Properament',
+                badge: '🚀 En desenvolupament'
+            },
+            es: {
+                brand: 'LibrePin Studio',
+                title: 'LibrePin Studio',
+                subtitle: 'Próximamente',
+                badge: '🚀 En desarrollo'
+            },
+            en: {
+                brand: 'LibrePin Studio',
+                title: 'LibrePin Studio',
+                subtitle: 'Coming soon',
+                badge: '🚀 In development'
+            }
+        };
+
+        // ---------- STATE ----------
+        let state = {
+            lang: 'ca',
+            darkMode: false
+        };
+
+        // ---------- FUNCTIONS ----------
+        function getBrowserLanguage() {
+            const lang = navigator.language || navigator.languages?.[0] || 'ca';
+            const short = lang.slice(0, 2).toLowerCase();
+            return ['ca', 'es', 'en'].includes(short) ? short : 'ca';
+        }
+
+        function updateUI() {
+            const t = translations[state.lang] || translations.ca;
+            document.getElementById('brandText').textContent = t.brand;
+            document.getElementById('mainTitle').textContent = t.title;
+            document.getElementById('subtitleText').textContent = t.subtitle;
+            document.getElementById('badgeText').textContent = t.badge;
+            document.getElementById('langSelect').value = state.lang;
+        }
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+            document.getElementById('themeToggle').innerHTML = state.darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('librepin_studio_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('librepin_studio_theme');
+            if (saved === 'dark') {
+                state.darkMode = true;
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+
+        function init() {
+            // Load theme
+            loadTheme();
+
+            // Set language from browser
+            const browserLang = getBrowserLanguage();
+            state.lang = browserLang;
+            localStorage.setItem('librepin_studio_lang', browserLang);
+
+            // Update UI
+            updateUI();
+
+            // Events
+            document.getElementById('langSelect').addEventListener('change', (e) => {
+                state.lang = e.target.value;
+                localStorage.setItem('librepin_studio_lang', state.lang);
+                updateUI();
+            });
+
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Brand link returns to top (or could link to main LibrePin)
+            document.getElementById('brandLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Run on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+
+</body>
+</html>
