@@ -3252,7 +3252,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.12.2</span>
+                    <span>v1.12.2.1</span>
                 </div>
             </div>
         </div>
@@ -3607,7 +3607,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.12.2 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.12.2.1 Mobile</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -4033,7 +4033,7 @@
             '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.12.2 Mobile';
+        const APP_VERSION = '1.12.2.1 Mobile';
         const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
 
         // Traducciones para la pantalla de bienvenida (solo las necesarias en tiempo real)
@@ -4375,7 +4375,7 @@
                 tutorialNo: "Ara no"
             },
             es: {
-                appTitle: "LibrePin", addPin: "Añadir pin", settings: "Ajustes", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
+                appTitle: "LibrePin", addPin: "Añadir pin", settings: "Configuración", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
                 name: "Nombre", subtitle: "Subtítulo", description: "Descripción", image: "URL de la imagen",
                 tags: "Etiquetas (separadas por comas)",
                 buttons: "Botones personalizados", addBtn: "Añadir botón",
@@ -4538,7 +4538,7 @@
                 sidebarLegend: "Leyendas de líneas",
                 sidebarStudio: "Studio",
                 sidebarTutorial: "Ayuda",
-                sidebarSettings: "Ajustes",
+                sidebarSettings: "Configuración",
                 greetingMorning: "Buenos días",
                 greetingAfternoon: "Buenas tardes",
                 greetingEvening: "Buenas noches",
@@ -4563,7 +4563,7 @@
                 legendTitle: "Leyendas de líneas",
                 legendSubtitle: "Líneas dibujadas en el mapa",
                 noLegendLines: "No hay líneas",
-                noLegendDesc: "Crea líneas desde el apartado Líneas en los ajustes",
+                noLegendDesc: "Crea líneas desde el apartado Líneas en configuración",
                 linesBtn: "Líneas",
                 lineIcon: "URL del icono (PNG)",
                 showLine: "Mostrar en el mapa",
@@ -8973,7 +8973,7 @@
             overlay.querySelector('#studioCancelBtn').onclick = () => overlay.remove();
             overlay.querySelector('#studioContinueBtn').onclick = () => {
                 overlay.remove();
-                window.open('https://www.google.com', '_blank');
+                window.open('https://librepin.github.io/studio/', '_blank');
             };
             overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
         }
