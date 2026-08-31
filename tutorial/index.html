@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="ca" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>LibrePin Docs</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/MSoYWQS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --md-primary: #9a398d;
+            --md-primary-light: #c454a7;
+            --md-primary-dark: #6a2260;
+            --md-primary-container: #f0e0ed;
+            --md-surface: #FFFFFF;
+            --md-surface-dim: #F5F5F5;
+            --md-background: #F8F9FA;
+            --md-on-surface: #1C1B1F;
+            --md-on-surface-variant: #49454F;
+            --md-outline: #79747E;
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --md-elevation-2: 0 3px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+            --md-elevation-3: 0 8px 24px rgba(0,0,0,0.15);
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --nav-active-bg: rgba(154,57,141,0.08);
+            --sidebar-width: 280px;
+            --bottom-nav-height: 60px;
+        }
+
+        [data-theme="dark"] {
+            --md-primary: #9a398d;
+            --md-primary-light: #c454a7;
+            --md-primary-dark: #6a2260;
+            --md-primary-container: #2a1a2a;
+            --md-surface: #1C1B1F;
+            --md-surface-dim: #2C2A2E;
+            --md-background: #0F0F14;
+            --md-on-surface: #E6E1E5;
+            --md-on-surface-variant: #CAC4D0;
+            --md-outline: #938F99;
+            --nav-active-bg: rgba(154,57,141,0.15);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--md-background);
+            color: var(--md-on-surface);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 0; height: 0; }
+        * { scrollbar-width: none; }
+
+        .app-container {
+            margin: 0 auto;
+            height: 100dvh;
+            background: var(--md-background);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-aspect-ratio: 16/9) and (min-width: 768px) {
+            .app-container {
+                border-left: 1px solid rgba(128,128,128,0.1);
+                border-right: 1px solid rgba(128,128,128,0.1);
+                box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            }
+            .bottom-nav {
+                padding: 8px 16px 16px;
+            }
+            .nav-item {
+                padding: 8px 16px;
+                font-size: 11px;
+            }
+            .nav-item i {
+                font-size: 24px;
+            }
+            .top-bar {
+                padding: 12px 16px;
+                min-height: 64px;
+            }
+            .top-bar .app-title {
+                font-size: 22px;
+            }
+            .sidebar {
+                width: 300px;
+            }
+            .doc-content {
+                padding: 24px 32px 32px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .top-bar {
+            background: var(--md-surface);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            flex-shrink: 0;
+            z-index: 10;
+            min-height: 56px;
+        }
+        .top-bar .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 40px;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+        .top-bar .menu-btn:active {
+            background: rgba(128,128,128,0.15);
+            transform: scale(0.9);
+        }
+        .top-bar .app-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--md-primary);
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+            justify-content: center;
+        }
+        .top-bar .app-title i {
+            font-size: 22px;
+        }
+        .top-bar .app-title:active {
+            transform: scale(0.95);
+        }
+        .top-bar .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .top-bar .header-actions .theme-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+        .top-bar .header-actions .theme-btn:active {
+            transform: scale(0.9);
+            background: var(--md-surface-dim);
+        }
+        .top-bar .header-actions .lang-select {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+        .top-bar .header-actions .lang-select:focus {
+            border-color: var(--md-primary);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.3s ease;
+            pointer-events: none;
+        }
+        .sidebar-overlay.active {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            max-width: 85vw;
+            background: var(--md-surface);
+            z-index: 1001;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--md-elevation-3);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+        .sidebar-overlay.active .sidebar {
+            transform: translateX(0);
+        }
+        .sidebar .sidebar-header {
+            padding: 0 20px 12px;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar .sidebar-header .sidebar-logo {
+            font-size: 28px;
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-header .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            padding: 4px;
+        }
+        .sidebar .sidebar-search {
+            padding: 12px 20px;
+        }
+        .sidebar .sidebar-search input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .sidebar .sidebar-search input:focus {
+            border-color: var(--md-primary);
+        }
+        .sidebar .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        .sidebar .sidebar-nav .nav-section {
+            padding: 8px 20px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--md-on-surface-variant);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .sidebar .sidebar-nav .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: inherit;
+            border-left: 3px solid transparent;
+        }
+        .sidebar .sidebar-nav .nav-item:active {
+            background: var(--md-surface-dim);
+            transform: scale(0.98);
+        }
+        .sidebar .sidebar-nav .nav-item.active {
+            background: var(--nav-active-bg);
+            border-left-color: var(--md-primary);
+            color: var(--md-primary);
+        }
+        .sidebar .sidebar-nav .nav-item i {
+            font-size: 18px;
+            width: 24px;
+            color: var(--md-primary);
+            text-align: center;
+        }
+        .sidebar .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(128,128,128,0.1);
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            text-align: center;
+        }
+
+        .bottom-nav {
+            background: var(--md-surface);
+            display: none;
+            justify-content: space-around;
+            padding: 6px 8px 14px;
+            border-top: 1px solid rgba(128,128,128,0.12);
+            flex-shrink: 0;
+            z-index: 30;
+            padding-bottom: max(14px, env(safe-area-inset-bottom));
+            height: var(--bottom-nav-height);
+            min-height: var(--bottom-nav-height);
+        }
+        .bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            background: none;
+            border: none;
+            font-size: 10px;
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            flex: 1;
+            position: relative;
+            justify-content: center;
+            font-family: inherit;
+        }
+        .bottom-nav .nav-item i { font-size: 22px; }
+        .bottom-nav .nav-item.active {
+            color: var(--md-primary);
+            background: var(--nav-active-bg);
+        }
+        .bottom-nav .nav-item:active { transform: scale(0.95); }
+        @media (max-width: 500px) {
+            .bottom-nav { display: flex; }
+        }
+
+        .pages-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            min-height: 0;
+        }
+        .page {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .page.active { display: block; }
+
+        .doc-content {
+            padding: 16px 18px 24px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .md-content h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--md-primary);
+            margin: 24px 0 12px;
+        }
+        .md-content h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--md-primary);
+            margin: 20px 0 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--md-primary-container);
+        }
+        .md-content h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--md-on-surface);
+            margin: 16px 0 8px;
+        }
+        .md-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--md-on-surface);
+            margin: 12px 0 6px;
+        }
+        .md-content p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin: 8px 0 14px;
+            color: var(--md-on-surface);
+        }
+        .md-content ul, .md-content ol {
+            padding-left: 24px;
+            margin: 8px 0 14px;
+        }
+        .md-content li {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 4px;
+            color: var(--md-on-surface);
+        }
+        .md-content strong {
+            font-weight: 600;
+            color: var(--md-on-surface);
+        }
+        .md-content blockquote {
+            border-left: 4px solid var(--md-primary);
+            padding: 8px 16px;
+            margin: 12px 0;
+            background: var(--md-primary-container);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            color: var(--md-on-surface-variant);
+        }
+        .md-content code {
+            font-family: monospace;
+            background: var(--md-surface-dim);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--md-primary);
+        }
+        .md-content pre {
+            background: var(--md-surface-dim);
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 12px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid rgba(128,128,128,0.1);
+        }
+        .md-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--md-on-surface);
+        }
+        .md-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+        .md-content table th {
+            background: var(--md-primary-container);
+            color: var(--md-on-surface);
+            font-weight: 600;
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--md-outline);
+        }
+        .md-content table td {
+            padding: 10px 12px;
+            border: 1px solid var(--md-outline);
+            color: var(--md-on-surface);
+        }
+        .md-content table tr:nth-child(even) {
+            background: var(--md-surface-dim);
+        }
+        .md-content img {
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            margin: 8px 0;
+        }
+        .md-content a {
+            color: var(--md-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--md-primary-light);
+        }
+        .md-content a:hover {
+            border-bottom-color: var(--md-primary);
+        }
+        .md-content hr {
+            border: none;
+            border-top: 1px solid var(--md-outline);
+            margin: 20px 0;
+            opacity: 0.3;
+        }
+        .md-content .badge {
+            display: inline-block;
+            background: var(--md-primary);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-right: 4px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            right: 20px;
+            max-width: 460px;
+            margin: 0 auto;
+            background: var(--md-surface);
+            border-radius: 40px;
+            padding: 14px 22px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            box-shadow: var(--md-elevation-3);
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(80px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .toast i { color: var(--md-primary); font-size: 20px; }
+        .toast span { font-size: 15px; }
+
+        @media (max-width: 500px) {
+            .top-bar { padding: 8px 10px; min-height: 50px; }
+            .top-bar .app-title { font-size: 17px; }
+            .top-bar .app-title i { font-size: 18px; }
+            .top-bar .menu-btn { font-size: 22px; }
+            .doc-content { padding: 12px 14px 20px; }
+            .sidebar { width: 260px; }
+            .sidebar .sidebar-nav .nav-item { padding: 10px 16px; font-size: 14px; }
+            .md-content h1 { font-size: 22px; }
+            .md-content h2 { font-size: 18px; }
+            .md-content h3 { font-size: 16px; }
+            .md-content p, .md-content li { font-size: 14px; }
+        }
+        @media (max-width: 380px) {
+            .top-bar .app-title { font-size: 15px; }
+            .top-bar .app-title i { font-size: 16px; }
+            .top-bar .menu-btn { font-size: 20px; }
+            .sidebar { width: 220px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page.active .doc-content {
+            animation: fadeInUp 0.3s ease;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+        }
+
+        input, textarea, select {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+
+        a, button, .nav-item, .sidebar-item, .fab-btn, .menu-btn {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+
+        button:focus, a:focus, input:focus, textarea:focus, select:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid var(--md-primary) !important;
+            outline-offset: 2px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="top-bar" id="mainTopBar">
+            <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+            <div class="app-title" id="appTitleClick"><i class="fas fa-map-pin"></i> LibrePin Docs</div>
+            <div class="header-actions">
+                <button class="theme-btn" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+                <select class="lang-select" id="langSelect">
+                    <option value="ca">Català</option>
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sidebar-overlay" id="sidebarOverlay">
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <span class="sidebar-logo"><i class="fas fa-map-pin"></i></span>
+                    <span class="sidebar-title">LibrePin Docs</span>
+                    <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="sidebar-search">
+                    <input type="text" id="sidebarSearch" placeholder="Cercar documentació...">
+                </div>
+                <div class="sidebar-nav" id="sidebarNav"></div>
+                <div class="sidebar-footer">
+                    <span>v1.0 · Docs</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="pages-container">
+            <div id="docsPage" class="page active">
+                <div class="doc-content" id="docContent">
+                    <div class="md-content" id="mdContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <button class="nav-item active" id="navHome"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" id="navSections"><i class="fas fa-list"></i><span>Sections</span></button>
+        </div>
+    </div>
+
+    <div id="toastMsg" class="toast"><i class="fas fa-info-circle"></i><span id="toastText"></span></div>
+
+    <script>
+        const APP_VERSION = '1.12';
+        const DEFAULT_LANG = 'ca';
+
+        // ---------- MARKDOWN CONTINGUT COMPLET EN CATALÀ ----------
+        const MD_CA = `# Introducció a LibrePin
+
+LibrePin és una aplicació web progressiva (PWA) per a la gestió de punts d'interès personalitzats en un mapa interactiu. Està dissenyada per ser lleugera, ràpida i funcional tant en dispositius mòbils com en escriptori; però encara més important, està dissenyada per a ser completament vostra.
+
+## Què és LibrePin?
+
+LibrePin et permet:
+
+- **Crear pins** personalitzats amb nom, descripció, imatge, etiquetes i valoració.
+- **Organitzar els teus llocs** en grups temàtics.
+- **Cercar al teu voltant o allò que t'interessa** amb un accés ràpid.
+- **Moure't per la ciutat** traçant rutes o amb l'ajuda del transport públic.
+- **Recordar allà on has estat** segons diferents modes (entorn, fora d'entorn, només favorits, transport).
+
+## Per què LibrePin i no altres?
+
+Perquè **LibrePin us pertany**. És una eina pensada per a vosaltres, per a la vostra manera de veure el món, feta per a qui vol construir el seu propi mapa sense imposicions ni contingut predeterminat. No hi ha res preestablert. Vosaltres decidiu què hi poseu, com ho organitzeu i cap a on voleu que creixi.
+
+No venim amb un catàleg de llocs ni us omplim la pantalla amb dades que no heu demanat. Som un espai en blanc, un llenç on cada pin, cada ruta i cada etiqueta és una decisió vostra, no un suggeriment d'un algoritme. Això vol dir que el mapa que creeu serà realment vostre: reflectirà les vostres vivències, els vostres records i la vostra manera d'entendre l'espai.
+
+Quan arrenqueu LibrePin per primera vegada, no hi ha res. Ni un sol pin, ni una ruta marcada, ni cap punt d'interès. El vostre mapa, les vostres regles. I aquest buit inicial no és un defecte: és la garantia que allò que construireu serà autèntic, personal i sense interferències externes. Sou vosaltres qui, a poc a poc, anireu donant forma al vostre propi mapa, sense distraccions, sense publicitat, sense marques que us diguin on anar.
+
+LibrePin és per a qui vol fer-ho tot pel seu compte. Per a qui prefereix un mapa fet a mà, a mida i que només contingui allò que realment li importa. Si us ve de gust crear, organitzar i decidir, aquesta és la vostra eina. La resta, us la deixem a vosaltres.
+
+## Requisits
+
+- Navegador web modern (Chrome, Firefox, Safari, Edge).
+- Connexió a Internet per carregar el mapa i les imatges.
+- Permís de geolocalització (opcional, per a la ubicació automàtica).
+- Creativitat per part de la persona usuària.
+
+## Com segueixo aquesta lectura?
+Aneu al menú lateral d'aquesta aplicació (**☰**) i trieu la secció que volgeu llegir o aneu per ordre.
+
+---
+
+# Instal·lació i Configuració Inicial
+
+## Com instal·lar LibrePin
+
+LibrePin és una aplicació web que no requereix cap procés d'instal·lació tradicional. Podeu accedir-hi directament des del vostre navegador, com a qualsevol altra pàgina web. No cal baixar apps de cap botiga ni concedir permisos especials.
+
+Tot i això, **recomanem instal·lar-la com a PWA** (aplicació web progressiva). Això vol dir que la web s'instal·larà al vostre dispositiu com si fos una aplicació nativa: apareixerà a la pantalla d'inici del vostre telèfon, tauleta o ordinador, amb la seva pròpia icona, i s'obrirà a pantalla completa, sense les barres del navegador, oferint-vos una experiència més immersiva i ràpida.
+
+### Com instal·lar-la com a PWA
+
+La majoria de navegadors moderns inclouen una opció per instal·lar pàgines web com a aplicacions. El procediment és senzill i només us portarà uns segons:
+
+1. **Obriu LibrePin** al vostre navegador preferit (Chrome, Edge, Safari, Firefox, etc.).
+2. **Localitzeu l'opció d'instal·lació** al menú del navegador:
+   - A **Chrome** (Android/ordinador): toqueu els tres punts verticals ⋮ a la part superior dreta i seleccioneu **"Instal·la l'aplicació"** o **"Crea una drecera"**.
+   - A **Safari** (iPhone/iPad): toqueu la icona de compartir (quadrat amb fletxa) i seleccioneu **"Afegeix a la pantalla d'inici"**.
+   - A **Firefox** (Android): toqueu els tres punts ⋮ i seleccioneu **"Afegeix a la pantalla d'inici"**.
+3. **Confirmeu la instal·lació** i, si el navegador us ho permet, podeu canviar el nom de la drecera abans de desar-la.
+4. A partir d'aquest moment, trobareu la icona de **LibrePin** a la pantalla d'inici del vostre dispositiu, juntament amb la resta d'aplicacions.
+
+### Avantatges d'instal·lar-la com a PWA
+
+- **Accés ràpid**: la icona roman sempre a la pantalla d'inici, com qualsevol altra app.
+- **Pantalla completa**: s'executa sense les barres del navegador, aprofitant al màxim l'espai.
+- **Funciona sense connexió** (parcialment): un cop carregada, podeu consultar el mapa i els pins que ja heu visitat, fins i tot sense Internet (tot i que el mapa necessita connexió per carregar les imatges).
+- **Actualitzacions automàtiques**: sempre tindreu l'última versió, sense necessitat de baixar res manualment.
+
+### Instal·lació tradicional (sense PWA)
+
+Si preferiu no instal·lar-la com a PWA, simplement afegiu l'enllaç a les adreces d'interès del vostre navegador o obriu-la directament des de la barra d'adreces cada cop que vulgueu utilitzar-la. No cal cap altre pas.
+
+> **Nota**: La instal·lació com a PWA és completament opcional i no afecta el funcionament de l'aplicació. Podeu utilitzar LibrePin indistintament des del navegador o des de la drecera instal·lada, ja que les dades es comparteixen entre ambdues.
+
+# Navegació i Interfície d'Usuari
+
+## Barra superior
+
+La barra superior conté els elements principals de navegació:
+
+- **Menú lateral** (☰): Obre la barra lateral amb accés ràpid a Recents, Mode, Llegendes, Studio, Ajuda i Arranjament.
+- **Títol "LibrePin"**: Fent clic retorna al mapa.
+- **Icona de perfil**: Mostra la foto de perfil i l'estat del mode actual. Fent clic accedeix al perfil.
+
+## Barra lateral
+
+Des de la barra lateral podeu accedir a:
+
+| Opció | Descripció |
+|-------|------------|
+| **Recents** | Veure els últims 50 pins visitats. |
+| **Mode de visualització** | Canviar entre els modes de visualització. |
+| **Llegendes de línies** | Gestionar les línies dibuixades al mapa. |
+| **Studio** | Accés a funcions avançades (requereix precaució). |
+| **Ajuda / Tutorial** | Obre la guia d'usuari. |
+| **Arranjament** | Accedeix a tots els ajustos de l'app. |
+
+### Marcatge ràpid
+
+A la barra lateral, just sota el nom d'usuari, hi ha la secció de **Marcatge ràpid**. Aquesta funcionalitat permet:
+
+- Guardar una cerca ràpida amb un botó personalitzat.
+- Assignar un títol, icona i text de cerca.
+
+Per utilitzar-lo:
+1. Feu clic al botó **+** per crear un nou marcatge ràpid.
+2. Definiu un títol, icona (URL) i el text a cercar.
+3. Des de la barra lateral, feu clic al marcatge per executar la cerca automàticament.
+
+## Barra inferior
+
+La barra inferior permet canviar entre les quatre vistes principals:
+
+| Icona | Pestanya | Descripció |
+|-------|----------|------------|
+| 🗺️ | **Mapa** | Visualització principal del mapa amb tots els pins. |
+| 🔍 | **Buscar** | Cerca de pins per nom, subtítol o etiquetes. |
+| 📚 | **Grups** | Gestió de grups de pins temàtics. |
+| ❤️ | **Preferits** | Llista de pins marcats com a preferits. |
+
+## Pàgina de detall del pin
+
+Quan feu clic a un pin, s'obre una pàgina de detall amb:
+
+- **Imatge** del pin (si n'hi ha).
+- **Nom** i **subtítol**.
+- **Valoració** (estrelles).
+- **Descripció**.
+- **Serveis de transport** (si és una parada).
+- **Botons personalitzats** (si s'han definit).
+- **Ressenya**.
+- **Pins relacionats** (si se n'han assignat).
+- **Accions**: "Ves-hi", "Consultar horari", "Escoltar en veu alta", "Veure al mapa", "Traçar una ruta", "Vegeu també".
+
+---
+
+# Gestió de Pins
+
+## Què és un pin?
+
+Un pin és un punt d'interès que pots afegir al mapa. Cada pin pot contenir:
+
+| Camp | Descripció | Obligatori |
+|------|------------|------------|
+| **Nom** | Títol del pin. | ✅ Sí |
+| **Subtítol** | Breu descripció addicional (màx 100 caràcters). | ❌ No |
+| **Descripció** | Text llarg amb informació detallada. | ❌ No |
+| **Etiquetes** | Paraules clau separades per comes. | ❌ No |
+| **Imatge** | URL d'una imatge per al pin. (No es permet pujar un fitxer, parlem d'això més endavant.) | ❌ No |
+| **Coordenades** | Latitud i longitud (s'obtenen automàticament si es crea des del mapa, no ho ompliu a mà si no s'escau). | ✅ Sí |
+| **Valoració** | De 1 a 5 estrelles. | ❌ No |
+| **Ressenya** | Títol (màx 50 caràcters) i text lliure. | ❌ No |
+| **Botons personalitzats** | Enllaços amb text personalitzat. | ❌ No |
+| **Parada de transport** | Marca el pin com a parada de transport públic. | ❌ No |
+| **Serveis** | Servei de transport que hi circula. | ❌ No |
+| **Enllaços d'horari** | URL per consultar horaris. | ❌ No |
+| **MP3** | URL d'un àudio per reproduir. (Només si és una parada) | ❌ No |
+| **Pins relacionats** | Altres pins vinculats. | ❌ No |
+| **Fora de l'entorn** | Marca el pin com a fora de l'entorn per defecte. | ❌ No |
+
+### Obtenció d'URLs d'imatges
+Dirigiu-vos a la secció dedicada a això des de la barra lateral d'aquest lloc web.
+
+
+## Crear un pin
+
+### Des del mapa
+1. Feu clic en qualsevol punt del mapa.
+2. Apareixerà un botó "Afegir" a la part inferior.
+3. Feu clic per obrir el diàleg de creació.
+4. Ompliu els camps i deseu.
+
+## Editar un pin
+
+1. Obre en detall el pin.
+2. Fes clic a la icona ✏️ (editar) a la barra superior.
+3. Modifica els camps que vulguis.
+
+## Eliminar un pin
+
+1. Obre el detall del pin.
+2. Fes clic a la icona 🗑️ (eliminar) a la barra superior.
+3. Confirma l'eliminació.
+
+## Duplicat de pins
+
+L'aplicació comprova que no hi hagi dos pins amb el mateix nom i coordenades. Si intenteu crear-ne un de duplicat, rebreu un avís.
+
+---
+
+# Gestió de Grups
+
+## Què és un grup?
+
+Un grup és una col·lecció temàtica de pins. Et permet organitzar els teus pins per categories (ex: "Restaurants", "Museus", "Transport", etc.). També pot servir pet categoritzar x marca de supermercats o agrupar tots els pins d'un centre comercial.
+
+## Crear un grup
+
+1. Ves a la pestanya **Grups** (📚) a la barra inferior.
+2. Fes clic al botó **"Crear grup"**.
+3. Omple les dades del grup:
+   - **Nom** (obligatori).
+   - **Color d'accent** (per identificar el grup).
+   - **URL de la icona** (opcional).
+   - **Descripció** (opcional).
+   - **Pins que en formen part**: Selecciona els pins que pertanyen al grup.
+4. Fes clic a **Guardar**.
+
+## Gestionar grups
+
+- **Veure grups**: A la pestanya Grups veuràs tots els grups creats.
+- **Cercar grups**: Utilitza el camp de cerca per filtrar per nom.
+- **Accedir a un grup**: Fes clic a una targeta de grup per obrir-ne el detall.
+
+## Detall d'un grup
+
+Quan obres un grup, pots:
+
+- **Veure els pins** que en formen part.
+- **Ordenar els pins** del grup (per recent, valoració, alfabètic o distància).
+- **Editar el grup**: Modificar nom, color, icona, descripció o pins associats.
+- **Eliminar el grup**: Confirma l'eliminació.
+
+## Ordenar pins d'un grup
+
+Fes clic a la icona d'ordenació (⇅) al detall del grup per alternar entre:
+
+| Mode | Descripció |
+|------|------------|
+| **Recent** | Per data d'última visita. |
+| **Valoració** | De més alta a més baixa. |
+| **Alfabètic** | Per nom de la A a la Z. |
+| **Distància** | Més a prop de la teva ubicació (requereix GPS). |
+
+## Vegeu també
+
+Si un pin pertany a un o més grups, al detall del pin apareixerà el botó **"Vegeu també"**. Fent-hi clic es mostra un pop-up amb els grups als quals pertany, i pots accedir-hi directament.
+
+---
+
+# Cerca i Preferits
+
+## Cerca de pins
+
+La funcionalitat de cerca permet trobar pins de manera ràpida i eficient.
+
+### Com cercar
+
+1. Aneu a la pestanya **Buscar** (🔍) a la barra inferior.
+2. Teclegeu almenys 2 caràcters al camp de cerca.
+3. Els resultats es mostraran automàticament.
+
+### Què es busca
+
+La cerca es realitza sobre:
+- **Nom** del pin.
+- **Subtítol** del pin.
+- **Etiquetes** (tags) assignades.
+
+### Ordenar resultats
+
+Un cop feta una cerca, podeu ordenar els resultats fent clic a la icona d'ordenació. Els modes disponibles són:
+
+| Mode | Descripció |
+|------|------------|
+| **Últim vist** | Per data d'última visita. |
+| **Puntuació** | De més alta a més baixa. |
+| **Alfabètic** | Per nom de la A a la Z. |
+| **Més a prop** | Per distància a la teva ubicació (requereix GPS). |
+
+> **Nota**: El mode d'ordenació s'aplica també a la llista de preferits.
+
+### Carregar més resultats
+
+Si hi ha més de 25 resultats, apareixerà un botó "Carregar més" al final de la llista.
+
+## Preferits
+
+Els preferits et permeten marcar pins per a un accés ràpid.
+
+### Afegir un pin a preferits
+
+1. Obriu el detall del pin.
+2. Feu clic a la icona ❤️ (cor) a la barra superior.
+3. El cor es tornarà groc i el pin s'afegirà a la llista de preferits.
+
+### Veure els preferits
+
+1. Aneu a la pestanya **Preferits** (❤️) a la barra inferior.
+2. Veureu la llista de tots els pins marcats com a preferits.
+3. Podeu ordenar la llista fent clic al botó **"Ordenar"**.
+
+### Indicador de preferit
+
+Els pins que són preferits mostren un cor groc a la cantonada superior dreta a les vistes de:
+- Cerca.
+- Grups.
+- Llista de preferits.
+
+---
+
+# Modes de Visualització
+
+LibrePin disposa de quatre modes de visualització que permeten filtrar els pins mostrats al mapa i a les llistes.
+
+## Accés als modes
+
+Podeu canviar de mode de dues maneres:
+1. **Barra lateral**: Opció "Mode de visualització".
+2. **Barra de cerca**: Des de la cerca, fent clic a la icona 👁️.
+
+## Modes disponibles
+
+### 1. El meu entorn (🏠)
+
+- **Descripció**: Mostra només els pins del teu entorn.
+- **Com funciona**: Filtra els pins que tenen la marca "Fora del meu entorn" desactivada.
+- **Indicador**: Punt verd a la icona de perfil.
+
+### 2. Fora del meu entorn (🌴)
+
+- **Descripció**: Mostra tots els pins, inclosos els de fora del teu entorn.
+- **Com funciona**: No aplica cap filtre d'entorn.
+- **Indicador**: Punt taronja a la icona de perfil.
+
+### 3. No destorbar (🌙)
+
+- **Descripció**: Mostra només els pins marcats com a preferits.
+- **Com funciona**: Filtra els pins que no són preferits.
+- **Indicador**: Punt vermell a la icona de perfil.
+
+### 4. Només transport (🚌)
+
+- **Descripció**: Mostra només les parades de transport públic.
+- **Com funciona**: Filtra els pins que no tenen la marca "És una parada de transport públic" activada.
+- **Indicador**: Punt blau a la icona de perfil.
+
+## Efectes del mode en altres funcions
+
+- **Cerca**: Només es mostren resultats dels pins visibles en el mode actual.
+- **Grups**: Només es mostren pins visibles dins dels grups.
+- **Recents**: Només es mostren pins visibles.
+- **Preferits**: En mode "No destorbar", només es mostren preferits (ja ho són per definició).
+
+---
+
+# Llegendes i Línies
+
+## Què són les línies?
+
+Les línies et permeten dibuixar rutes o traçats al mapa. Són útils per a:
+- Marcar un itinerari.
+- Indicar una ruta de transport com ara el metro o trens de rodalia.
+- Dibuixar un poligon per marcar una zona.
+
+## Crear una línia
+
+1. Aneu a **Arranjament** → **Línies**
+2. Feu clic a **"Afegir línia"**.
+3. Ompliu les dades:
+   - **Nom** (obligatori).
+   - **URL de la icona (PNG)** (opcional).
+   - **Color** (selector de color).
+   - **Gruix (px)**: Entre 2 i 12 píxels.
+   - **Punts**: Llista de coordenades separades per \`;\` (ex: \`41.3851,2.1734;41.3861,2.1744\`).
+4. Feu clic a **OK** per guardar.
+
+> **Important**: Cal afegir almenys 2 punts perquè la línia es pugui dibuixar.
+
+## Gestionar línies
+
+### Des de la llista de línies (Arranjament → Línies)
+
+- **Arrossegar** per reordenar.
+- **Editar** (✏️) per modificar les dades.
+- **Eliminar** (🗑️) per esborrar la línia.
+
+### Des de la pàgina de Llegendes
+
+1. Aneu a **Barra lateral** → **Llegendes de línies**.
+2. Veureu totes les línies creades.
+3. Podeu:
+   - **Mostrar/Amagar** una línia individual (checkbox).
+   - **Mostrar/Amagar totes** amb el commutador de la part superior.
+   - **Editar línies** (botó "Editar línies").
+   - **Centrar el mapa** en una línia fent clic a la targeta (s'ha de mostrar al mapa).
+
+## Visibilitat de les línies
+
+- El commutador **"Mostrar línies"** a la pàgina de Llegendes controla si totes les línies són visibles al mapa.
+- Cada línia té la seva pròpia visibilitat individual (checkbox).
+- Les línies es mostren per ordre invers (la més recent a sobre).
+
+## Detall de la línia al mapa
+
+Quan una línia és visible:
+- Es dibuixa amb el color i el gruix especificats.
+- Fent clic a la targeta de la línia a la pàgina de Llegendes, el mapa s'ajusta per mostrar-la completament.
+
+---
+
+# Arranjament
+
+L'apartat d'arranjament conté totes les opcions de personalització i gestió de dades.
+
+## Accés a l'arranjament
+
+Des de la **barra lateral** (☰) selecciona **"Arranjament"**.
+
+## Seccions d'arranjament
+
+### 1. Perfil
+
+Gestioneu les vostres dades :
+- **Nom d'usuari**.
+- **URL de la foto de perfil**.
+- **Pronoms** (màx 50 caràcters).
+- **Subtítol**.
+> **Important**: Aquesta informació **NO** es comparteix amb altres usuaris ni amb cap desenvolupador.
+
+Accions addicionals:
+- **Exportar dataset**: Descarrega totes les dades en un fitxer JSON.
+- **Importar dataset**: Carrega un fitxer JSON amb dades prèviament exportades.
+- **Esborrar totes les dades**: Elimina tot el contingut (pins, grups, línies, etc.).
+> **Nota**: Es parla de la gestió de dades més endavant.
+
+### 2. Posició
+
+Configureu la posició inicial del mapa:
+- **System GPS**: Utilitza la ubicació del dispositiu.
+- **Ciutats predefinides**: Trieu entre les diferents ciutats
+
+### 3. Aparença
+
+Personalitzeu l'aspecte visual de l'aplicació:
+- **Tema**: Clar o fosc.
+- **Color d'accent**: Trieu entre 12 colors predefinits.
+- **Agrupació de pins**: Activar/desactivar l'agrupació (clústers).
+
+> **Advertència**: Desactivar l'agrupació pot causar un rendiment més lent amb molts pins.
+
+### 4. Idioma
+
+Canvia l'idioma de tota la IU.
+
+> **Nota**: El canvi d'idioma requereix recarregar l'aplicació.
+
+### 5. Serveis de transport
+
+Gestioneu els serveis de transport que es poden assignar als pins:
+- **Afegir servei**: Nom i URL de la icona.
+- **Editar servei**: Modificar nom o icona.
+- **Eliminar servei**: Esborrar el servei.
+- **Arrossegar** per reordenar.
+
+### 6. Recents
+
+Mostra els últims 50 pins visitats.
+
+### 7. Línies
+
+Gestió de línies (veure secció anterior dedicada).
+
+### 8. Recarregar app
+
+Reinicieu l'aplicació sense perdre dades. Útil per aplicar canvis que requereixen una recàrrega o per solucionar problemes.
+
+### 9. Quant a
+
+Informació de l'aplicació: versió, descripció i altres.
+
+## Canvis que requereixen recàrrega
+
+Alguns ajustaments requereixen recarregar l'aplicació per aplicar els canvis:
+- Canvi d'idioma.
+- Canvi de color d'accent.
+- Activació/desactivació d'agrupació de pins.
+
+Quan es facin aquests canvis, es mostrarà una pantalla de recàrrega obligatòria.
+
+---
+
+# Obtenció d'URLs d'imatges
+
+Per afegir una imatge a un pin, necessiteu una URL pública que apunti directament al fitxer d'imatge. Aquesta URL ha de ser accessible des de qualsevol dispositiu i acabar habitualment amb extensions com \`.jpg\`, \`.png\`, \`.webp\` o \`.gif\`.
+
+### Com obtenir una URL d'imatge
+Per obtenir els enllaços d'imatges és recomanable fer-ho des de un equip d'escriptori, però en dispositius mòbils també és possible.
+
+Hi ha diverses maneres d'obtenir una URL d'imatge per als vostres pins:
+
+**1. Imatges pròpies allotjades al núvol**
+
+-   Pujau les vostres imatges a serveis com **Google Fotos**, **iCloud**, **Dropbox** o **OneDrive**.
+-   Activeu l'opció de compartir i obteniu l'enllaç públic. Assegureu-vos que l'enllaç apunti directament a la imatge (no a la pàgina de visualització).
+-   Per a Google Fotos, heu de crear un àlbum compartit i obtenir l'URL de cada imatge individual.
+
+**2. Plataformes d'allotjament d'imatges**
+
+-   Serveis com **Imgur**, **Postimages**, **TinyPic** o **ImageShack** us permeten pujar imatges gratuïtament i obtenir-ne una URL directa.
+-   Pujau la imatge, copieu l'enllaç directe (normalment marcat com a "Direct Link" o "URL de la imatge") i enganxeu-lo al camp corresponent.
+
+**3. Xarxes socials**
+
+-   Podeu obtenir l'URL d'una imatge publicada a **Instagram**, **Facebook** o **Twitter**.
+-   Obriu la imatge en una pestanya nova i copieu l'URL de la barra d'adreces. En alguns casos, haureu de buscar l'opció "Obrir imatge a una finestra nova".
+
+**4. Cerca d'imatges**
+
+-   Cerqueu la imatge que us interessa a **Google Imatges** o **Bing Images**.
+-   Obriu la imatge a mida completa i copieu l'URL de la barra d'adreces. Assegureu-vos que la imatge no tingui drets d'autor si l'utilitzeu per a ús públic.
+
+### Consells pràctics
+
+-   **Eviteu URLs curtes** o escurçadores com [bit.ly](https://bit.ly/), ja que no sempre funcionen correctament.
+-   **Comproveu que l'URL funciona** obrint-la en una pestanya incògnit del navegador. Si la imatge es carrega, l'URL és vàlida.
+-   **Preferiu imatges quadrades** o amb una relació d'aspecte propera a 1:1 per a una millor visualització a les targetes dels pins.
+-   La mida recomanada per a les imatges és d'entre 200x200 i 800x800 píxels per equilibrar qualitat i velocitat de càrrega.
+
+### Ús de la funció "Reciclar imatge"
+LibrePin inclou una funció que us permet reutilitzar imatges que ja heu utilitzat en altres pins. Així estalvieu temps i eviteu duplicar enllaços. La trobareu al diàleg de creació/edició del pin, fent clic a la icona de les imatges (🔄).
+
+---
+
+# Altres preguntes
+
+## Generals
+
+### Què és LibrePin?
+LibrePin és una aplicació web per gestionar punts d'interès personalitzats en un mapa interactiu. Permet crear, organitzar i visualitzar pins amb informació detallada.
+
+### És gratuït?
+Sí, LibrePin és completament gratuït i de codi obert.
+
+### Necessito instal·lar alguna cosa?
+No, només necessites un navegador web modern. L'aplicació funciona directament des del navegador. Instal·lar-la com a PWA és totalment opcional i no retalla cap funció no fer-ho.
+
+### Les meves dades són segures?
+Les dades s'emmagatzemen localment al teu navegador (LocalStorage). Ningú més pot accedir-hi tret que comparteixis el fitxer d'exportació. Els desenvolupadors no tenen cap possibilitat de consultar les dades.
+
+---
+
+# Dades i Persistència
+
+La gestió de les dades és un dels aspectes centrals de LibrePin. Entendre com es guarden, com es poden transferir i com es protegeixen us ajudarà a treure'n el màxim profit i a utilitzar l'aplicació amb tranquil·litat.
+
+---
+
+## On es guarden les meves dades?
+
+Totes les dades que genereu a LibrePin (pins, grups, línies, preferits, marcatges ràpids, etc.) s'emmagatzemen **exclusivament al LocalStorage del vostre navegador**. Això vol dir que:
+
+- Les dades **no es perden** en tancar la pestanya o el navegador.
+- Les dades **no s'envien a cap servidor extern**. Ni nosaltres ni cap tercera part hi tenim accés.
+- Les dades són **específiques del navegador i del dispositiu** on feu servir l'aplicació. Si obriu LibrePin des d'un altre navegador o dispositiu, veureu un mapa buit (llevat que importeu les dades).
+
+> **Important**: El LocalStorage té una capacitat limitada (normalment entre 5 i 10 MB per domini). Si treballeu amb moltes imatges o pins, us recomanem fer còpies de seguretat periòdiques.
+
+---
+
+## Com faig una còpia de seguretat?
+
+Fer còpies de seguretat és senzill i us permet recuperar les dades si canvieu de dispositiu, de navegador, o si voleu compartir el vostre mapa amb algú altre.
+
+1. Accediu a **Arranjament** → **Perfil**.
+2. Feu clic al botó **"Exportar dataset"**.
+3. El navegador us descarregarà automàticament un fitxer amb extensió \`.json\` que conté totes les dades de l'aplicació.
+4. Guardeu aquest fitxer en un lloc segur (ordinador, núvol, disc extern, etc.).
+
+El fitxer JSON conté tota la informació: pins, grups, línies, preferits, serveis de transport, marcatges ràpids, configuració de l'aparença, idioma, i fins i tot les vostres dades de perfil.
+
+---
+
+## Com restauro una còpia de seguretat?
+
+Si heu exportat prèviament les vostres dades, podeu restaurar-les en qualsevol moment:
+
+1. Accediu a **Arranjament** → **Perfil**.
+2. Feu clic al botó **"Importar dataset"**.
+3. Seleccioneu el fitxer \`.json\` que teníeu guardat.
+4. L'aplicació us mostrarà una previsualització de les dades (nom de perfil, nombre de pins, etc.).
+5. Després d'una espera de 5 segons, podreu confirmar la importació.
+6. Un cop importades, l'aplicació es recarregarà automàticament per aplicar els canvis. **En cas que no ho faci, tanqueu i torneu a obrir LibrePin manualment.**
+
+> **Advertència**: La importació **sobreescriu totes les dades actuals**. Si teniu dades al dispositiu que no voleu perdre, assegureu-vos de fer una còpia de seguretat abans d'importar.
+
+---
+
+## Puc esborrar totes les dades?
+
+Sí, si voleu començar de zero o alliberar espai al LocalStorage:
+
+1. Accediu a **Arranjament** → **Perfil**.
+2. Feu clic al botó **"Esborrar totes les dades"** (en vermell).
+3. Confirmeu l'acció al diàleg de confirmació.
+
+> **ATENCIÓ**: Aquesta acció **no es pot desfer**. Tots els pins, grups, línies, preferits i configuracions s'eliminaran permanentment. Assegureu-vos de tenir una còpia de seguretat abans de procedir.
+
+---
+
+## Com puc compartir les meves dades?
+
+LibrePin us permet compartir el vostre mapa d'aquesta manera:
+
+### Compartir el fitxer d'exportació
+- Exporteu les dades com a JSON (vegeu "Com faig una còpia de seguretat?").
+- Envieu el fitxer per correu electrònic, Drive, Telegram, etc.
+- La persona receptora pot importar el fitxer des del seu LibrePin i veure el vostre mapa.
+
+---
+
+## Què passa si canvio de navegador o dispositiu?
+
+Les dades no es sincronitzen automàticament entre dispositius. Per traslladar el vostre mapa a un altre navegador o dispositiu:
+
+1. Exporteu les dades des del dispositiu original (Arranjament → Perfil → Exportar dataset).
+2. Transferiu el fitxer \`.json\` al nou dispositiu (per correu, USB, núvol, etc.).
+3. Obriu LibrePin al nou dispositiu i importeu el fitxer.
+
+D'aquesta manera, el vostre mapa estarà disponible allà on aneu.
+
+---
+
+## Consells de seguretat
+
+- **Feu còpies de seguretat periòdiques**, sobretot si afegiu molts pins o si hi dediqueu temps a organitzar-los.
+- **Guardeu el fitxer JSON en un lloc segur**, ja que conté totes les vostres dades.
+- **No compartiu el fitxer JSON amb persones desconegudes** si conté informació sensible.
+- Si treballeu en un dispositiu compartit, recordeu esborrar les dades o tancar la sessió del navegador després d'usar LibrePin.
+
+---
+
+
+# Resolució de problemes
+
+De tant en tant, poden sorgir petites incidències. No us preocupeu, la majoria tenen solució ràpida. Aquí us deixem les més habituals i com abordar-les:
+
+## El mapa no es carrega
+
+-   Comproveu la connexió a Internet. El mapa necessita accés a la xarxa per carregar les imatges i les dades cartogràfiques.
+-   Recarregueu l'aplicació des de **Arranjament → Recarregar app**. Això refresca l'estat sense perdre cap dada.
+-   Si persisteix, proveu de netejar la memòria cau del navegador (Ctrl+F5 o Cmd+Shift+R). De vegades, una recàrrega forçada soluciona problemes de caché.
+
+## Els pins no es mostren
+
+-   Verifiqueu el **mode de visualització** actiu. Si esteu en mode "El meu entorn", només es mostren els pins que no estan marcats com a "Fora de l'entorn". Si esteu en mode "No destorbar", només es mostren els preferits.
+-   Comproveu que els pins no estiguin filtrats per cap altre criteri.
+-   Si tot sembla correcte, recarregueu l'aplicació per refrescar l'estat.
+
+## La ubicació GPS no funciona
+
+-   Assegureu-vos que heu concedit permís de geolocalització al navegador. Normalment, el navegador us ho demana en obrir l'aplicació per primera vegada.
+-   Proveu de seleccionar una ciutat manualment des de **Arranjament → Posició**. Això us permetrà situar el mapa encara que el GPS no estigui disponible.
+-   Comproveu la senyal GPS del vostre dispositiu. Si sou en interiors o en zones amb poca cobertura, pot ser que el dispositiu trigui a obtenir la ubicació.
+
+## L'aplicació va lenta
+
+-   Desactiveu l'agrupació de pins a **Arranjament → Aparença → No agrupar els pins**. Això pot millorar el rendiment si teniu molts pins, però tingueu en compte que pot alentir el mapa si n'hi ha massa.
+-   Reduïu el nombre de pins visibles canviant de mode de visualització o eliminant pins que ja no us siguin útils.
+-   Tanqueu altres pestanyes o aplicacions que puguin estar consumint recursos del dispositiu.
+
+## Els canvis no s'apliquen
+
+-   Alguns ajustaments requereixen recarregar l'aplicació per aplicar-se completament: canvi d'idioma, canvi de color d'accent, o activació/desactivació de l'agrupació de pins. L'aplicació us ho notificarà i es recarregarà automàticament en aquests casos.
+-   Si heu fet un canvi i no es reflecteix, proveu de recarregar manualment l'aplicació des de **Arranjament → Recarregar app**.
+
+## He perdut les dades
+
+-   Si teníeu una còpia de seguretat prèvia, podeu restaurar-la des de **Perfil → Importar dataset**.
+-   Si no en teníeu, les dades s'han perdut permanentment, ja que s'emmagatzemen exclusivament al LocalStorage del vostre navegador i no es guarden en cap servidor extern.
+-   Per a futures ocasions, us recomanem fer còpies de seguretat periòdiques des de **Perfil → Exportar dataset**.
+
+## Heu detectat un error que no apareix aquí?
+
+Si heu trobat un problema que no està cobert en aquesta llista, podeu obrir una incidència al repositori de GitHub de LibrePin. Descriviu el pas a pas per reproduir l'error i, si és possible, adjunteu una captura de pantalla. Així ens ajudaràs a millorar l'aplicació per a tothom.
+
+---
+
+# LibrePin Studio
+LibrePin Studio serà una suite d'eines avançades dissenyada per a aquells que volen un control total sobre el seu dataset. Està pensada per a usuaris molt actius que gestionen grans volums de dades i necessiten funcionalitats com ara neteja massiva, anàlisi estadística, reorganització en bloc o exportacions avançades. No està recomanada per a usuaris novells, ja que requereix certa familiaritat amb l'estructura de dades i les operacions en lot.
+
+De moment, estem treballant en el seu desenvolupament i aviat compartirem més detalls sobre les funcionalitats que incorporarà. Us demanem paciència i us animem a seguir-nos per estar al dia de les novetats. Mentre arriba, podeu continuar gaudint de LibrePin i aprofitar al màxim les eines actuals.
+
+---
+
+# Abans d'acabar
+Vaig crear LibrePin perquè volia una eina que em permetés construir el meu propi mapa, sense intermediaris, sense marques i sense contingut imposat. Després d'utilitzar d'aplicacions que et diuen on has d'anar, què has de visitar i com has d'organitzar els teus llocs, vaig decidir que la millor manera de tenir el control era fer-ho jo mateixa. LibrePin neix d'aquesta necessitat: un mapa que sigui realment teu, on cada pin sigui una decisió conscient, no una suggerència d'un algoritme.
+
+Però LibrePin no és només el meu projecte; és per a vosaltres. És per a aquells que, com jo, volen documentar els seus descobriments, guardar els seus records i organitzar els seus desplaçaments al seu ritme, sense pressa i sense distraccions. És per a qui prefereix un mapa fet a mà, a mida, que creixi amb ells i que només contingui allò que realment els importa. **Gràcies per fer-lo vostre**, per omplir-lo de vida i per acompanyar-me en aquest viatge. Que el vostre mapa sigui tan gran com la vostra curiositat.`;
+
+        const MD_ES = `# Introducción a LibrePin
+
+LibrePin es una aplicación web progresiva (PWA) para la gestión de puntos de interés personalizados en un mapa interactivo. Está diseñada para ser ligera, rápida y funcional tanto en dispositivos móviles como en ordenadores; pero aún más importante, está diseñada para ser completamente tuya.
+
+## ¿Qué es LibrePin?
+
+LibrePin te permite:
+
+- **Crear pins** personalizados con nombre, descripción, imagen, etiquetas y valoración.
+- **Organizar tus lugares** en grupos temáticos.
+- **Buscar en tu entorno o aquello que te interesa** con un acceso rápido.
+- **Moverte por la ciudad** trazando rutas o con la ayuda del transporte público.
+- **Recordar dónde has estado** según diferentes modos (entorno, fuera de entorno, solo favoritos, transporte).
+
+## ¿Por qué LibrePin y no otras?
+
+Porque **LibrePin te pertenece**. Es una herramienta pensada para ti, para tu manera de ver el mundo, hecha para quien quiere construir su propio mapa sin imposiciones ni contenido predeterminado. No hay nada preestablecido. Tú decides qué pones, cómo lo organizas y hacia dónde quieres que crezca.
+
+No venimos con un catálogo de lugares ni te llenamos la pantalla con datos que no has pedido. Somos un espacio en blanco, un lienzo donde cada pin, cada ruta y cada etiqueta es una decisión tuya, no una sugerencia de un algoritmo. Esto significa que el mapa que crees será realmente tuyo: reflejará tus vivencias, tus recuerdos y tu manera de entender el espacio.
+
+Cuando arrancas LibrePin por primera vez, no hay nada. Ni un solo pin, ni una ruta marcada, ni ningún punto de interés. Tu mapa, tus reglas. Y este vacío inicial no es un defecto: es la garantía de que lo que construyas será auténtico, personal y sin interferencias externas. Eres tú quien, poco a poco, irás dando forma a tu propio mapa, sin distracciones, sin publicidad, sin marcas que te digan a dónde ir.
+
+LibrePin es para quien quiere hacerlo todo por su cuenta. Para quien prefiere un mapa hecho a mano, a medida y que solo contenga aquello que realmente le importa. Si te apetece crear, organizar y decidir, esta es tu herramienta. El resto, te lo dejamos a ti.
+
+## Requisitos
+
+- Navegador web moderno (Chrome, Firefox, Safari, Edge).
+- Conexión a Internet para cargar el mapa y las imágenes.
+- Permiso de geolocalización (opcional, para la ubicación automática).
+- Creatividad por parte de la persona usuaria.
+
+## ¿Cómo sigo esta lectura?
+Ve al menú lateral de esta aplicación (**☰**) y elige la sección que quieras leer o ve en orden.
+
+---
+
+# Instalación y Configuración Inicial
+
+## Cómo instalar LibrePin
+
+LibrePin es una aplicación web que no requiere ningún proceso de instalación tradicional. Puedes acceder a ella directamente desde tu navegador, como cualquier otra página web. No necesitas descargar apps de ninguna tienda ni conceder permisos especiales.
+
+Sin embargo, **recomendamos instalarla como PWA** (aplicación web progresiva). Esto significa que la web se instalará en tu dispositivo como si fuera una aplicación nativa: aparecerá en la pantalla de inicio de tu teléfono, tableta u ordenador, con su propio icono, y se abrirá a pantalla completa, sin las barras del navegador, ofreciéndote una experiencia más inmersiva y rápida.
+
+### Cómo instalarla como PWA
+
+La mayoría de navegadores modernos incluyen una opción para instalar páginas web como aplicaciones. El procedimiento es sencillo y solo te llevará unos segundos:
+
+1. **Abre LibrePin** en tu navegador preferido (Chrome, Edge, Safari, Firefox, etc.).
+2. **Localiza la opción de instalación** en el menú del navegador:
+   - En **Chrome** (Android/ordenador): toca los tres puntos verticales ⋮ en la parte superior derecha y selecciona **"Instalar la aplicación"** o **"Crear un acceso directo"**.
+   - En **Safari** (iPhone/iPad): toca el icono de compartir (cuadrado con flecha) y selecciona **"Añadir a la pantalla de inicio"**.
+   - En **Firefox** (Android): toca los tres puntos ⋮ y selecciona **"Añadir a la pantalla de inicio"**.
+3. **Confirma la instalación** y, si el navegador te lo permite, puedes cambiar el nombre del acceso directo antes de guardarlo.
+4. A partir de este momento, encontrarás el icono de **LibrePin** en la pantalla de inicio de tu dispositivo, junto con el resto de aplicaciones.
+
+### Ventajas de instalarla como PWA
+
+- **Acceso rápido**: el icono permanece siempre en la pantalla de inicio, como cualquier otra app.
+- **Pantalla completa**: se ejecuta sin las barras del navegador, aprovechando al máximo el espacio.
+- **Funciona sin conexión** (parcialmente): una vez cargada, puedes consultar el mapa y los pins que ya has visitado, incluso sin Internet (aunque el mapa necesita conexión para cargar las imágenes).
+- **Actualizaciones automáticas**: siempre tendrás la última versión, sin necesidad de descargar nada manualmente.
+
+### Instalación tradicional (sin PWA)
+
+Si prefieres no instalarla como PWA, simplemente añade el enlace a los favoritos de tu navegador o ábrela directamente desde la barra de direcciones cada vez que quieras utilizarla. No necesitas ningún otro paso.
+
+> **Nota**: La instalación como PWA es completamente opcional y no afecta al funcionamiento de la aplicación. Puedes utilizar LibrePin indistintamente desde el navegador o desde el acceso directo instalado, ya que los datos se comparten entre ambos.
+
+---
+
+# Navegación e Interfaz de Usuario
+
+## Barra superior
+
+La barra superior contiene los elementos principales de navegación:
+
+- **Menú lateral** (☰): Abre la barra lateral con acceso rápido a Recientes, Modo, Leyendas, Studio, Ayuda y Configuración.
+- **Título "LibrePin"**: Al hacer clic vuelve al mapa.
+- **Icono de perfil**: Muestra la foto de perfil y el estado del modo actual. Al hacer clic accede al perfil.
+
+## Barra lateral
+
+Desde la barra lateral puedes acceder a:
+
+| Opción | Descripción |
+|-------|------------|
+| **Recientes** | Ver los últimos 50 pins visitados. |
+| **Modo de visualización** | Cambiar entre los modos de visualización. |
+| **Leyendas de líneas** | Gestionar las líneas dibujadas en el mapa. |
+| **Studio** | Acceso a funciones avanzadas (requiere precaución). |
+| **Ayuda / Tutorial** | Abre la guía de usuario. |
+| **Configuración** | Accede a todos los ajustes de la app. |
+
+### Marcaje rápido
+
+En la barra lateral, justo debajo del nombre de usuario, está la sección de **Marcaje rápido**. Esta funcionalidad permite:
+
+- Guardar una búsqueda rápida con un botón personalizado.
+- Asignar un título, icono y texto de búsqueda.
+
+Para usarlo:
+1. Haz clic en el botón **+** para crear un nuevo marcaje rápido.
+2. Define un título, icono (URL) y el texto a buscar.
+3. Desde la barra lateral, haz clic en el marcaje para ejecutar la búsqueda automáticamente.
+
+## Barra inferior
+
+La barra inferior permite cambiar entre las cuatro vistas principales:
+
+| Icono | Pestaña | Descripción |
+|-------|----------|------------|
+| 🗺️ | **Mapa** | Visualización principal del mapa con todos los pins. |
+| 🔍 | **Buscar** | Búsqueda de pins por nombre, subtítulo o etiquetas. |
+| 📚 | **Grupos** | Gestión de grupos de pins temáticos. |
+| ❤️ | **Favoritos** | Lista de pins marcados como favoritos. |
+
+## Página de detalle del pin
+
+Cuando haces clic en un pin, se abre una página de detalle con:
+
+- **Imagen** del pin (si la hay).
+- **Nombre** y **subtítulo**.
+- **Valoración** (estrellas).
+- **Descripción**.
+- **Servicios de transporte** (si es una parada).
+- **Botones personalizados** (si se han definido).
+- **Reseña**.
+- **Pins relacionados** (si se han asignado).
+- **Acciones**: "Ir", "Consultar horario", "Escuchar en voz alta", "Ver en el mapa", "Trazar una ruta", "Véase también".
+
+---
+
+# Gestión de Pins
+
+## ¿Qué es un pin?
+
+Un pin es un punto de interés que puedes añadir al mapa. Cada pin puede contener:
+
+| Campo | Descripción | Obligatorio |
+|------|------------|------------|
+| **Nombre** | Título del pin. | ✅ Sí |
+| **Subtítulo** | Breve descripción adicional (máx 100 caracteres). | ❌ No |
+| **Descripción** | Texto largo con información detallada. | ❌ No |
+| **Etiquetas** | Palabras clave separadas por comas. | ❌ No |
+| **Imagen** | URL de una imagen para el pin. (No se permite subir un archivo, hablamos de esto más adelante.) | ❌ No |
+| **Coordenadas** | Latitud y longitud (se obtienen automáticamente si se crea desde el mapa, no lo rellenes a mano si no procede). | ✅ Sí |
+| **Valoración** | De 1 a 5 estrellas. | ❌ No |
+| **Reseña** | Título (máx 50 caracteres) y texto libre. | ❌ No |
+| **Botones personalizados** | Enlaces con texto personalizado. | ❌ No |
+| **Parada de transporte** | Marca el pin como parada de transporte público. | ❌ No |
+| **Servicios** | Servicio de transporte que circula. | ❌ No |
+| **Enlaces de horario** | URL para consultar horarios. | ❌ No |
+| **MP3** | URL de un audio para reproducir. (Solo si es una parada) | ❌ No |
+| **Pins relacionados** | Otros pins vinculados. | ❌ No |
+| **Fuera del entorno** | Marca el pin como fuera del entorno por defecto. | ❌ No |
+
+### Obtención de URLs de imágenes
+Dirígete a la sección dedicada a esto desde la barra lateral de este sitio web.
+
+## Crear un pin
+
+### Desde el mapa
+1. Haz clic en cualquier punto del mapa.
+2. Aparecerá un botón "Añadir" en la parte inferior.
+3. Haz clic para abrir el diálogo de creación.
+4. Rellena los campos y guarda.
+
+## Editar un pin
+
+1. Abre en detalle el pin.
+2. Haz clic en el icono ✏️ (editar) en la barra superior.
+3. Modifica los campos que quieras.
+
+## Eliminar un pin
+
+1. Abre el detalle del pin.
+2. Haz clic en el icono 🗑️ (eliminar) en la barra superior.
+3. Confirma la eliminación.
+
+## Duplicado de pins
+
+La aplicación comprueba que no haya dos pins con el mismo nombre y coordenadas. Si intentas crear uno duplicado, recibirás un aviso.
+
+---
+
+# Gestión de Grupos
+
+## ¿Qué es un grupo?
+
+Un grupo es una colección temática de pins. Te permite organizar tus pins por categorías (ej: "Restaurantes", "Museos", "Transporte", etc.). También puede servir para categorizar por marca de supermercados o agrupar todos los pins de un centro comercial.
+
+## Crear un grupo
+
+1. Ve a la pestaña **Grupos** (📚) en la barra inferior.
+2. Haz clic en el botón **"Crear grupo"**.
+3. Rellena los datos del grupo:
+   - **Nombre** (obligatorio).
+   - **Color de acento** (para identificar el grupo).
+   - **URL del icono** (opcional).
+   - **Descripción** (opcional).
+   - **Pins que forman parte**: Selecciona los pins que pertenecen al grupo.
+4. Haz clic en **Guardar**.
+
+## Gestionar grupos
+
+- **Ver grupos**: En la pestaña Grupos verás todos los grupos creados.
+- **Buscar grupos**: Utiliza el campo de búsqueda para filtrar por nombre.
+- **Acceder a un grupo**: Haz clic en una tarjeta de grupo para abrir su detalle.
+
+## Detalle de un grupo
+
+Cuando abres un grupo, puedes:
+
+- **Ver los pins** que forman parte.
+- **Ordenar los pins** del grupo (por reciente, valoración, alfabético o distancia).
+- **Editar el grupo**: Modificar nombre, color, icono, descripción o pins asociados.
+- **Eliminar el grupo**: Confirma la eliminación.
+
+## Ordenar pins de un grupo
+
+Haz clic en el icono de ordenación (⇅) en el detalle del grupo para alternar entre:
+
+| Modo | Descripción |
+|------|------------|
+| **Reciente** | Por fecha de última visita. |
+| **Valoración** | De más alta a más baja. |
+| **Alfabético** | Por nombre de la A a la Z. |
+| **Distancia** | Más cerca de tu ubicación (requiere GPS). |
+
+## Véase también
+
+Si un pin pertenece a uno o más grupos, en el detalle del pin aparecerá el botón **"Véase también"**. Al hacer clic se muestra un pop-up con los grupos a los que pertenece, y puedes acceder a ellos directamente.
+
+---
+
+# Búsqueda y Favoritos
+
+## Búsqueda de pins
+
+La funcionalidad de búsqueda permite encontrar pins de manera rápida y eficiente.
+
+### Cómo buscar
+
+1. Ve a la pestaña **Buscar** (🔍) en la barra inferior.
+2. Teclea al menos 2 caracteres en el campo de búsqueda.
+3. Los resultados se mostrarán automáticamente.
+
+### Qué se busca
+
+La búsqueda se realiza sobre:
+- **Nombre** del pin.
+- **Subtítulo** del pin.
+- **Etiquetas** (tags) asignadas.
+
+### Ordenar resultados
+
+Una vez hecha una búsqueda, puedes ordenar los resultados haciendo clic en el icono de ordenación. Los modos disponibles son:
+
+| Modo | Descripción |
+|------|------------|
+| **Último visto** | Por fecha de última visita. |
+| **Puntuación** | De más alta a más baja. |
+| **Alfabético** | Por nombre de la A a la Z. |
+| **Más cerca** | Por distancia a tu ubicación (requiere GPS). |
+
+> **Nota**: El modo de ordenación se aplica también a la lista de favoritos.
+
+### Cargar más resultados
+
+Si hay más de 25 resultados, aparecerá un botón "Cargar más" al final de la lista.
+
+## Favoritos
+
+Los favoritos te permiten marcar pins para un acceso rápido.
+
+### Añadir un pin a favoritos
+
+1. Abre el detalle del pin.
+2. Haz clic en el icono ❤️ (corazón) en la barra superior.
+3. El corazón se volverá amarillo y el pin se añadirá a la lista de favoritos.
+
+### Ver los favoritos
+
+1. Ve a la pestaña **Favoritos** (❤️) en la barra inferior.
+2. Verás la lista de todos los pins marcados como favoritos.
+3. Puedes ordenar la lista haciendo clic en el botón **"Ordenar"**.
+
+### Indicador de favorito
+
+Los pins que son favoritos muestran un corazón amarillo en la esquina superior derecha en las vistas de:
+- Búsqueda.
+- Grupos.
+- Lista de favoritos.
+
+---
+
+# Modos de Visualización
+
+LibrePin dispone de cuatro modos de visualización que permiten filtrar los pins mostrados en el mapa y en las listas.
+
+## Acceso a los modos
+
+Puedes cambiar de modo de dos maneras:
+1. **Barra lateral**: Opción "Modo de visualización".
+2. **Barra de búsqueda**: Desde la búsqueda, haciendo clic en el icono 👁️.
+
+## Modos disponibles
+
+### 1. Mi entorno (🏠)
+
+- **Descripción**: Muestra solo los pins de tu entorno.
+- **Cómo funciona**: Filtra los pins que tienen la marca "Fuera de mi entorno" desactivada.
+- **Indicador**: Punto verde en el icono de perfil.
+
+### 2. Fuera de mi entorno (🌴)
+
+- **Descripción**: Muestra todos los pins, incluidos los de fuera de tu entorno.
+- **Cómo funciona**: No aplica ningún filtro de entorno.
+- **Indicador**: Punto naranja en el icono de perfil.
+
+### 3. No molestar (🌙)
+
+- **Descripción**: Muestra solo los pins marcados como favoritos.
+- **Cómo funciona**: Filtra los pins que no son favoritos.
+- **Indicador**: Punto rojo en el icono de perfil.
+
+### 4. Solo transporte (🚌)
+
+- **Descripción**: Muestra solo las paradas de transporte público.
+- **Cómo funciona**: Filtra los pins que no tienen la marca "Es una parada de transporte público" activada.
+- **Indicador**: Punto azul en el icono de perfil.
+
+## Efectos del modo en otras funciones
+
+- **Búsqueda**: Solo se muestran resultados de los pins visibles en el modo actual.
+- **Grupos**: Solo se muestran pins visibles dentro de los grupos.
+- **Recientes**: Solo se muestran pins visibles.
+- **Favoritos**: En modo "No molestar", solo se muestran favoritos (ya lo son por definición).
+
+---
+
+# Leyendas y Líneas
+
+## ¿Qué son las líneas?
+
+Las líneas te permiten dibujar rutas o trazados en el mapa. Son útiles para:
+- Marcar un itinerario.
+- Indicar una ruta de transporte como el metro o trenes de cercanías.
+- Dibujar un polígono para marcar una zona.
+
+## Crear una línea
+
+1. Ve a **Configuración** → **Líneas**.
+2. Haz clic en **"Añadir línea"**.
+3. Rellena los datos:
+   - **Nombre** (obligatorio).
+   - **URL del icono (PNG)** (opcional).
+   - **Color** (selector de color).
+   - **Grosor (px)**: Entre 2 y 12 píxeles.
+   - **Puntos**: Lista de coordenadas separadas por \`;\` (ej: \`41.3851,2.1734;41.3861,2.1744\`).
+4. Haz clic en **OK** para guardar.
+
+> **Importante**: Hay que añadir al menos 2 puntos para que la línea se pueda dibujar.
+
+## Gestionar líneas
+
+### Desde la lista de líneas (Configuración → Líneas)
+
+- **Arrastrar** para reordenar.
+- **Editar** (✏️) para modificar los datos.
+- **Eliminar** (🗑️) para borrar la línea.
+
+### Desde la página de Leyendas
+
+1. Ve a **Barra lateral** → **Leyendas de líneas**.
+2. Verás todas las líneas creadas.
+3. Puedes:
+   - **Mostrar/Ocultar** una línea individual (checkbox).
+   - **Mostrar/Ocultar todas** con el conmutador de la parte superior.
+   - **Editar líneas** (botón "Editar líneas").
+   - **Centrar el mapa** en una línea haciendo clic en la tarjeta (debe mostrarse en el mapa).
+
+## Visibilidad de las líneas
+
+- El conmutador **"Mostrar líneas"** en la página de Leyendas controla si todas las líneas son visibles en el mapa.
+- Cada línea tiene su propia visibilidad individual (checkbox).
+- Las líneas se muestran en orden inverso (la más reciente encima).
+
+## Detalle de la línea en el mapa
+
+Cuando una línea es visible:
+- Se dibuja con el color y el grosor especificados.
+- Al hacer clic en la tarjeta de la línea en la página de Leyendas, el mapa se ajusta para mostrarla completamente.
+
+---
+
+# Configuración
+
+El apartado de configuración contiene todas las opciones de personalización y gestión de datos.
+
+## Acceso a la configuración
+
+Desde la **barra lateral** (☰) selecciona **"Configuración"**.
+
+## Secciones de configuración
+
+### 1. Perfil
+
+Gestiona tus datos:
+- **Nombre de usuario**.
+- **URL de la foto de perfil**.
+- **Pronombres** (máx 50 caracteres).
+- **Subtítulo**.
+> **Importante**: Esta información **NO** se comparte con otros usuarios ni con ningún desarrollador.
+
+Acciones adicionales:
+- **Exportar dataset**: Descarga todos los datos en un archivo JSON.
+- **Importar dataset**: Carga un archivo JSON con datos previamente exportados.
+- **Borrar todos los datos**: Elimina todo el contenido (pins, grupos, líneas, etc.).
+> **Nota**: Se habla de la gestión de datos más adelante.
+
+### 2. Posición
+
+Configura la posición inicial del mapa:
+- **System GPS**: Utiliza la ubicación del dispositivo.
+- **Ciudades predefinidas**: Elige entre las diferentes ciudades.
+
+### 3. Apariencia
+
+Personaliza el aspecto visual de la aplicación:
+- **Tema**: Claro u oscuro.
+- **Color de acento**: Elige entre 12 colores predefinidos.
+- **Agrupación de pins**: Activar/desactivar la agrupación (clústers).
+
+> **Advertencia**: Desactivar la agrupación puede causar un rendimiento más lento con muchos pins.
+
+### 4. Idioma
+
+Cambia el idioma de toda la IU.
+
+> **Nota**: El cambio de idioma requiere recargar la aplicación.
+
+### 5. Servicios de transporte
+
+Gestiona los servicios de transporte que se pueden asignar a los pins:
+- **Añadir servicio**: Nombre y URL del icono.
+- **Editar servicio**: Modificar nombre o icono.
+- **Eliminar servicio**: Borrar el servicio.
+- **Arrastrar** para reordenar.
+
+### 6. Recientes
+
+Muestra los últimos 50 pins visitados.
+
+### 7. Líneas
+
+Gestión de líneas (ver sección anterior dedicada).
+
+### 8. Recargar app
+
+Reinicia la aplicación sin perder datos. Útil para aplicar cambios que requieren una recarga o para solucionar problemas.
+
+### 9. Acerca de
+
+Información de la aplicación: versión, descripción y otros.
+
+## Cambios que requieren recarga
+
+Algunos ajustes requieren recargar la aplicación para aplicar los cambios:
+- Cambio de idioma.
+- Cambio de color de acento.
+- Activación/desactivación de agrupación de pins.
+
+Cuando se hagan estos cambios, se mostrará una pantalla de recarga obligatoria.
+
+---
+
+# Obtención de URLs de imágenes
+
+Para añadir una imagen a un pin, necesitas una URL pública que apunte directamente al archivo de imagen. Esta URL debe ser accesible desde cualquier dispositivo y terminar habitualmente con extensiones como \`.jpg\`, \`.png\`, \`.webp\` o \`.gif\`.
+
+### Cómo obtener una URL de imagen
+Para obtener los enlaces de imágenes es recomendable hacerlo desde un equipo de escritorio, pero en dispositivos móviles también es posible.
+
+Hay varias maneras de obtener una URL de imagen para tus pins:
+
+**1. Imágenes propias alojadas en la nube**
+
+-   Sube tus imágenes a servicios como **Google Fotos**, **iCloud**, **Dropbox** o **OneDrive**.
+-   Activa la opción de compartir y obtén el enlace público. Asegúrate de que el enlace apunte directamente a la imagen (no a la página de visualización).
+-   Para Google Fotos, debes crear un álbum compartido y obtener la URL de cada imagen individual.
+
+**2. Plataformas de alojamiento de imágenes**
+
+-   Servicios como **Imgur**, **Postimages**, **TinyPic** o **ImageShack** te permiten subir imágenes gratuitamente y obtener una URL directa.
+-   Sube la imagen, copia el enlace directo (normalmente marcado como "Direct Link" o "URL de la imagen") y pégalo en el campo correspondiente.
+
+**3. Redes sociales**
+
+-   Puedes obtener la URL de una imagen publicada en **Instagram**, **Facebook** o **Twitter**.
+-   Abre la imagen en una pestaña nueva y copia la URL de la barra de direcciones. En algunos casos, tendrás que buscar la opción "Abrir imagen en una ventana nueva".
+
+**4. Búsqueda de imágenes**
+
+-   Busca la imagen que te interesa en **Google Imágenes** o **Bing Images**.
+-   Abre la imagen a tamaño completo y copia la URL de la barra de direcciones. Asegúrate de que la imagen no tenga derechos de autor si la usas para uso público.
+
+### Consejos prácticos
+
+-   **Evita URLs cortas** o acortadores como [bit.ly](https://bit.ly/), ya que no siempre funcionan correctamente.
+-   **Comprueba que la URL funciona** abriéndola en una pestaña de incógnito del navegador. Si la imagen se carga, la URL es válida.
+-   **Prefiere imágenes cuadradas** o con una relación de aspecto cercana a 1:1 para una mejor visualización en las tarjetas de los pins.
+-   El tamaño recomendado para las imágenes es de entre 200x200 y 800x800 píxeles para equilibrar calidad y velocidad de carga.
+
+### Uso de la función "Reciclar imagen"
+LibrePin incluye una función que te permite reutilizar imágenes que ya has utilizado en otros pins. Así ahorras tiempo y evitas duplicar enlaces. La encontrarás en el diálogo de creación/edición del pin, haciendo clic en el icono de las imágenes (🔄).
+
+---
+
+# Otras preguntas
+
+## Generales
+
+### ¿Qué es LibrePin?
+LibrePin es una aplicación web para gestionar puntos de interés personalizados en un mapa interactivo. Permite crear, organizar y visualizar pins con información detallada.
+
+### ¿Es gratuito?
+Sí, LibrePin es completamente gratuito y de código abierto.
+
+### ¿Necesito instalar algo?
+No, solo necesitas un navegador web moderno. La aplicación funciona directamente desde el navegador. Instalarla como PWA es totalmente opcional y no recorta ninguna función no hacerlo.
+
+### ¿Mis datos son seguros?
+Los datos se almacenan localmente en tu navegador (LocalStorage). Nadie más puede acceder a ellos a menos que compartas el archivo de exportación. Los desarrolladores no tienen ninguna posibilidad de consultar los datos.
+
+---
+
+# Datos y Persistencia
+
+La gestión de los datos es uno de los aspectos centrales de LibrePin. Entender cómo se guardan, cómo se pueden transferir y cómo se protegen te ayudará a sacar el máximo provecho y a utilizar la aplicación con tranquilidad.
+
+## ¿Dónde se guardan mis datos?
+
+Todos los datos que generes en LibrePin (pins, grupos, líneas, favoritos, marcajes rápidos, etc.) se almacenan **exclusivamente en el LocalStorage de tu navegador**. Esto significa que:
+
+- Los datos **no se pierden** al cerrar la pestaña o el navegador.
+- Los datos **no se envían a ningún servidor externo**. Ni nosotros ni ningún tercero tenemos acceso a ellos.
+- Los datos son **específicos del navegador y del dispositivo** donde usas la aplicación. Si abres LibrePin desde otro navegador o dispositivo, verás un mapa vacío (a menos que importes los datos).
+
+> **Importante**: El LocalStorage tiene una capacidad limitada (normalmente entre 5 y 10 MB por dominio). Si trabajas con muchas imágenes o pins, te recomendamos hacer copias de seguridad periódicas.
+
+## ¿Cómo hago una copia de seguridad?
+
+Hacer copias de seguridad es sencillo y te permite recuperar los datos si cambias de dispositivo, de navegador, o si quieres compartir tu mapa con alguien más.
+
+1. Accede a **Configuración** → **Perfil**.
+2. Haz clic en el botón **"Exportar dataset"**.
+3. El navegador te descargará automáticamente un archivo con extensión \`.json\` que contiene todos los datos de la aplicación.
+4. Guarda este archivo en un lugar seguro (ordenador, nube, disco externo, etc.).
+
+El archivo JSON contiene toda la información: pins, grupos, líneas, favoritos, servicios de transporte, marcajes rápidos, configuración de la apariencia, idioma, e incluso tus datos de perfil.
+
+## ¿Cómo restauro una copia de seguridad?
+
+Si has exportado previamente tus datos, puedes restaurarlos en cualquier momento:
+
+1. Accede a **Configuración** → **Perfil**.
+2. Haz clic en el botón **"Importar dataset"**.
+3. Selecciona el archivo \`.json\` que tenías guardado.
+4. La aplicación te mostrará una previsualización de los datos (nombre de perfil, número de pins, etc.).
+5. Después de una espera de 5 segundos, podrás confirmar la importación.
+6. Una vez importados, la aplicación se recargará automáticamente para aplicar los cambios. **En caso de que no lo haga, cierra y vuelve a abrir LibrePin manualmente.**
+
+> **Advertencia**: La importación **sobrescribe todos los datos actuales**. Si tienes datos en el dispositivo que no quieres perder, asegúrate de hacer una copia de seguridad antes de importar.
+
+## ¿Puedo borrar todos los datos?
+
+Sí, si quieres empezar de cero o liberar espacio en el LocalStorage:
+
+1. Accede a **Configuración** → **Perfil**.
+2. Haz clic en el botón **"Borrar todos los datos"** (en rojo).
+3. Confirma la acción en el diálogo de confirmación.
+
+> **ATENCIÓN**: Esta acción **no se puede deshacer**. Todos los pins, grupos, líneas, favoritos y configuraciones se eliminarán permanentemente. Asegúrate de tener una copia de seguridad antes de proceder.
+
+## ¿Cómo puedo compartir mis datos?
+
+LibrePin te permite compartir tu mapa de esta manera:
+
+### Compartir el archivo de exportación
+- Exporta los datos como JSON (ver "¿Cómo hago una copia de seguridad?").
+- Envía el archivo por correo electrónico, Drive, Telegram, etc.
+- La persona receptora puede importar el archivo desde su LibrePin y ver tu mapa.
+
+## ¿Qué pasa si cambio de navegador o dispositivo?
+
+Los datos no se sincronizan automáticamente entre dispositivos. Para trasladar tu mapa a otro navegador o dispositivo:
+
+1. Exporta los datos desde el dispositivo original (Configuración → Perfil → Exportar dataset).
+2. Transfiere el archivo \`.json\` al nuevo dispositivo (por correo, USB, nube, etc.).
+3. Abre LibrePin en el nuevo dispositivo e importa el archivo.
+
+De esta manera, tu mapa estará disponible donde vayas.
+
+## Consejos de seguridad
+
+- **Haz copias de seguridad periódicas**, sobre todo si añades muchos pins o si dedicas tiempo a organizarlos.
+- **Guarda el archivo JSON en un lugar seguro**, ya que contiene todos tus datos.
+- **No compartas el archivo JSON con personas desconocidas** si contiene información sensible.
+- Si trabajas en un dispositivo compartido, recuerda borrar los datos o cerrar la sesión del navegador después de usar LibrePin.
+
+---
+
+# Resolución de problemas
+
+De vez en cuando, pueden surgir pequeñas incidencias. No te preocupes, la mayoría tienen solución rápida. Aquí te dejamos las más habituales y cómo abordarlas:
+
+## El mapa no se carga
+
+-   Comprueba la conexión a Internet. El mapa necesita acceso a la red para cargar las imágenes y los datos cartográficos.
+-   Recarga la aplicación desde **Configuración → Recargar app**. Esto refresca el estado sin perder ningún dato.
+-   Si persiste, prueba a limpiar la memoria caché del navegador (Ctrl+F5 o Cmd+Shift+R). A veces, una recarga forzada soluciona problemas de caché.
+
+## Los pins no se muestran
+
+-   Verifica el **modo de visualización** activo. Si estás en modo "Mi entorno", solo se muestran los pins que no están marcados como "Fuera del entorno". Si estás en modo "No molestar", solo se muestran los favoritos.
+-   Comprueba que los pins no estén filtrados por ningún otro criterio.
+-   Si todo parece correcto, recarga la aplicación para refrescar el estado.
+
+## La ubicación GPS no funciona
+
+-   Asegúrate de que has concedido permiso de geolocalización al navegador. Normalmente, el navegador te lo pide al abrir la aplicación por primera vez.
+-   Prueba a seleccionar una ciudad manualmente desde **Configuración → Posición**. Esto te permitirá situar el mapa aunque el GPS no esté disponible.
+-   Comprueba la señal GPS de tu dispositivo. Si estás en interiores o en zonas con poca cobertura, puede que el dispositivo tarde en obtener la ubicación.
+
+## La aplicación va lenta
+
+-   Desactiva la agrupación de pins en **Configuración → Apariencia → No agrupar los pins**. Esto puede mejorar el rendimiento si tienes muchos pins, pero ten en cuenta que puede ralentizar el mapa si hay demasiados.
+-   Reduce el número de pins visibles cambiando de modo de visualización o eliminando pins que ya no te sean útiles.
+-   Cierra otras pestañas o aplicaciones que puedan estar consumiendo recursos del dispositivo.
+
+## Los cambios no se aplican
+
+-   Algunos ajustes requieren recargar la aplicación para aplicarse completamente: cambio de idioma, cambio de color de acento, o activación/desactivación de la agrupación de pins. La aplicación te lo notificará y se recargará automáticamente en estos casos.
+-   Si has hecho un cambio y no se refleja, prueba a recargar manualmente la aplicación desde **Configuración → Recargar app**.
+
+## He perdido los datos
+
+-   Si tenías una copia de seguridad previa, puedes restaurarla desde **Perfil → Importar dataset**.
+-   Si no tenías, los datos se han perdido permanentemente, ya que se almacenan exclusivamente en el LocalStorage de tu navegador y no se guardan en ningún servidor externo.
+-   Para futuras ocasiones, te recomendamos hacer copias de seguridad periódicas desde **Perfil → Exportar dataset**.
+
+## ¿Has detectado un error que no aparece aquí?
+
+Si has encontrado un problema que no está cubierto en esta lista, puedes abrir una incidencia en el repositorio de GitHub de LibrePin. Describe el paso a paso para reproducir el error y, si es posible, adjunta una captura de pantalla. Así nos ayudarás a mejorar la aplicación para todos.
+
+---
+
+# LibrePin Studio
+LibrePin Studio será una suite de herramientas avanzadas diseñada para aquellos que quieren un control total sobre su dataset. Está pensada para usuarios muy activos que gestionan grandes volúmenes de datos y necesitan funcionalidades como limpieza masiva, análisis estadístico, reorganización en bloque o exportaciones avanzadas. No está recomendada para usuarios novatos, ya que requiere cierta familiaridad con la estructura de datos y las operaciones en lote.
+
+De momento, estamos trabajando en su desarrollo y pronto compartiremos más detalles sobre las funcionalidades que incorporará. Os pedimos paciencia y os animamos a seguirnos para estar al día de las novedades. Mientras llega, podéis seguir disfrutando de LibrePin y aprovechar al máximo las herramientas actuales.
+
+---
+
+# Antes de terminar
+Creé LibrePin porque quería una herramienta que me permitiera construir mi propio mapa, sin intermediarios, sin marcas y sin contenido impuesto. Después de utilizar aplicaciones que te dicen dónde tienes que ir, qué tienes que visitar y cómo tienes que organizar tus lugares, decidí que la mejor manera de tener el control era hacerlo yo misma. LibrePin nace de esta necesidad: un mapa que sea realmente tuyo, donde cada pin sea una decisión consciente, no una sugerencia de un algoritmo.
+
+Pero LibrePin no es solo mi proyecto; es para vosotros. Es para aquellos que, como yo, quieren documentar sus descubrimientos, guardar sus recuerdos y organizar sus desplazamientos a su ritmo, sin prisas y sin distracciones. Es para quien prefiere un mapa hecho a mano, a medida, que crezca con ellos y que solo contenga aquello que realmente les importa. **Gracias por hacerlo vuestro**, por llenarlo de vida y por acompañarme en este viaje. Que vuestro mapa sea tan grande como vuestra curiosidad.`;
+
+        const MD_EN = `# Introduction to LibrePin
+
+LibrePin is a progressive web application (PWA) for managing personalized points of interest on an interactive map. It is designed to be lightweight, fast, and functional on both mobile devices and desktops; but even more importantly, it is designed to be completely yours.
+
+## What is LibrePin?
+
+LibrePin allows you to:
+
+- **Create custom pins** with name, description, image, tags, and rating.
+- **Organize your places** into thematic groups.
+- **Search around you or what interests you** with quick access.
+- **Move around the city** by tracing routes or with the help of public transport.
+- **Remember where you have been** according to different modes (environment, outside environment, only favorites, transport).
+
+## Why LibrePin and not others?
+
+Because **LibrePin belongs to you**. It is a tool designed for you, for your way of seeing the world, made for those who want to build their own map without impositions or predetermined content. Nothing is pre-established. You decide what you put in it, how you organize it, and where you want it to grow.
+
+We don't come with a catalog of places or fill your screen with data you haven't asked for. We are a blank space, a canvas where every pin, every route, and every tag is your decision, not a suggestion from an algorithm. This means that the map you create will be truly yours: it will reflect your experiences, your memories, and your way of understanding space.
+
+When you start LibrePin for the first time, there is nothing. Not a single pin, no marked route, no point of interest. Your map, your rules. And this initial emptiness is not a defect: it is the guarantee that what you build will be authentic, personal, and free from external interference. It is you who, little by little, will shape your own map, without distractions, without advertising, without brands telling you where to go.
+
+LibrePin is for those who want to do everything on their own. For those who prefer a handmade map, tailored to their needs, and that only contains what truly matters to them. If you feel like creating, organizing, and deciding, this is your tool. We leave the rest to you.
+
+## Requirements
+
+- Modern web browser (Chrome, Firefox, Safari, Edge).
+- Internet connection to load the map and images.
+- Geolocation permission (optional, for automatic location).
+- Creativity on the user's part.
+
+## How do I follow this reading?
+Go to the side menu of this application (**☰**) and choose the section you want to read or go in order.
+
+---
+
+# Installation and Initial Setup
+
+## How to install LibrePin
+
+LibrePin is a web application that does not require any traditional installation process. You can access it directly from your browser, like any other web page. You don't need to download apps from any store or grant special permissions.
+
+However, **we recommend installing it as a PWA** (progressive web application). This means that the web will install on your device as if it were a native application: it will appear on the home screen of your phone, tablet, or computer, with its own icon, and it will open in full screen, without browser bars, offering you a more immersive and faster experience.
+
+### How to install it as a PWA
+
+Most modern browsers include an option to install web pages as applications. The procedure is simple and will only take a few seconds:
+
+1. **Open LibrePin** in your preferred browser (Chrome, Edge, Safari, Firefox, etc.).
+2. **Locate the installation option** in the browser menu:
+   - In **Chrome** (Android/computer): tap the three vertical dots ⋮ in the top right corner and select **"Install app"** or **"Create shortcut"**.
+   - In **Safari** (iPhone/iPad): tap the share icon (square with arrow) and select **"Add to Home Screen"**.
+   - In **Firefox** (Android): tap the three dots ⋮ and select **"Add to Home Screen"**.
+3. **Confirm the installation** and, if the browser allows it, you can change the name of the shortcut before saving it.
+4. From this moment on, you will find the **LibrePin** icon on your device's home screen, along with the rest of your applications.
+
+### Advantages of installing as a PWA
+
+- **Quick access**: the icon remains on the home screen, like any other app.
+- **Full screen**: it runs without browser bars, making the most of the space.
+- **Works offline** (partially): once loaded, you can consult the map and the pins you have already visited, even without Internet (although the map needs a connection to load images).
+- **Automatic updates**: you will always have the latest version, without having to download anything manually.
+
+### Traditional installation (without PWA)
+
+If you prefer not to install it as a PWA, simply add the link to your browser's bookmarks or open it directly from the address bar every time you want to use it. No other steps are required.
+
+> **Note**: Installing as a PWA is completely optional and does not affect the functioning of the application. You can use LibrePin interchangeably from the browser or from the installed shortcut, as data is shared between both.
+
+---
+
+# Navigation and User Interface
+
+## Top bar
+
+The top bar contains the main navigation elements:
+
+- **Side menu** (☰): Opens the sidebar with quick access to Recent, Mode, Legends, Studio, Help, and Settings.
+- **"LibrePin" title**: Clicking returns to the map.
+- **Profile icon**: Shows the profile photo and the current mode status. Clicking accesses the profile.
+
+## Sidebar
+
+From the sidebar you can access:
+
+| Option | Description |
+|-------|-------------|
+| **Recent** | View the last 50 pins visited. |
+| **View mode** | Switch between view modes. |
+| **Line legends** | Manage the lines drawn on the map. |
+| **Studio** | Access to advanced functions (requires caution). |
+| **Help / Tutorial** | Opens the user guide. |
+| **Settings** | Access all app settings. |
+
+### Quick mark
+
+In the sidebar, just below the username, is the **Quick mark** section. This functionality allows you to:
+
+- Save a quick search with a custom button.
+- Assign a title, icon, and search text.
+
+To use it:
+1. Click the **+** button to create a new quick mark.
+2. Define a title, icon (URL), and the text to search.
+3. From the sidebar, click the mark to automatically execute the search.
+
+## Bottom bar
+
+The bottom bar allows you to switch between the four main views:
+
+| Icon | Tab | Description |
+|------|-----|-------------|
+| 🗺️ | **Map** | Main view of the map with all pins. |
+| 🔍 | **Search** | Search for pins by name, subtitle, or tags. |
+| 📚 | **Groups** | Management of thematic pin groups. |
+| ❤️ | **Favorites** | List of pins marked as favorites. |
+
+## Pin detail page
+
+When you click on a pin, a detail page opens with:
+
+- **Image** of the pin (if any).
+- **Name** and **subtitle**.
+- **Rating** (stars).
+- **Description**.
+- **Transport services** (if it's a stop).
+- **Custom buttons** (if defined).
+- **Review**.
+- **Related pins** (if assigned).
+- **Actions**: "Go", "Check schedule", "Play aloud", "View on map", "Go from", "See also".
+
+---
+
+# Pin Management
+
+## What is a pin?
+
+A pin is a point of interest that you can add to the map. Each pin can contain:
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| **Name** | Pin title. | ✅ Yes |
+| **Subtitle** | Brief additional description (max 100 characters). | ❌ No |
+| **Description** | Long text with detailed information. | ❌ No |
+| **Tags** | Keywords separated by commas. | ❌ No |
+| **Image** | URL of an image for the pin. (File upload is not allowed, we talk about this later.) | ❌ No |
+| **Coordinates** | Latitude and longitude (obtained automatically if created from the map, do not fill by hand if not appropriate). | ✅ Yes |
+| **Rating** | From 1 to 5 stars. | ❌ No |
+| **Review** | Title (max 50 characters) and free text. | ❌ No |
+| **Custom buttons** | Links with custom text. | ❌ No |
+| **Transport stop** | Marks the pin as a public transport stop. | ❌ No |
+| **Services** | Transport service that runs through it. | ❌ No |
+| **Schedule links** | URL to check schedules. | ❌ No |
+| **MP3** | URL of an audio to play. (Only if it's a stop) | ❌ No |
+| **Related pins** | Other linked pins. | ❌ No |
+| **Outside environment** | Marks the pin as outside the environment by default. | ❌ No |
+
+### Getting image URLs
+Go to the section dedicated to this from the sidebar of this website.
+
+## Create a pin
+
+### From the map
+1. Click on any point on the map.
+2. An "Add" button will appear at the bottom.
+3. Click to open the creation dialog.
+4. Fill in the fields and save.
+
+## Edit a pin
+
+1. Open the pin in detail.
+2. Click the ✏️ (edit) icon on the top bar.
+3. Modify the fields you want.
+
+## Delete a pin
+
+1. Open the pin detail.
+2. Click the 🗑️ (delete) icon on the top bar.
+3. Confirm the deletion.
+
+## Duplicate pins
+
+The application checks that there are no two pins with the same name and coordinates. If you try to create a duplicate, you will receive a warning.
+
+---
+
+# Group Management
+
+## What is a group?
+
+A group is a thematic collection of pins. It allows you to organize your pins by categories (e.g., "Restaurants", "Museums", "Transport", etc.). It can also be used to categorize by supermarket brand or group all the pins of a shopping center.
+
+## Create a group
+
+1. Go to the **Groups** tab (📚) on the bottom bar.
+2. Click the **"Create group"** button.
+3. Fill in the group data:
+   - **Name** (required).
+   - **Accent color** (to identify the group).
+   - **Icon URL** (optional).
+   - **Description** (optional).
+   - **Pins that are part of it**: Select the pins that belong to the group.
+4. Click **Save**.
+
+## Manage groups
+
+- **View groups**: On the Groups tab you will see all created groups.
+- **Search groups**: Use the search field to filter by name.
+- **Access a group**: Click on a group card to open its details.
+
+## Group details
+
+When you open a group, you can:
+
+- **View the pins** that are part of it.
+- **Sort the pins** in the group (by recent, rating, alphabetical, or distance).
+- **Edit the group**: Modify name, color, icon, description, or associated pins.
+- **Delete the group**: Confirm the deletion.
+
+## Sort pins in a group
+
+Click the sort icon (⇅) in the group detail to alternate between:
+
+| Mode | Description |
+|------|-------------|
+| **Recent** | By last visit date. |
+| **Rating** | From highest to lowest. |
+| **Alphabetical** | By name from A to Z. |
+| **Distance** | Closest to your location (requires GPS). |
+
+## See also
+
+If a pin belongs to one or more groups, the **"See also"** button will appear in the pin detail. Clicking it shows a pop-up with the groups it belongs to, and you can access them directly.
+
+---
+
+# Search and Favorites
+
+## Pin search
+
+The search functionality allows you to find pins quickly and efficiently.
+
+### How to search
+
+1. Go to the **Search** tab (🔍) on the bottom bar.
+2. Type at least 2 characters in the search field.
+3. Results will be displayed automatically.
+
+### What is searched
+
+The search is performed on:
+- Pin **name**.
+- Pin **subtitle**.
+- Assigned **tags**.
+
+### Sort results
+
+Once a search is done, you can sort the results by clicking the sort icon. The available modes are:
+
+| Mode | Description |
+|------|-------------|
+| **Last viewed** | By last visit date. |
+| **Rating** | From highest to lowest. |
+| **Alphabetical** | By name from A to Z. |
+| **Closest** | By distance to your location (requires GPS). |
+
+> **Note**: The sorting mode also applies to the favorites list.
+
+### Load more results
+
+If there are more than 25 results, a "Load more" button will appear at the end of the list.
+
+## Favorites
+
+Favorites allow you to mark pins for quick access.
+
+### Add a pin to favorites
+
+1. Open the pin detail.
+2. Click the ❤️ (heart) icon on the top bar.
+3. The heart will turn yellow and the pin will be added to the favorites list.
+
+### View favorites
+
+1. Go to the **Favorites** tab (❤️) on the bottom bar.
+2. You will see the list of all pins marked as favorites.
+3. You can sort the list by clicking the **"Sort"** button.
+
+### Favorite indicator
+
+Pins that are favorites show a yellow heart in the top right corner in the views of:
+- Search.
+- Groups.
+- Favorites list.
+
+---
+
+# View Modes
+
+LibrePin has four view modes that allow you to filter the pins shown on the map and in the lists.
+
+## Access to modes
+
+You can change mode in two ways:
+1. **Sidebar**: "View mode" option.
+2. **Search bar**: From the search, clicking the 👁️ icon.
+
+## Available modes
+
+### 1. My environment (🏠)
+
+- **Description**: Shows only pins from your environment.
+- **How it works**: Filters pins that have the "Outside my environment" mark disabled.
+- **Indicator**: Green dot on the profile icon.
+
+### 2. Outside my environment (🌴)
+
+- **Description**: Shows all pins, including those outside your environment.
+- **How it works**: Does not apply any environment filter.
+- **Indicator**: Orange dot on the profile icon.
+
+### 3. Do not disturb (🌙)
+
+- **Description**: Shows only pins marked as favorites.
+- **How it works**: Filters pins that are not favorites.
+- **Indicator**: Red dot on the profile icon.
+
+### 4. Transport only (🚌)
+
+- **Description**: Shows only public transport stops.
+- **How it works**: Filters pins that do not have the "Is a public transport stop" mark activated.
+- **Indicator**: Blue dot on the profile icon.
+
+## Effects of mode on other functions
+
+- **Search**: Only results from pins visible in the current mode are shown.
+- **Groups**: Only visible pins are shown within groups.
+- **Recent**: Only visible pins are shown.
+- **Favorites**: In "Do not disturb" mode, only favorites are shown (they already are by definition).
+
+---
+
+# Legends and Lines
+
+## What are lines?
+
+Lines allow you to draw routes or paths on the map. They are useful for:
+- Marking an itinerary.
+- Indicating a transport route such as the metro or commuter trains.
+- Drawing a polygon to mark an area.
+
+## Create a line
+
+1. Go to **Settings** → **Lines**.
+2. Click **"Add line"**.
+3. Fill in the data:
+   - **Name** (required).
+   - **Icon URL (PNG)** (optional).
+   - **Color** (color picker).
+   - **Thickness (px)**: Between 2 and 12 pixels.
+   - **Points**: List of coordinates separated by \`;\` (e.g.: \`41.3851,2.1734;41.3861,2.1744\`).
+4. Click **OK** to save.
+
+> **Important**: You must add at least 2 points for the line to be drawn.
+
+## Manage lines
+
+### From the lines list (Settings → Lines)
+
+- **Drag** to reorder.
+- **Edit** (✏️) to modify data.
+- **Delete** (🗑️) to remove the line.
+
+### From the Legends page
+
+1. Go to **Sidebar** → **Line legends**.
+2. You will see all created lines.
+3. You can:
+   - **Show/Hide** an individual line (checkbox).
+   - **Show/Hide all** with the switch at the top.
+   - **Edit lines** ("Edit lines" button).
+   - **Center the map** on a line by clicking the card (it must be shown on the map).
+
+## Line visibility
+
+- The **"Show lines"** switch on the Legends page controls whether all lines are visible on the map.
+- Each line has its own individual visibility (checkbox).
+- Lines are displayed in reverse order (the most recent on top).
+
+## Line detail on the map
+
+When a line is visible:
+- It is drawn with the specified color and thickness.
+- Clicking the line card on the Legends page adjusts the map to show it completely.
+
+---
+
+# Settings
+
+The settings section contains all customization and data management options.
+
+## Access to settings
+
+From the **sidebar** (☰) select **"Settings"**.
+
+## Settings sections
+
+### 1. Profile
+
+Manage your data:
+- **Username**.
+- **Profile photo URL**.
+- **Pronouns** (max 50 characters).
+- **Subtitle**.
+> **Important**: This information is **NOT** shared with other users or any developer.
+
+Additional actions:
+- **Export dataset**: Download all data in a JSON file.
+- **Import dataset**: Load a JSON file with previously exported data.
+- **Delete all data**: Remove all content (pins, groups, lines, etc.).
+> **Note**: Data management is discussed later.
+
+### 2. Position
+
+Configure the initial map position:
+- **System GPS**: Use the device's location.
+- **Predefined cities**: Choose from different cities.
+
+### 3. Appearance
+
+Customize the visual aspect of the application:
+- **Theme**: Light or dark.
+- **Accent color**: Choose from 12 predefined colors.
+- **Pin clustering**: Activate/deactivate clustering.
+
+> **Warning**: Disabling clustering may cause slower performance with many pins.
+
+### 4. Language
+
+Change the language of the entire UI.
+
+> **Note**: Changing the language requires reloading the application.
+
+### 5. Transport services
+
+Manage transport services that can be assigned to pins:
+- **Add service**: Name and icon URL.
+- **Edit service**: Modify name or icon.
+- **Delete service**: Remove the service.
+- **Drag** to reorder.
+
+### 6. Recent
+
+Shows the last 50 pins visited.
+
+### 7. Lines
+
+Line management (see previous dedicated section).
+
+### 8. Reload app
+
+Restart the application without losing data. Useful for applying changes that require a reload or for fixing problems.
+
+### 9. About
+
+Application information: version, description, and others.
+
+## Changes that require reload
+
+Some settings require reloading the application to apply changes:
+- Language change.
+- Accent color change.
+- Activation/deactivation of pin clustering.
+
+When these changes are made, a mandatory reload screen will be shown.
+
+---
+
+# Getting Image URLs
+
+To add an image to a pin, you need a public URL that points directly to the image file. This URL must be accessible from any device and usually end with extensions like \`.jpg\`, \`.png\`, \`.webp\`, or \`.gif\`.
+
+### How to get an image URL
+Getting image links is recommended from a desktop computer, but it is also possible on mobile devices.
+
+There are several ways to get an image URL for your pins:
+
+**1. Own images hosted in the cloud**
+
+-   Upload your images to services like **Google Photos**, **iCloud**, **Dropbox**, or **OneDrive**.
+-   Activate the sharing option and get the public link. Make sure the link points directly to the image (not to the viewing page).
+-   For Google Photos, you need to create a shared album and get the URL of each individual image.
+
+**2. Image hosting platforms**
+
+-   Services like **Imgur**, **Postimages**, **TinyPic**, or **ImageShack** allow you to upload images for free and get a direct URL.
+-   Upload the image, copy the direct link (usually marked as "Direct Link" or "Image URL") and paste it into the corresponding field.
+
+**3. Social networks**
+
+-   You can get the URL of an image published on **Instagram**, **Facebook**, or **Twitter**.
+-   Open the image in a new tab and copy the URL from the address bar. In some cases, you will need to look for the "Open image in new window" option.
+
+**4. Image search**
+
+-   Search for the image you are interested in on **Google Images** or **Bing Images**.
+-   Open the image at full size and copy the URL from the address bar. Make sure the image does not have copyright if you use it for public use.
+
+### Practical tips
+
+-   **Avoid short URLs** or link shorteners like [bit.ly](https://bit.ly/), as they don't always work correctly.
+-   **Check that the URL works** by opening it in an incognito browser tab. If the image loads, the URL is valid.
+-   **Prefer square images** or with an aspect ratio close to 1:1 for better display on pin cards.
+-   The recommended size for images is between 200x200 and 800x800 pixels to balance quality and loading speed.
+
+### Using the "Recycle image" function
+LibrePin includes a function that allows you to reuse images that you have already used in other pins. This saves time and avoids duplicating links. You will find it in the pin creation/editing dialog, clicking on the images icon (🔄).
+
+---
+
+# Other Questions
+
+## General
+
+### What is LibrePin?
+LibrePin is a web application for managing personalized points of interest on an interactive map. It allows you to create, organize, and visualize pins with detailed information.
+
+### Is it free?
+Yes, LibrePin is completely free and open source.
+
+### Do I need to install anything?
+No, you only need a modern web browser. The application works directly from the browser. Installing it as a PWA is totally optional and does not cut any functionality if you don't.
+
+### Are my data safe?
+Data is stored locally in your browser (LocalStorage). No one else can access it unless you share the export file. The developers have no way of consulting the data.
+
+---
+
+# Data and Persistence
+
+Data management is one of the central aspects of LibrePin. Understanding how data is saved, transferred, and protected will help you get the most out of it and use the application with peace of mind.
+
+## Where are my data stored?
+
+All data you generate in LibrePin (pins, groups, lines, favorites, quick marks, etc.) are stored **exclusively in your browser's LocalStorage**. This means that:
+
+- Data is **not lost** when you close the tab or browser.
+- Data is **not sent to any external server**. Neither we nor any third party have access to it.
+- Data is **specific to the browser and device** where you use the application. If you open LibrePin from another browser or device, you will see an empty map (unless you import the data).
+
+> **Important**: LocalStorage has a limited capacity (usually between 5 and 10 MB per domain). If you work with many images or pins, we recommend making periodic backups.
+
+## How do I make a backup?
+
+Making backups is simple and allows you to recover data if you change devices, browsers, or if you want to share your map with someone else.
+
+1. Go to **Settings** → **Profile**.
+2. Click the **"Export dataset"** button.
+3. The browser will automatically download a file with the \`.json\` extension containing all the application data.
+4. Save this file in a safe place (computer, cloud, external disk, etc.).
+
+The JSON file contains all the information: pins, groups, lines, favorites, transport services, quick marks, appearance configuration, language, and even your profile data.
+
+## How do I restore a backup?
+
+If you have previously exported your data, you can restore them at any time:
+
+1. Go to **Settings** → **Profile**.
+2. Click the **"Import dataset"** button.
+3. Select the \`.json\` file you had saved.
+4. The application will show you a preview of the data (profile name, number of pins, etc.).
+5. After a 5-second wait, you will be able to confirm the import.
+6. Once imported, the application will reload automatically to apply the changes. **If it doesn't, close and reopen LibrePin manually.**
+
+> **Warning**: Importing **overwrites all current data**. If you have data on the device that you don't want to lose, make sure to back up before importing.
+
+## Can I delete all data?
+
+Yes, if you want to start from scratch or free up space in LocalStorage:
+
+1. Go to **Settings** → **Profile**.
+2. Click the **"Delete all data"** button (in red).
+3. Confirm the action in the confirmation dialog.
+
+> **WARNING**: This action **cannot be undone**. All pins, groups, lines, favorites, and configurations will be permanently deleted. Make sure you have a backup before proceeding.
+
+## How can I share my data?
+
+LibrePin allows you to share your map in this way:
+
+### Share the export file
+- Export the data as JSON (see "How do I make a backup?").
+- Send the file by email, Drive, Telegram, etc.
+- The recipient can import the file from their LibrePin and view your map.
+
+## What happens if I change browser or device?
+
+Data does not synchronize automatically between devices. To transfer your map to another browser or device:
+
+1. Export the data from the original device (Settings → Profile → Export dataset).
+2. Transfer the \`.json\` file to the new device (by email, USB, cloud, etc.).
+3. Open LibrePin on the new device and import the file.
+
+This way, your map will be available wherever you go.
+
+## Security tips
+
+- **Make periodic backups**, especially if you add many pins or spend time organizing them.
+- **Save the JSON file in a safe place**, as it contains all your data.
+- **Do not share the JSON file with strangers** if it contains sensitive information.
+- If you work on a shared device, remember to delete the data or close the browser session after using LibrePin.
+
+---
+
+# Troubleshooting
+
+From time to time, small issues may arise. Don't worry, most have a quick solution. Here are the most common ones and how to address them:
+
+## The map does not load
+
+-   Check your Internet connection. The map needs network access to load images and cartographic data.
+-   Reload the application from **Settings → Reload app**. This refreshes the state without losing any data.
+-   If it persists, try clearing the browser cache (Ctrl+F5 or Cmd+Shift+R). Sometimes a hard reload solves caching problems.
+
+## Pins do not show
+
+-   Verify the active **view mode**. If you are in "My environment" mode, only pins that are not marked as "Outside environment" are shown. If you are in "Do not disturb" mode, only favorites are shown.
+-   Check that pins are not filtered by any other criteria.
+-   If everything seems correct, reload the application to refresh the state.
+
+## GPS location does not work
+
+-   Make sure you have granted geolocation permission to the browser. Usually, the browser asks you when opening the application for the first time.
+-   Try selecting a city manually from **Settings → Position**. This will allow you to position the map even if GPS is not available.
+-   Check the GPS signal on your device. If you are indoors or in areas with poor coverage, the device may take time to get the location.
+
+## The application is slow
+
+-   Disable pin clustering at **Settings → Appearance → Do not cluster pins**. This can improve performance if you have many pins, but keep in mind that it can slow down the map if there are too many.
+-   Reduce the number of visible pins by changing the view mode or deleting pins that are no longer useful.
+-   Close other tabs or applications that may be consuming device resources.
+
+## Changes do not apply
+
+-   Some settings require reloading the application to apply completely: language change, accent color change, or activation/deactivation of pin clustering. The application will notify you and reload automatically in these cases.
+-   If you have made a change and it does not reflect, try manually reloading the application from **Settings → Reload app**.
+
+## I have lost data
+
+-   If you had a previous backup, you can restore it from **Profile → Import dataset**.
+-   If you didn't, the data has been permanently lost, as it is stored exclusively in your browser's LocalStorage and is not saved on any external server.
+-   For future occasions, we recommend making periodic backups from **Profile → Export dataset**.
+
+## Have you detected an error not listed here?
+
+If you have found a problem that is not covered in this list, you can open an issue in the LibrePin GitHub repository. Describe the step-by-step process to reproduce the error and, if possible, attach a screenshot. This will help us improve the application for everyone.
+
+---
+
+# LibrePin Studio
+LibrePin Studio will be a suite of advanced tools designed for those who want total control over their dataset. It is intended for very active users who manage large volumes of data and need functionalities such as mass cleaning, statistical analysis, bulk reorganization, or advanced exports. It is not recommended for novice users, as it requires some familiarity with data structure and batch operations.
+
+For now, we are working on its development and will soon share more details about the functionalities it will include. We ask for your patience and encourage you to follow us to stay up to date with the news. While it arrives, you can continue enjoying LibrePin and making the most of the current tools.
+
+---
+
+# Before finishing
+I created LibrePin because I wanted a tool that would allow me to build my own map, without intermediaries, without brands, and without imposed content. After using applications that tell you where to go, what to visit, and how to organize your places, I decided that the best way to have control was to do it myself. LibrePin is born from this need: a map that is truly yours, where each pin is a conscious decision, not a suggestion from an algorithm.
+
+But LibrePin is not just my project; it is for you. It is for those who, like me, want to document their discoveries, keep their memories, and organize their travels at their own pace, without rushing and without distractions. It is for those who prefer a handmade map, tailored to their needs, that grows with them and only contains what truly matters to them. **Thank you for making it yours**, for filling it with life, and for accompanying me on this journey. May your map be as vast as your curiosity.`;
+
+        let state = {
+            lang: DEFAULT_LANG,
+            darkMode: false,
+            currentSection: null
+        };
+
+        function extractSections(md) {
+            const lines = md.split('\n');
+            const sections = [];
+            let current = null;
+            let buffer = [];
+
+            for (const line of lines) {
+                if (line.startsWith('# ')) {
+                    if (current) {
+                        sections.push({ title: current, content: buffer.join('\n').trim() });
+                    }
+                    current = line.replace('# ', '').trim();
+                    buffer = [];
+                } else {
+                    buffer.push(line);
+                }
+            }
+            if (current && buffer.length > 0) {
+                sections.push({ title: current, content: buffer.join('\n').trim() });
+            }
+            return sections;
+        }
+
+        function renderDoc(lang) {
+            let md = '';
+            if (lang === 'ca') md = MD_CA;
+            else if (lang === 'es') md = MD_ES;
+            else if (lang === 'en') md = MD_EN;
+            else md = MD_CA;
+
+            const sections = extractSections(md);
+            renderSidebar(sections, lang);
+
+            if (sections.length > 0) {
+                const firstSection = sections[0];
+                state.currentSection = firstSection.title;
+                renderContent(firstSection.title, firstSection.content);
+            } else {
+                document.getElementById('mdContent').innerHTML = '<p>No s\'ha trobat contingut.</p>';
+            }
+        }
+
+        function renderSidebar(sections, lang) {
+            const container = document.getElementById('sidebarNav');
+            const titles = { ca: 'Seccions', es: 'Secciones', en: 'Sections' };
+
+            let html = `<div class="nav-section">${titles[lang] || 'Seccions'}</div>`;
+            sections.forEach((sec, index) => {
+                const active = sec.title === state.currentSection ? 'active' : '';
+                const icon = index === 0 ? 'fa-home' : 'fa-file-lines';
+                html += `<button class="nav-item ${active}" data-section="${sec.title}" data-index="${index}"><i class="fas ${icon}"></i> ${sec.title}</button>`;
+            });
+            container.innerHTML = html;
+
+            container.querySelectorAll('.nav-item').forEach(btn => {
+                btn.onclick = () => {
+                    const title = btn.dataset.section;
+                    const idx = parseInt(btn.dataset.index);
+                    if (idx >= 0 && idx < sections.length) {
+                        state.currentSection = title;
+                        renderContent(title, sections[idx].content);
+                        document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        closeSidebar();
+                        scrollToTop();
+                    }
+                };
+            });
+
+            const searchInput = document.getElementById('sidebarSearch');
+            searchInput.placeholder = lang === 'ca' ? 'Cercar...' : lang === 'es' ? 'Buscar...' : 'Search...';
+            searchInput.oninput = (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('.sidebar .nav-item').forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    el.style.display = text.includes(term) ? 'flex' : 'none';
+                });
+            };
+        }
+
+        function renderContent(title, content) {
+            const container = document.getElementById('mdContent');
+            container.innerHTML = marked.parse(`# ${title}\n\n${content}`);
+            scrollToTop();
+        }
+
+        function scrollToTop() {
+            const docContent = document.getElementById('docContent');
+            const mdContent = document.getElementById('mdContent');
+            const page = document.getElementById('docsPage');
+            if (docContent) docContent.scrollTop = 0;
+            if (mdContent) mdContent.scrollTop = 0;
+            if (page) page.scrollTop = 0;
+        }
+
+        function toggleSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebarOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+            document.getElementById('themeToggle').innerHTML = state.darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('librepin_docs_theme', state.darkMode ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('librepin_docs_theme');
+            if (saved === 'dark') {
+                state.darkMode = true;
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+
+        function getBrowserLanguage() {
+            const lang = navigator.language || navigator.languages?.[0] || 'ca';
+            const short = lang.slice(0, 2).toLowerCase();
+            return ['ca', 'es', 'en'].includes(short) ? short : 'ca';
+        }
+
+        function init() {
+            loadTheme();
+
+            const browserLang = getBrowserLanguage();
+            state.lang = browserLang;
+            document.getElementById('langSelect').value = browserLang;
+            localStorage.setItem('librepin_docs_lang', browserLang);
+
+            renderDoc(state.lang);
+
+            document.getElementById('menuBtn').addEventListener('click', toggleSidebar);
+            document.getElementById('sidebarClose').addEventListener('click', closeSidebar);
+            document.getElementById('sidebarOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeSidebar();
+            });
+
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            document.getElementById('langSelect').addEventListener('change', (e) => {
+                const lang = e.target.value;
+                state.lang = lang;
+                localStorage.setItem('librepin_docs_lang', lang);
+                renderDoc(lang);
+                scrollToTop();
+            });
+
+            document.getElementById('appTitleClick').addEventListener('click', () => {
+                const sections = extractSections(state.lang === 'ca' ? MD_CA : state.lang === 'es' ? MD_ES : MD_EN);
+                if (sections.length > 0) {
+                    state.currentSection = sections[0].title;
+                    renderContent(sections[0].title, sections[0].content);
+                    document.querySelectorAll('.sidebar .nav-item').forEach(b => b.classList.remove('active'));
+                    document.querySelector('.sidebar .nav-item')?.classList.add('active');
+                    scrollToTop();
+                }
+            });
+
+            document.getElementById('navHome').addEventListener('click', () => {
+                document.getElementById('appTitleClick').click();
+            });
+            document.getElementById('navSections').addEventListener('click', toggleSidebar);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeSidebar();
+                if (e.key === 'f' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    document.getElementById('sidebarSearch').focus();
+                }
+            });
+
+            setTimeout(scrollToTop, 150);
+            console.log('LibrePin Docs v' + APP_VERSION + ' loaded!');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
