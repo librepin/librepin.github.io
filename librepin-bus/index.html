@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ca" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>LibrePin Bus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --md-primary: #E30613;
+            --md-surface: #FFFFFF;
+            --md-surface-dim: #F5F5F5;
+            --md-background: #F8F9FA;
+            --md-on-surface: #1C1B1F;
+            --md-on-surface-variant: #49454F;
+            --md-outline: #79747E;
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --md-elevation-2: 0 3px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+            --radius-lg: 28px;
+            --radius-md: 16px;
+        }
+
+        [data-theme="dark"] {
+            --md-primary: #E30613;
+            --md-surface: #1C1B1F;
+            --md-surface-dim: #2C2A2E;
+            --md-background: #0F0F14;
+            --md-on-surface: #E6E1E5;
+            --md-on-surface-variant: #CAC4D0;
+            --md-outline: #938F99;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--md-background);
+            color: var(--md-on-surface);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .app-container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--md-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--md-elevation-2);
+            padding: 20px;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Error state */
+        .error-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            flex: 1;
+            gap: 16px;
+        }
+        .error-state.show {
+            display: flex;
+        }
+        .error-state .error-icon {
+            font-size: 56px;
+            color: var(--md-primary);
+            opacity: 0.7;
+        }
+        .error-state .error-msg {
+            font-size: 16px;
+            color: var(--md-on-surface-variant);
+            max-width: 320px;
+            line-height: 1.5;
+        }
+        .error-state .error-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Content state */
+        .content-state {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+        }
+        .content-state.show {
+            display: flex;
+        }
+
+        /* Top bar: stop info + buttons */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+            flex-wrap: wrap;
+        }
+        .stop-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .stop-name {
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .stop-code {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+        }
+        .top-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .icon-btn {
+            background: var(--md-surface-dim);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 44px;
+            font-size: 18px;
+            color: var(--md-on-surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+        }
+        .icon-btn:active {
+            transform: scale(0.94);
+            background: var(--md-primary);
+            color: white;
+        }
+
+        .lines-container {
+            margin-top: 16px;
+            flex: 1;
+        }
+
+        .line-card {
+            background: var(--md-surface-dim);
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .line-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: white;
+        }
+        .line-header[data-contrast="dark"] {
+            color: #1C1B1F;
+        }
+        .line-badge {
+            width: 44px;
+            height: 44px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .line-dest {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .line-dest small {
+            font-weight: 400;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .arrival-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .arrival-row:last-child { border-bottom: none; }
+        .minutes-chip {
+            background: var(--md-primary);
+            padding: 4px 16px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .arrival-time {
+            font-weight: 500;
+        }
+        .bus-id {
+            font-size: 13px;
+            color: var(--md-on-surface-variant);
+        }
+        .empty-arrivals {
+            padding: 16px;
+            text-align: center;
+            color: var(--md-on-surface-variant);
+            font-size: 14px;
+        }
+
+        /* Settings Dialog */
+        .dialog-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .dialog-overlay.active { visibility: visible; opacity: 1; }
+        .dialog-card {
+            background: var(--md-surface);
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 28px;
+            padding: 28px 24px;
+        }
+        .dialog-card h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .setting-group {
+            margin-bottom: 18px;
+        }
+        .setting-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+        }
+        .setting-group select,
+        .setting-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--md-outline);
+            background: var(--md-surface-dim);
+            color: var(--md-on-surface);
+            font-size: 16px;
+            font-family: inherit;
+        }
+        .setting-group select:focus,
+        .setting-group input:focus {
+            outline: 2px solid var(--md-primary);
+            border-color: transparent;
+        }
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .toggle-row span { font-weight: 500; }
+        .toggle {
+            width: 52px;
+            height: 28px;
+            background: var(--md-outline);
+            border-radius: 28px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .toggle.active { background: var(--md-primary); }
+        .toggle .thumb {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 22px;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: 0.2s;
+        }
+        .toggle.active .thumb { left: 27px; }
+        .dialog-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .dialog-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .dialog-btn.primary { background: var(--md-primary); color: white; }
+        .dialog-btn.secondary { background: var(--md-surface-dim); color: var(--md-on-surface); }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--md-surface);
+            border-radius: 40px;
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+            box-shadow: var(--md-elevation-2);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(100px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .loading-overlay.active { visibility: visible; opacity: 1; }
+        .loading-card {
+            background: var(--md-surface);
+            border-radius: 32px;
+            padding: 24px 32px;
+            text-align: center;
+        }
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid rgba(227,6,19,0.2);
+            border-top-color: var(--md-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 500px) {
+            .app-container { padding: 16px; }
+            .stop-name { font-size: 18px; }
+            .top-bar { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- Error State -->
+    <div class="error-state" id="errorState">
+        <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="error-msg" id="errorMsg">No s'ha pogut carregar la parada</div>
+        <div class="error-actions">
+            <button class="icon-btn" id="errorRefreshBtn" title="Recarregar"><i class="fas fa-sync-alt"></i></button>
+            <button class="icon-btn" id="errorSettingsBtn" title="Arranjament"><i class="fas fa-sliders-h"></i></button>
+        </div>
+    </div>
+
+    <!-- Content State -->
+    <div class="content-state" id="contentState">
+        <div class="top-bar">
+            <div class="stop-info">
+                <div class="stop-name" id="stopName">—</div>
+                <div class="stop-code" id="stopCode">—</div>
+            </div>
+            <div class="top-actions">
+                <button class="icon-btn" id="refreshBtn" title="Recarregar"><i class="fas fa-sync-alt"></i></button>
+                <button class="icon-btn" id="settingsBtn" title="Arranjament"><i class="fas fa-sliders-h"></i></button>
+            </div>
+        </div>
+
+        <div class="lines-container" id="linesContainer">
+            <div class="empty-arrivals">Carregant horaris...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Dialog -->
+<div id="settingsDialog" class="dialog-overlay">
+    <div class="dialog-card">
+        <h2>⚙️ Arranjament</h2>
+
+        <div class="setting-group">
+            <label>Idioma</label>
+            <select id="langSelect">
+                <option value="ca">Català</option>
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label>Clau API (app_id)</label>
+            <input type="text" id="apiIdInput" placeholder="app_id" value="">
+        </div>
+
+        <div class="setting-group">
+            <label>Clau API (app_key)</label>
+            <input type="text" id="apiKeyInput" placeholder="app_key" value="">
+        </div>
+
+        <div class="setting-group">
+            <div class="toggle-row">
+                <span>Mode fosc</span>
+                <div class="toggle" id="darkToggle"><div class="thumb"></div></div>
+            </div>
+            <div class="toggle-row">
+                <span>So</span>
+                <div class="toggle active" id="soundToggle"><div class="thumb"></div></div>
+            </div>
+            <div class="toggle-row">
+                <span>Format 24h</span>
+                <div class="toggle active" id="timeToggle"><div class="thumb"></div></div>
+            </div>
+        </div>
+
+        <div class="dialog-actions">
+            <button class="dialog-btn secondary" id="settingsCancelBtn">Cancel·lar</button>
+            <button class="dialog-btn primary" id="settingsSaveBtn">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toastMsg" class="toast"><i class="fas fa-info-circle"></i><span id="toastText"></span></div>
+
+<!-- Loading -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-card">
+        <div class="spinner"></div>
+        <span id="loadingText">Carregant...</span>
+    </div>
+</div>
+
+<script>
+    // -------- CONFIGURACIÓ --------
+    const APP_VERSION = '1.0.0';
+
+    let config = {
+        apiId: '',
+        apiKey: '',
+        lang: 'en',
+        darkMode: false,
+        soundEnabled: true,
+        use24h: true
+    };
+
+    let currentStopCode = null;
+    let stopData = null;
+
+    // -------- SONS --------
+    // Utilitzem ruta real per al so d'error
+    const errorSound = new Audio('sounds/error.mp3');
+    errorSound.volume = 0.4;
+    errorSound.preload = 'auto';
+
+    const clickSound = new Audio('data:audio/wav;base64,U3R1ZmZUdXJy');
+    clickSound.volume = 0.3;
+
+    function playSound(name) {
+        if (!config.soundEnabled) return;
+        try {
+            if (name === 'error') {
+                errorSound.currentTime = 0;
+                errorSound.play().catch(() => {});
+            } else if (name === 'click') {
+                clickSound.currentTime = 0;
+                clickSound.play().catch(() => {});
+            }
+        } catch(e) {}
+    }
+
+    // -------- TRADUCCIONS --------
+    const i18n = {
+        ca: {
+            loading: 'Carregant...',
+            stop: 'Parada',
+            minutes: 'min',
+            now: 'Ara',
+            noArrivals: 'Sense arribades',
+            outbound: 'Anada',
+            return: 'Tornada',
+            bus: 'Autobús',
+            errorStop: 'No s\'ha trobat la parada o no hi ha busos disponibles',
+            errorApi: 'Falten les claus API. Configura-les a Arranjament.',
+            errorGeneric: 'S\'ha produït un error',
+            toastSaved: 'Configuració guardada',
+            settingsTitle: 'Arranjament'
+        },
+        es: {
+            loading: 'Cargando...',
+            stop: 'Parada',
+            minutes: 'min',
+            now: 'Ahora',
+            noArrivals: 'Sin llegadas',
+            outbound: 'Ida',
+            return: 'Vuelta',
+            bus: 'Autobús',
+            errorStop: 'No se encontró la parada o no hay autobuses disponibles',
+            errorApi: 'Faltan las claves API. Configúralas en Ajustes.',
+            errorGeneric: 'Se produjo un error',
+            toastSaved: 'Configuración guardada',
+            settingsTitle: 'Ajustes'
+        },
+        en: {
+            loading: 'Loading...',
+            stop: 'Stop',
+            minutes: 'min',
+            now: 'Now',
+            noArrivals: 'No arrivals',
+            outbound: 'Outbound',
+            return: 'Return',
+            bus: 'Bus',
+            errorStop: 'Stop not found or no buses available',
+            errorApi: 'API keys missing. Configure them in Settings.',
+            errorGeneric: 'An error occurred',
+            toastSaved: 'Settings saved',
+            settingsTitle: 'Settings'
+        }
+    };
+    function t(key) { return i18n[config.lang]?.[key] || i18n.ca[key] || key; }
+
+    // -------- PERSISTÈNCIA --------
+    function loadConfig() {
+        try {
+            const saved = localStorage.getItem('librepin_config');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                config = { ...config, ...parsed };
+            }
+        } catch(e) {}
+        const params = new URLSearchParams(window.location.search);
+        const stopParam = params.get('stop');
+        if (stopParam) currentStopCode = stopParam;
+        const langParam = params.get('lang');
+        if (langParam && ['ca','es','en'].includes(langParam)) config.lang = langParam;
+    }
+
+    function saveConfig() {
+        try {
+            localStorage.setItem('librepin_config', JSON.stringify(config));
+        } catch(e) {}
+        applyConfig();
+    }
+
+    function applyConfig() {
+        document.documentElement.setAttribute('data-theme', config.darkMode ? 'dark' : 'light');
+        document.getElementById('darkToggle').classList.toggle('active', config.darkMode);
+        document.getElementById('soundToggle').classList.toggle('active', config.soundEnabled);
+        document.getElementById('timeToggle').classList.toggle('active', config.use24h);
+        document.getElementById('langSelect').value = config.lang;
+        document.getElementById('apiIdInput').value = config.apiId || '';
+        document.getElementById('apiKeyInput').value = config.apiKey || '';
+    }
+
+    // -------- TOAST --------
+    function showToast(msg, isError = false) {
+        const toast = document.getElementById('toastMsg');
+        document.getElementById('toastText').textContent = msg;
+        toast.classList.add('show');
+        if (isError) playSound('error');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // -------- LOADING --------
+    function showLoading() { document.getElementById('loadingOverlay').classList.add('active'); }
+    function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
+
+    // -------- UI STATES --------
+    function showErrorState(msg) {
+        document.getElementById('errorState').classList.add('show');
+        document.getElementById('contentState').classList.remove('show');
+        document.getElementById('errorMsg').textContent = msg || t('errorGeneric');
+        // Reproduir so d'error
+        playSound('error');
+    }
+
+    function showContentState() {
+        document.getElementById('errorState').classList.remove('show');
+        document.getElementById('contentState').classList.add('show');
+    }
+
+    function showEmptyContent() {
+        document.getElementById('stopName').textContent = '—';
+        document.getElementById('stopCode').textContent = '—';
+        document.getElementById('linesContainer').innerHTML = `<div class="empty-arrivals">${t('noArrivals')}</div>`;
+    }
+
+    // -------- API --------
+    async function fetchStopData(stopCode) {
+        if (!config.apiId || !config.apiKey) {
+            showErrorState(t('errorApi'));
+            return;
+        }
+        if (!stopCode) {
+            showErrorState('Codi de parada no especificat');
+            return;
+        }
+
+        showLoading();
+        try {
+            const url = `https://api.tmb.cat/v1/itransit/bus/parades/${stopCode}?app_id=${config.apiId}&app_key=${config.apiKey}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+            if (!json.parades || json.parades.length === 0) throw new Error('No data');
+
+            stopData = json.parades[0];
+            showContentState();
+            renderResults();
+        } catch (e) {
+            console.error(e);
+            showErrorState(t('errorStop'));
+        } finally {
+            hideLoading();
+        }
+    }
+
+    function getLineColor(lineCode) {
+        if (/^\d+$/.test(lineCode)) return '#E30613';
+        const prefix = lineCode.charAt(0);
+        switch(prefix) {
+            case 'H': return '#0054A6';
+            case 'V': return '#34A853';
+            case 'D': return '#8E44AD';
+            case 'N': return '#1E90FF';
+            case 'X': return '#0f0f0f';
+            default: return '#FFC10E';
+        }
+    }
+
+    function formatTime(date) {
+        if (config.use24h) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        } else {
+            return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+    }
+
+    function renderResults() {
+        if (!stopData) return;
+        document.getElementById('stopName').textContent = stopData.nom_parada;
+        document.getElementById('stopCode').textContent = `${t('stop')}: ${stopData.codi_parada}`;
+
+        const lines = stopData.linies_trajectes || [];
+        const container = document.getElementById('linesContainer');
+
+        if (lines.length === 0) {
+            container.innerHTML = `<div class="empty-arrivals">${t('noArrivals')}</div>`;
+            return;
+        }
+
+        let html = '';
+        for (const line of lines) {
+            const lineCode = line.nom_linia;
+            const bgColor = getLineColor(lineCode);
+            const contrastAttr = bgColor === '#FFC10E' ? 'data-contrast="dark"' : '';
+            const dirText = line.id_sentit === 1 ? t('outbound') : t('return');
+            const arrivals = line.propers_busos || [];
+
+            let arrivalsHtml = '';
+            for (const bus of arrivals) {
+                const arrivalDate = new Date(bus.temps_arribada);
+                const diffMin = Math.max(0, Math.floor((arrivalDate - Date.now()) / 60000));
+                const timeText = diffMin === 0 ? t('now') : `${diffMin} ${t('minutes')}`;
+                const hourStr = formatTime(arrivalDate);
+                const busId = bus.id_bus;
+                const busDisplay = (busId && busId !== '#undefined' && busId !== 'undefined')
+                    ? `<span class="bus-id"><i class="fas fa-bus"></i> ${busId}</span>`
+                    : '';
+                arrivalsHtml += `
+                    <div class="arrival-row">
+                        <span class="minutes-chip">${timeText}</span>
+                        <span class="arrival-time">${hourStr}</span>
+                        ${busDisplay}
+                    </div>
+                `;
+            }
+            if (!arrivalsHtml) {
+                arrivalsHtml = `<div class="empty-arrivals">${t('noArrivals')}</div>`;
+            }
+
+            html += `
+                <div class="line-card">
+                    <div class="line-header" style="background:${bgColor};" ${contrastAttr}>
+                        <div class="line-badge">${lineCode}</div>
+                        <div>
+                            <div class="line-dest">${line.desti_trajecte || line.nom_linia} <small>${dirText}</small></div>
+                        </div>
+                    </div>
+                    <div>${arrivalsHtml}</div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // -------- SETTINGS DIALOG --------
+    function openSettings() {
+        applyConfig();
+        document.getElementById('settingsDialog').classList.add('active');
+    }
+    function closeSettings() {
+        document.getElementById('settingsDialog').classList.remove('active');
+    }
+
+    function saveSettings() {
+        config.lang = document.getElementById('langSelect').value;
+        config.apiId = document.getElementById('apiIdInput').value.trim();
+        config.apiKey = document.getElementById('apiKeyInput').value.trim();
+        config.darkMode = document.getElementById('darkToggle').classList.contains('active');
+        config.soundEnabled = document.getElementById('soundToggle').classList.contains('active');
+        config.use24h = document.getElementById('timeToggle').classList.contains('active');
+        saveConfig();
+        closeSettings();
+        showToast(t('toastSaved'));
+        if (currentStopCode) fetchStopData(currentStopCode);
+    }
+
+    function setupToggle(elmId) {
+        const el = document.getElementById(elmId);
+        el.addEventListener('click', () => {
+            el.classList.toggle('active');
+            playSound('click');
+        });
+    }
+
+    // -------- INIT --------
+    function init() {
+        loadConfig();
+        applyConfig();
+
+        setupToggle('darkToggle');
+        setupToggle('soundToggle');
+        setupToggle('timeToggle');
+
+        // Refresh buttons
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            if (currentStopCode) fetchStopData(currentStopCode);
+            else showErrorState('Codi de parada no especificat');
+        });
+        document.getElementById('errorRefreshBtn').addEventListener('click', () => {
+            if (currentStopCode) fetchStopData(currentStopCode);
+            else showErrorState('Codi de parada no especificat');
+        });
+
+        // Settings buttons
+        document.getElementById('settingsBtn').addEventListener('click', openSettings);
+        document.getElementById('errorSettingsBtn').addEventListener('click', openSettings);
+        document.getElementById('settingsCancelBtn').addEventListener('click', closeSettings);
+        document.getElementById('settingsSaveBtn').addEventListener('click', saveSettings);
+
+        // Close dialogs on overlay click
+        document.getElementById('settingsDialog').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeSettings();
+        });
+
+        // Load stop
+        if (currentStopCode) {
+            fetchStopData(currentStopCode);
+        } else {
+            showErrorState('Especifica una parada amb ?stop=CODI');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
