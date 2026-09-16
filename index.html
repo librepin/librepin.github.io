@@ -958,7 +958,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.13.0</span>
+                    <span>v1.13.1</span>
                 </div>
             </div>
         </div>
@@ -1323,7 +1323,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.13.0 Mobile</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.13.1</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -1770,11 +1770,11 @@
             <div class="town-search-wrapper">
                 <input type="text" id="townFilterSearchInput" class="town-search-input" placeholder="Cercar població...">
             </div>
-            <div id="townFilterList"></div>
-            <div class="dialog-actions" style="margin-top:12px;">
-                <button class="fab-btn secondary" id="townFilterClear"><span id="townFilterClearLabel">Mostrar totes</span></button>
-                <button class="fab-btn secondary" id="townFilterClose"><span id="townFilterCloseLabel">Tancar</span></button>
+            <div class="dialog-actions" style="margin-bottom:12px; display:flex; gap:8px;">
+                <button class="fab-btn secondary" id="townFilterClear" style="flex:1;"><span id="townFilterClearLabel">Mostrar totes</span></button>
+                <button class="fab-btn secondary" id="townFilterClose" style="flex:1;"><span id="townFilterCloseLabel">Tancar</span></button>
             </div>
+            <div id="townFilterList"></div>
         </div>
     </div>
 
@@ -1803,8 +1803,8 @@
             '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.13.0';
-        const DEFAULT_AVATAR = 'https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg';
+        const APP_VERSION = '1.13.1';
+        const DEFAULT_AVATAR = null; // Ya no usamos una imagen por defecto
 
         const WELCOME_TRANSLATIONS = {
             ca: { title: 'LibrePin', subtitle: 'Et donem la benvinguda al teu nou mapa!', nameLabel: "Nom d'usuari", startLabel: 'Start' },
@@ -1820,7 +1820,7 @@
             detailPinId: null, currentAudio: null, audioPlaying: false, editingServiceId: null,
             tempRelatedPins: [], tempServices: [], servicesViewExpanded: false, searchLimit: 25,
             editingGroupId: null, tempGroupPins: [],
-            profile: { name: 'User', avatar: DEFAULT_AVATAR, pronouns: '', preferredTown: null },
+            profile: { name: 'User', avatar: null, pronouns: '', preferredTown: null },
             profileLoaded: false, userLocation: null, watchId: null, userMarker: null, history: ['map'],
             gpsSplashVisible: false, gpsSplashResolve: null, lineLayers: {}, lineVisibility: {},
             editingLineId: null, linesVisible: true, sortMode: 'recent', currentSearchQuery: '',
@@ -4048,7 +4048,7 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (data.pins && data.services) {
-                        document.getElementById('importAvatar').src = data.profile?.avatar || DEFAULT_AVATAR;
+                        document.getElementById('importAvatar').src = data.profile?.avatar || DEFAULT_AVATAR || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍';
                         document.getElementById('importName').textContent = data.profile?.name || 'Unknown';
                         document.getElementById('importSub').textContent = `${data.pins ? data.pins.length : 0} pins • ${data.groups ? data.groups.length : 0} groups`;
                         if (state.pins.length === 0) { applyImportedData(data); showToast(t('importSuccess')); showReloadSplash(); return; }
@@ -4146,7 +4146,7 @@
                 state.accentColor = '#9a398d'; state.darkMode = false; state.mapStyle = 'color';
                 state.viewMode = 'home'; state.lang = 'en'; state.sortMode = 'recent'; state.groupSortMode = 'recent';
                 state.mapStartLocation = BARCELONA_CENTER; state.currentLocation = BARCELONA_CENTER;
-                state.profile = { name: 'User', avatar: DEFAULT_AVATAR, pronouns: '', preferredTown: null };
+                state.profile = { name: 'User', avatar: null, pronouns: '', preferredTown: null };
                 state.profileLoaded = false; state.noCluster = false; state.isFirstLaunch = true;
                 state.appLaunchCount = 0; state.townFilter = null; state.showTownInSearch = true;
                 saveData();
@@ -4180,7 +4180,19 @@
 
         function renderProfile() {
             const p = state.profile;
-            document.getElementById('profileAvatar').src = p.avatar || DEFAULT_AVATAR;
+            const avatarImg = document.getElementById('profileAvatar');
+            const greetingAvatar = document.getElementById('greetingAvatar');
+            if (p.avatar) {
+                avatarImg.src = p.avatar;
+                avatarImg.style.display = 'block';
+                greetingAvatar.src = p.avatar;
+                greetingAvatar.style.display = 'block';
+            } else {
+                avatarImg.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+                avatarImg.style.display = 'block';
+                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+                greetingAvatar.style.display = 'block';
+            }
             document.getElementById('profileName').innerText = p.name || 'User';
             document.getElementById('profilePronouns').innerText = p.pronouns || '—';
             let prefTownText = '—';
@@ -4192,9 +4204,11 @@
             document.getElementById('profileSubtitle').innerHTML = prefTownFlag ? `<img src="${prefTownFlag}" style="width:28px;height:19px;border-radius:3px;object-fit:cover;"> ${prefTownText}` : prefTownText;
             document.getElementById('pinCount').innerText = state.pins.length;
             const iconEl = document.getElementById('profileIconBtn');
-            if (p.avatar && p.avatar !== DEFAULT_AVATAR) iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
-            else iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
-            document.getElementById('greetingAvatar').src = p.avatar || DEFAULT_AVATAR;
+            if (p.avatar) {
+                iconEl.innerHTML = `<img src="${p.avatar}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
+            } else {
+                iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
+            }
         }
 
         function openProfileEditor() {
@@ -4202,12 +4216,12 @@
             const dialog = document.createElement('div');
             dialog.className = 'dialog-overlay active profile-edit-dialog';
             dialog.style.display = 'flex';
-            dialog.innerHTML = `<div class="dialog-card"><h3><i class="fas fa-user-edit"></i> ${t('editProfile')}</h3><div class="form-group"><label>${t('profileName')}</label><input type="text" id="editProfileName" value="${escapeHtml(p.name || '')}" placeholder="${t('profileName')}"></div><div class="form-group"><label>${t('profileAvatar')}</label><input type="text" id="editProfileAvatar" value="${escapeHtml(p.avatar || DEFAULT_AVATAR)}" placeholder="https://..."></div><div class="form-group"><label>${t('profilePronouns')}</label><input type="text" id="editProfilePronouns" value="${escapeHtml(p.pronouns || '')}" placeholder="Custom entry!" maxlength="50"></div><div class="form-group"><label>${t('preferredTown')}</label><select id="editProfileTown" style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:16px; font-family:inherit; outline:none;"><option value="">-- ${t('noTowns')} --</option>${getSortedTownsForSelect().map(town => `<option value="${town.id}" ${p.preferredTown === town.id ? 'selected' : ''}>${town.name}</option>`).join('')}</select></div><div class="dialog-actions"><button class="fab-btn secondary" id="profileEditCancel">${t('cancel')}</button><button class="fab-btn glow" id="profileEditSave">${t('save')}</button></div></div>`;
+            dialog.innerHTML = `<div class="dialog-card"><h3><i class="fas fa-user-edit"></i> ${t('editProfile')}</h3><div class="form-group"><label>${t('profileName')}</label><input type="text" id="editProfileName" value="${escapeHtml(p.name || '')}" placeholder="${t('profileName')}"></div><div class="form-group"><label>${t('profileAvatar')}</label><input type="text" id="editProfileAvatar" value="${escapeHtml(p.avatar || '')}" placeholder="https://..."></div><div class="form-group"><label>${t('profilePronouns')}</label><input type="text" id="editProfilePronouns" value="${escapeHtml(p.pronouns || '')}" placeholder="Custom entry!" maxlength="50"></div><div class="form-group"><label>${t('preferredTown')}</label><select id="editProfileTown" style="width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:16px; font-family:inherit; outline:none;"><option value="">-- ${t('noTowns')} --</option>${getSortedTownsForSelect().map(town => `<option value="${town.id}" ${p.preferredTown === town.id ? 'selected' : ''}>${town.name}</option>`).join('')}</select></div><div class="dialog-actions"><button class="fab-btn secondary" id="profileEditCancel">${t('cancel')}</button><button class="fab-btn glow" id="profileEditSave">${t('save')}</button></div></div>`;
             document.body.appendChild(dialog);
             dialog.querySelector('#profileEditCancel').onclick = () => dialog.remove();
             dialog.querySelector('#profileEditSave').onclick = () => {
                 const name = document.getElementById('editProfileName').value.trim() || 'User';
-                const avatar = document.getElementById('editProfileAvatar').value.trim() || DEFAULT_AVATAR;
+                const avatar = document.getElementById('editProfileAvatar').value.trim() || null;
                 const pronouns = document.getElementById('editProfilePronouns').value.trim().slice(0, 50);
                 const preferredTown = document.getElementById('editProfileTown').value || null;
                 state.profile = { name, avatar, pronouns, preferredTown };
@@ -4234,7 +4248,12 @@
             document.getElementById('greetingName').innerText = `${greeting}, ${name}`;
             const subs = [t('greetingSub1'), t('greetingSub2'), t('greetingSub3'), t('greetingSub4')];
             document.getElementById('greetingSub').innerText = subs[Math.floor(Math.random() * subs.length)];
-            document.getElementById('greetingAvatar').src = state.profile.avatar || DEFAULT_AVATAR;
+            const greetingAvatar = document.getElementById('greetingAvatar');
+            if (state.profile.avatar) {
+                greetingAvatar.src = state.profile.avatar;
+            } else {
+                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+            }
         }
 
         function showSettingsSubpage(subpageId) {
