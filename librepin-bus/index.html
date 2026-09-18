@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ca" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>LibrePin Bus</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/qP2g9FV.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -26,6 +27,7 @@
             --md-elevation-2: 0 3px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
             --radius-lg: 28px;
             --radius-md: 16px;
+            --max-content-width: 640px;
         }
 
         [data-theme="dark"] {
@@ -44,22 +46,21 @@
             color: var(--md-on-surface);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 16px;
+            padding: 0;
         }
 
+        /* Main app wrapper – full width, no card container */
         .app-container {
-            max-width: 600px;
             width: 100%;
-            background: var(--md-surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--md-elevation-2);
-            padding: 20px;
-            position: relative;
-            min-height: 280px;
+            max-width: var(--max-content-width);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding: 24px 20px 40px;
+            margin: 0 auto;
+            position: relative;
         }
 
         /* Error state */
@@ -69,28 +70,28 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             flex: 1;
-            gap: 16px;
+            gap: 20px;
         }
         .error-state.show {
             display: flex;
         }
         .error-state .error-icon {
-            font-size: 56px;
+            font-size: 64px;
             color: var(--md-primary);
-            opacity: 0.7;
+            opacity: 0.75;
         }
         .error-state .error-msg {
-            font-size: 16px;
+            font-size: 17px;
             color: var(--md-on-surface-variant);
-            max-width: 320px;
-            line-height: 1.5;
+            max-width: 380px;
+            line-height: 1.55;
         }
         .error-state .error-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 14px;
+            margin-top: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -100,6 +101,7 @@
             display: none;
             flex-direction: column;
             flex: 1;
+            width: 100%;
         }
         .content-state.show {
             display: flex;
@@ -108,286 +110,341 @@
         /* Top bar: stop info + buttons */
         .top-bar {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(128,128,128,0.1);
-            flex-wrap: wrap;
+            text-align: center;
+            gap: 16px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid rgba(128,128,128,0.12);
+            width: 100%;
         }
         .stop-info {
-            flex: 1;
-            min-width: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
         .stop-name {
-            font-size: 22px;
-            font-weight: 600;
-            line-height: 1.2;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.4px;
             word-break: break-word;
+            text-align: center;
         }
         .stop-code {
             font-size: 14px;
             color: var(--md-on-surface-variant);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            background: var(--md-surface-dim);
+            border-radius: 40px;
         }
         .top-actions {
             display: flex;
-            gap: 8px;
-            flex-shrink: 0;
+            gap: 12px;
+            justify-content: center;
         }
         .icon-btn {
             background: var(--md-surface-dim);
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 44px;
-            font-size: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 19px;
             color: var(--md-on-surface);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.15s;
+            transition: 0.18s ease;
+            box-shadow: var(--md-elevation-1);
         }
         .icon-btn:active {
-            transform: scale(0.94);
+            transform: scale(0.93);
             background: var(--md-primary);
             color: white;
         }
 
         .lines-container {
-            margin-top: 16px;
+            margin-top: 24px;
             flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
         .line-card {
-            background: var(--md-surface-dim);
+            background: var(--md-surface);
             border-radius: var(--radius-md);
-            margin-bottom: 14px;
             overflow: hidden;
+            box-shadow: var(--md-elevation-1);
+            transition: box-shadow 0.2s ease;
+            width: 100%;
         }
         .line-header {
-            padding: 12px 16px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             color: white;
         }
         .line-header[data-contrast="dark"] {
             color: #1C1B1F;
         }
         .line-badge {
-            width: 44px;
-            height: 44px;
-            background: rgba(0,0,0,0.2);
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.22);
             border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 18px;
+            font-size: 19px;
             flex-shrink: 0;
+            letter-spacing: -0.5px;
+        }
+        .line-header[data-contrast="dark"] .line-badge {
+            background: rgba(0,0,0,0.12);
         }
         .line-dest {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
+            line-height: 1.35;
+            text-align: left;
         }
-        .line-dest small {
-            font-weight: 400;
-            font-size: 12px;
-            opacity: 0.8;
-        }
+
         .arrival-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(128,128,128,0.09);
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
         }
         .arrival-row:last-child { border-bottom: none; }
         .minutes-chip {
             background: var(--md-primary);
-            padding: 4px 16px;
+            padding: 6px 18px;
             border-radius: 40px;
             color: white;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.2px;
+            min-width: 70px;
+            text-align: center;
         }
         .arrival-time {
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.3px;
         }
         .bus-id {
             font-size: 13px;
             color: var(--md-on-surface-variant);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            background: var(--md-surface-dim);
+            border-radius: 40px;
         }
         .empty-arrivals {
-            padding: 16px;
+            padding: 22px 16px;
             text-align: center;
             color: var(--md-on-surface-variant);
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
         }
 
         /* Settings Dialog */
         .dialog-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2000;
             visibility: hidden;
             opacity: 0;
-            transition: 0.2s;
+            transition: 0.22s ease;
+            padding: 20px;
         }
         .dialog-overlay.active { visibility: visible; opacity: 1; }
         .dialog-card {
             background: var(--md-surface);
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 420px;
             max-height: 90vh;
             overflow-y: auto;
             border-radius: 28px;
-            padding: 28px 24px;
+            padding: 32px 26px;
+            box-shadow: var(--md-elevation-2);
         }
         .dialog-card h2 {
-            margin-bottom: 20px;
-            font-size: 22px;
+            margin-bottom: 24px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
         .setting-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         .setting-group label {
             display: block;
-            font-weight: 500;
-            margin-bottom: 6px;
+            font-weight: 600;
+            margin-bottom: 8px;
             font-size: 14px;
             color: var(--md-on-surface-variant);
+            text-align: left;
+            letter-spacing: 0.2px;
         }
         .setting-group select,
         .setting-group input {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 18px;
             border-radius: 40px;
-            border: 1px solid var(--md-outline);
+            border: 1.5px solid var(--md-outline);
             background: var(--md-surface-dim);
             color: var(--md-on-surface);
             font-size: 16px;
             font-family: inherit;
+            transition: border-color 0.18s ease;
         }
         .setting-group select:focus,
         .setting-group input:focus {
-            outline: 2px solid var(--md-primary);
-            border-color: transparent;
+            outline: none;
+            border-color: var(--md-primary);
         }
         .toggle-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
         }
-        .toggle-row span { font-weight: 500; }
+        .toggle-row span { font-weight: 600; font-size: 15px; }
         .toggle {
-            width: 52px;
-            height: 28px;
+            width: 56px;
+            height: 30px;
             background: var(--md-outline);
-            border-radius: 28px;
+            border-radius: 30px;
             position: relative;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.2s ease;
             flex-shrink: 0;
         }
         .toggle.active { background: var(--md-primary); }
         .toggle .thumb {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             background: white;
-            border-radius: 22px;
+            border-radius: 50%;
             position: absolute;
             top: 3px;
             left: 3px;
-            transition: 0.2s;
+            transition: 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-        .toggle.active .thumb { left: 27px; }
+        .toggle.active .thumb { left: 29px; }
         .dialog-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 14px;
+            margin-top: 28px;
         }
         .dialog-btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border-radius: 40px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
             cursor: pointer;
             font-size: 16px;
+            transition: 0.18s ease;
+            letter-spacing: 0.2px;
         }
         .dialog-btn.primary { background: var(--md-primary); color: white; }
+        .dialog-btn.primary:active { transform: scale(0.97); }
         .dialog-btn.secondary { background: var(--md-surface-dim); color: var(--md-on-surface); }
+        .dialog-btn.secondary:active { transform: scale(0.97); }
 
         .toast {
             position: fixed;
             bottom: 30px;
-            left: 20px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            width: calc(100% - 40px);
             max-width: 400px;
-            margin: 0 auto;
             background: var(--md-surface);
             border-radius: 40px;
-            padding: 12px 20px;
+            padding: 14px 22px;
             display: flex;
             gap: 12px;
+            align-items: center;
             box-shadow: var(--md-elevation-2);
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(100px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            font-weight: 500;
         }
         .toast.show {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
         }
 
         .loading-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(3px);
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 3000;
             visibility: hidden;
             opacity: 0;
-            transition: 0.2s;
+            transition: 0.22s ease;
         }
         .loading-overlay.active { visibility: visible; opacity: 1; }
         .loading-card {
             background: var(--md-surface);
             border-radius: 32px;
-            padding: 24px 32px;
+            padding: 28px 36px;
             text-align: center;
+            box-shadow: var(--md-elevation-2);
         }
         .spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid rgba(227,6,19,0.2);
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(227,6,19,0.18);
             border-top-color: var(--md-primary);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 12px;
+            animation: spin 0.75s linear infinite;
+            margin: 0 auto 14px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 500px) {
-            .app-container { padding: 16px; }
-            .stop-name { font-size: 18px; }
-            .top-bar { gap: 8px; }
+        @media (max-width: 480px) {
+            .app-container { padding: 18px 14px 30px; }
+            .stop-name { font-size: 22px; }
+            .line-badge { width: 44px; height: 44px; font-size: 17px; }
+            .line-header { padding: 14px 16px; gap: 14px; }
+            .arrival-row { padding: 12px 16px; }
+            .minutes-chip { padding: 5px 16px; font-size: 14px; }
+            .dialog-card { padding: 26px 20px; }
         }
     </style>
 </head>
@@ -396,10 +453,10 @@
     <!-- Error State -->
     <div class="error-state" id="errorState">
         <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
-        <div class="error-msg" id="errorMsg">No s'ha pogut carregar la parada</div>
+        <div class="error-msg" id="errorMsg">Could not load stop</div>
         <div class="error-actions">
-            <button class="icon-btn" id="errorRefreshBtn" title="Recarregar"><i class="fas fa-sync-alt"></i></button>
-            <button class="icon-btn" id="errorSettingsBtn" title="Arranjament"><i class="fas fa-sliders-h"></i></button>
+            <button class="icon-btn" id="errorRefreshBtn" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+            <button class="icon-btn" id="errorSettingsBtn" title="Settings"><i class="fas fa-sliders-h"></i></button>
         </div>
     </div>
 
@@ -411,13 +468,13 @@
                 <div class="stop-code" id="stopCode">—</div>
             </div>
             <div class="top-actions">
-                <button class="icon-btn" id="refreshBtn" title="Recarregar"><i class="fas fa-sync-alt"></i></button>
-                <button class="icon-btn" id="settingsBtn" title="Arranjament"><i class="fas fa-sliders-h"></i></button>
+                <button class="icon-btn" id="refreshBtn" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                <button class="icon-btn" id="settingsBtn" title="Settings"><i class="fas fa-sliders-h"></i></button>
             </div>
         </div>
 
         <div class="lines-container" id="linesContainer">
-            <div class="empty-arrivals">Carregant horaris...</div>
+            <div class="empty-arrivals">Loading schedules...</div>
         </div>
     </div>
 </div>
@@ -425,45 +482,41 @@
 <!-- Settings Dialog -->
 <div id="settingsDialog" class="dialog-overlay">
     <div class="dialog-card">
-        <h2>⚙️ Arranjament</h2>
+        <h2 id="settingsTitle"> Settings</h2>
 
         <div class="setting-group">
-            <label>Idioma</label>
+            <label id="labelLanguage">Language</label>
             <select id="langSelect">
+                <option value="en">English</option>
                 <option value="ca">Català</option>
                 <option value="es">Español</option>
-                <option value="en">English</option>
             </select>
         </div>
 
         <div class="setting-group">
-            <label>Clau API (app_id)</label>
+            <label id="labelApiId">API Key (app_id)</label>
             <input type="text" id="apiIdInput" placeholder="app_id" value="">
         </div>
 
         <div class="setting-group">
-            <label>Clau API (app_key)</label>
+            <label id="labelApiKey">API Key (app_key)</label>
             <input type="text" id="apiKeyInput" placeholder="app_key" value="">
         </div>
 
         <div class="setting-group">
             <div class="toggle-row">
-                <span>Mode fosc</span>
+                <span id="labelDarkMode">Dark mode</span>
                 <div class="toggle" id="darkToggle"><div class="thumb"></div></div>
             </div>
             <div class="toggle-row">
-                <span>So</span>
-                <div class="toggle active" id="soundToggle"><div class="thumb"></div></div>
-            </div>
-            <div class="toggle-row">
-                <span>Format 24h</span>
+                <span id="label24h">24h format</span>
                 <div class="toggle active" id="timeToggle"><div class="thumb"></div></div>
             </div>
         </div>
 
         <div class="dialog-actions">
-            <button class="dialog-btn secondary" id="settingsCancelBtn">Cancel·lar</button>
-            <button class="dialog-btn primary" id="settingsSaveBtn">Guardar</button>
+            <button class="dialog-btn secondary" id="settingsCancelBtn">Cancel</button>
+            <button class="dialog-btn primary" id="settingsSaveBtn">Save</button>
         </div>
     </div>
 </div>
@@ -475,12 +528,12 @@
 <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-card">
         <div class="spinner"></div>
-        <span id="loadingText">Carregant...</span>
+        <span id="loadingText">Loading...</span>
     </div>
 </div>
 
 <script>
-    // -------- CONFIGURACIÓ --------
+    // -------- CONFIGURATION --------
     const APP_VERSION = '1.0.0';
 
     let config = {
@@ -488,51 +541,55 @@
         apiKey: '',
         lang: 'en',
         darkMode: false,
-        soundEnabled: true,
         use24h: true
     };
 
     let currentStopCode = null;
     let stopData = null;
 
-    // -------- SONS --------
-    // Utilitzem ruta real per al so d'error
-    const errorSound = new Audio('sounds/error.mp3');
-    errorSound.volume = 0.4;
-    errorSound.preload = 'auto';
-
-    const clickSound = new Audio('data:audio/wav;base64,U3R1ZmZUdXJy');
-    clickSound.volume = 0.3;
-
-    function playSound(name) {
-        if (!config.soundEnabled) return;
-        try {
-            if (name === 'error') {
-                errorSound.currentTime = 0;
-                errorSound.play().catch(() => {});
-            } else if (name === 'click') {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(() => {});
-            }
-        } catch(e) {}
-    }
-
-    // -------- TRADUCCIONS --------
+    // -------- TRANSLATIONS --------
     const i18n = {
+        en: {
+            loading: 'Loading...',
+            stop: 'Stop',
+            minutes: 'min',
+            now: 'Now',
+            noArrivals: 'No arrivals',
+            errorStop: 'Stop not found or no buses available',
+            errorApi: 'API keys missing. Configure them in Settings.',
+            errorGeneric: 'An error occurred',
+            toastSaved: 'Settings saved',
+            settingsTitle: 'Settings',
+            labelLanguage: 'Language',
+            labelApiId: 'API Key (app_id)',
+            labelApiKey: 'API Key (app_key)',
+            labelDarkMode: 'Dark mode',
+            label24h: '24h format',
+            cancel: 'Cancel',
+            save: 'Save',
+            specifyStop: 'Specify a stop with ?stop=CODE',
+            stopCodeMissing: 'Stop code not specified'
+        },
         ca: {
             loading: 'Carregant...',
             stop: 'Parada',
             minutes: 'min',
             now: 'Ara',
             noArrivals: 'Sense arribades',
-            outbound: 'Anada',
-            return: 'Tornada',
-            bus: 'Autobús',
             errorStop: 'No s\'ha trobat la parada o no hi ha busos disponibles',
             errorApi: 'Falten les claus API. Configura-les a Arranjament.',
             errorGeneric: 'S\'ha produït un error',
             toastSaved: 'Configuració guardada',
-            settingsTitle: 'Arranjament'
+            settingsTitle: 'Arranjament',
+            labelLanguage: 'Idioma',
+            labelApiId: 'Clau API (app_id)',
+            labelApiKey: 'Clau API (app_key)',
+            labelDarkMode: 'Mode fosc',
+            label24h: 'Format 24h',
+            cancel: 'Cancel·lar',
+            save: 'Guardar',
+            specifyStop: 'Especifica una parada amb ?stop=CODI',
+            stopCodeMissing: 'Codi de parada no especificat'
         },
         es: {
             loading: 'Cargando...',
@@ -540,40 +597,33 @@
             minutes: 'min',
             now: 'Ahora',
             noArrivals: 'Sin llegadas',
-            outbound: 'Ida',
-            return: 'Vuelta',
-            bus: 'Autobús',
             errorStop: 'No se encontró la parada o no hay autobuses disponibles',
             errorApi: 'Faltan las claves API. Configúralas en Ajustes.',
             errorGeneric: 'Se produjo un error',
             toastSaved: 'Configuración guardada',
-            settingsTitle: 'Ajustes'
-        },
-        en: {
-            loading: 'Loading...',
-            stop: 'Stop',
-            minutes: 'min',
-            now: 'Now',
-            noArrivals: 'No arrivals',
-            outbound: 'Outbound',
-            return: 'Return',
-            bus: 'Bus',
-            errorStop: 'Stop not found or no buses available',
-            errorApi: 'API keys missing. Configure them in Settings.',
-            errorGeneric: 'An error occurred',
-            toastSaved: 'Settings saved',
-            settingsTitle: 'Settings'
+            settingsTitle: 'Ajustes',
+            labelLanguage: 'Idioma',
+            labelApiId: 'Clave API (app_id)',
+            labelApiKey: 'Clave API (app_key)',
+            labelDarkMode: 'Modo oscuro',
+            label24h: 'Formato 24h',
+            cancel: 'Cancelar',
+            save: 'Guardar',
+            specifyStop: 'Especifica una parada con ?stop=CODIGO',
+            stopCodeMissing: 'Código de parada no especificado'
         }
     };
-    function t(key) { return i18n[config.lang]?.[key] || i18n.ca[key] || key; }
+    function t(key) { return i18n[config.lang]?.[key] || i18n.en[key] || key; }
 
-    // -------- PERSISTÈNCIA --------
+    // -------- PERSISTENCE --------
     function loadConfig() {
         try {
             const saved = localStorage.getItem('librepin_config');
             if (saved) {
                 const parsed = JSON.parse(saved);
                 config = { ...config, ...parsed };
+                if (!['en','ca','es'].includes(config.lang)) config.lang = 'en';
+                delete config.soundEnabled;
             }
         } catch(e) {}
         const params = new URLSearchParams(window.location.search);
@@ -585,27 +635,48 @@
 
     function saveConfig() {
         try {
-            localStorage.setItem('librepin_config', JSON.stringify(config));
+            const toSave = { ...config };
+            delete toSave.soundEnabled;
+            localStorage.setItem('librepin_config', JSON.stringify(toSave));
         } catch(e) {}
         applyConfig();
     }
 
     function applyConfig() {
         document.documentElement.setAttribute('data-theme', config.darkMode ? 'dark' : 'light');
+        document.documentElement.lang = config.lang;
         document.getElementById('darkToggle').classList.toggle('active', config.darkMode);
-        document.getElementById('soundToggle').classList.toggle('active', config.soundEnabled);
         document.getElementById('timeToggle').classList.toggle('active', config.use24h);
         document.getElementById('langSelect').value = config.lang;
         document.getElementById('apiIdInput').value = config.apiId || '';
         document.getElementById('apiKeyInput').value = config.apiKey || '';
+
+        // Translate UI elements
+        document.getElementById('settingsTitle').innerHTML = ` ${t('settingsTitle')}`;
+        document.getElementById('labelLanguage').textContent = t('labelLanguage');
+        document.getElementById('labelApiId').textContent = t('labelApiId');
+        document.getElementById('labelApiKey').textContent = t('labelApiKey');
+        document.getElementById('labelDarkMode').textContent = t('labelDarkMode');
+        document.getElementById('label24h').textContent = t('label24h');
+        document.getElementById('settingsCancelBtn').textContent = t('cancel');
+        document.getElementById('settingsSaveBtn').textContent = t('save');
+        document.getElementById('loadingText').textContent = t('loading');
+
+        // Update button titles
+        const refreshTitle = config.lang === 'ca' ? 'Recarregar' : (config.lang === 'es' ? 'Recargar' : 'Refresh');
+        document.getElementById('refreshBtn').title = refreshTitle;
+        document.getElementById('settingsBtn').title = t('settingsTitle');
+        document.getElementById('errorRefreshBtn').title = refreshTitle;
+        document.getElementById('errorSettingsBtn').title = t('settingsTitle');
+
+        if (stopData) renderResults();
     }
 
     // -------- TOAST --------
-    function showToast(msg, isError = false) {
+    function showToast(msg) {
         const toast = document.getElementById('toastMsg');
         document.getElementById('toastText').textContent = msg;
         toast.classList.add('show');
-        if (isError) playSound('error');
         clearTimeout(toast._timeout);
         toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
     }
@@ -619,19 +690,11 @@
         document.getElementById('errorState').classList.add('show');
         document.getElementById('contentState').classList.remove('show');
         document.getElementById('errorMsg').textContent = msg || t('errorGeneric');
-        // Reproduir so d'error
-        playSound('error');
     }
 
     function showContentState() {
         document.getElementById('errorState').classList.remove('show');
         document.getElementById('contentState').classList.add('show');
-    }
-
-    function showEmptyContent() {
-        document.getElementById('stopName').textContent = '—';
-        document.getElementById('stopCode').textContent = '—';
-        document.getElementById('linesContainer').innerHTML = `<div class="empty-arrivals">${t('noArrivals')}</div>`;
     }
 
     // -------- API --------
@@ -641,7 +704,7 @@
             return;
         }
         if (!stopCode) {
-            showErrorState('Codi de parada no especificat');
+            showErrorState(t('stopCodeMissing'));
             return;
         }
 
@@ -688,7 +751,7 @@
     function renderResults() {
         if (!stopData) return;
         document.getElementById('stopName').textContent = stopData.nom_parada;
-        document.getElementById('stopCode').textContent = `${t('stop')}: ${stopData.codi_parada}`;
+        document.getElementById('stopCode').innerHTML = `<i class="fas fa-map-pin" style="font-size:12px;opacity:0.7;"></i> ${t('stop')}: ${stopData.codi_parada}`;
 
         const lines = stopData.linies_trajectes || [];
         const container = document.getElementById('linesContainer');
@@ -703,7 +766,6 @@
             const lineCode = line.nom_linia;
             const bgColor = getLineColor(lineCode);
             const contrastAttr = bgColor === '#FFC10E' ? 'data-contrast="dark"' : '';
-            const dirText = line.id_sentit === 1 ? t('outbound') : t('return');
             const arrivals = line.propers_busos || [];
 
             let arrivalsHtml = '';
@@ -733,7 +795,7 @@
                     <div class="line-header" style="background:${bgColor};" ${contrastAttr}>
                         <div class="line-badge">${lineCode}</div>
                         <div>
-                            <div class="line-dest">${line.desti_trajecte || line.nom_linia} <small>${dirText}</small></div>
+                            <div class="line-dest">${line.desti_trajecte || line.nom_linia}</div>
                         </div>
                     </div>
                     <div>${arrivalsHtml}</div>
@@ -757,7 +819,6 @@
         config.apiId = document.getElementById('apiIdInput').value.trim();
         config.apiKey = document.getElementById('apiKeyInput').value.trim();
         config.darkMode = document.getElementById('darkToggle').classList.contains('active');
-        config.soundEnabled = document.getElementById('soundToggle').classList.contains('active');
         config.use24h = document.getElementById('timeToggle').classList.contains('active');
         saveConfig();
         closeSettings();
@@ -769,7 +830,6 @@
         const el = document.getElementById(elmId);
         el.addEventListener('click', () => {
             el.classList.toggle('active');
-            playSound('click');
         });
     }
 
@@ -779,17 +839,16 @@
         applyConfig();
 
         setupToggle('darkToggle');
-        setupToggle('soundToggle');
         setupToggle('timeToggle');
 
         // Refresh buttons
         document.getElementById('refreshBtn').addEventListener('click', () => {
             if (currentStopCode) fetchStopData(currentStopCode);
-            else showErrorState('Codi de parada no especificat');
+            else showErrorState(t('specifyStop'));
         });
         document.getElementById('errorRefreshBtn').addEventListener('click', () => {
             if (currentStopCode) fetchStopData(currentStopCode);
-            else showErrorState('Codi de parada no especificat');
+            else showErrorState(t('specifyStop'));
         });
 
         // Settings buttons
@@ -807,7 +866,7 @@
         if (currentStopCode) {
             fetchStopData(currentStopCode);
         } else {
-            showErrorState('Especifica una parada amb ?stop=CODI');
+            showErrorState(t('specifyStop'));
         }
     }
 
