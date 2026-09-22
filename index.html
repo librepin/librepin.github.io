@@ -22,9 +22,9 @@
         }
 
         :root {
-            --md-primary: #7C4DFF;
-            --md-primary-light: #B388FF;
-            --md-primary-dark: #4A2A8A;
+            --md-primary: #9a398d;
+            --md-primary-light: #9a398d;
+            --md-primary-dark: #9a398d;
             --md-primary-container: #E8DEFF;
             --md-surface: #FFFFFF;
             --md-surface-dim: #F5F5F5;
@@ -54,10 +54,10 @@
         }
 
         [data-theme="dark"] {
-            --md-primary: #7C4DFF;
-            --md-primary-light: #B388FF;
-            --md-primary-dark: #4A2A8A;
-            --md-primary-container: #2A1A3A;
+            --md-primary: #9a398d;
+            --md-primary-light: #9a398d;
+            --md-primary-dark: #9a398d;
+            --md-primary-container: #9a398d;
             --md-surface: #1C1B1F;
             --md-surface-dim: #2C2A2E;
             --md-background: #0F0F14;
@@ -292,6 +292,23 @@
         .pin-card .pin-services { display: flex; justify-content: center; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
         .pin-card .pin-services img { width: 22px; height: 22px; border-radius: 0px; object-fit: cover; }
 
+        /* --- LIST VIEW --- */
+        .pin-list { display: flex; flex-direction: column; padding: 8px 16px; }
+        .pin-list-item { display: flex; align-items: center; gap: 14px; padding: 12px 8px; border-bottom: 1px solid rgba(128,128,128,0.08); cursor: pointer; transition: background 0.2s ease; border-radius: var(--radius-sm); }
+        .pin-list-item:hover { background: var(--md-surface-dim); }
+        .pin-list-item .list-img { width: 48px; height: 48px; border-radius: var(--radius-sm); object-fit: cover; background: var(--md-surface-dim); flex-shrink: 0; }
+        .pin-list-item .list-info { flex: 1; min-width: 0; }
+        .pin-list-item .list-info .list-name { font-weight: 600; font-size: 15px; color: var(--md-on-surface); }
+        .pin-list-item .list-info .list-subtitle { font-size: 13px; color: var(--md-on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pin-list-item .list-info .list-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+        .pin-list-item .list-info .list-stars { font-size: 13px; letter-spacing: 1px; }
+        .pin-list-item .list-info .list-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+        .pin-list-item .list-info .list-tags .tag { font-size: 10px; background: var(--md-primary-container); color: var(--md-primary); padding: 1px 8px; border-radius: 10px; border: 1px solid var(--md-primary); opacity: 0.8; }
+        .pin-list-item .list-services { display: flex; gap: 2px; flex-shrink: 0; }
+        .pin-list-item .list-services img { width: 20px; height: 20px; border-radius: 0; object-fit: cover; }
+        .pin-list-item .list-fav { color: #FFB300; font-size: 16px; flex-shrink: 0; margin-left: 4px; }
+        .pin-list-item .list-distance { font-size: 11px; color: var(--md-on-surface-variant); white-space: nowrap; flex-shrink: 0; }
+
         /* --- SEARCH SORT DIALOG --- */
         .sort-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-sm); border: 2px solid var(--md-outline); background: var(--md-surface-dim); cursor: pointer; transition: all 0.3s ease; margin-bottom: 8px; }
         .sort-option:active { transform: scale(0.97); }
@@ -412,9 +429,12 @@
         .detail-header .fav-btn { background: none; border: none; font-size: 26px; cursor: pointer; padding: 8px; border-radius: 40px; color: var(--md-on-surface-variant); transition: all 0.3s ease; }
         .detail-header .fav-btn.active { color: #FFB300; animation: scaleIn 0.3s ease; }
         .detail-header .fav-btn:active { transform: scale(0.8); }
+        .detail-header .more-info-btn { background: none; border: none; font-size: 22px; cursor: pointer; padding: 8px; border-radius: 40px; color: var(--md-on-surface-variant); transition: all 0.3s ease; }
+        .detail-header .more-info-btn:active { transform: scale(0.8); }
+        .detail-header .more-info-btn.visible { display: inline-flex; }
 
         /* --- DIALOGS --- */
-        .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; z-index: 2000; visibility: hidden; opacity: 0; transition: 0.3s ease; padding: 16px; }
+        .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; z-index: 2000; visibility: hidden; opacity: 0; transition: 0.3s ease; padding: 16px; padding-bottom: 0px; }
         .dialog-overlay.active { visibility: visible; opacity: 1; }
         .dialog-card { background: var(--md-surface); width: 100%; max-width: 480px; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 24px 20px 32px; transform: translateY(40px); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .dialog-overlay.active .dialog-card { transform: translateY(0); }
@@ -850,6 +870,15 @@
         #townFilterPopup .town-search-input:focus { border-color: var(--md-primary); }
         #townFilterPopup .town-search-wrapper { position: relative; }
         #townFilterPopup .town-search-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--md-on-surface-variant); font-size: 14px; pointer-events: none; }
+        .list-tags {
+            display: none !important;
+        }
+        #settingsSearch .card:has(#searchViewLabel) {
+            display: none !important;
+        }
+        #showTownInSearchLabelText {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -958,7 +987,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.13.1</span>
+                    <span>v1.14</span>
                 </div>
             </div>
         </div>
@@ -991,6 +1020,7 @@
                             <input type="text" id="globalSearchInput" placeholder="Buscar pins...">
                             <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times"></i></button>
                         </div>
+                        <button class="header-btn" id="viewToggleSearchBtn" title="Canviar vista"><i class="fas fa-list"></i></button>
                         <button class="header-btn" id="modeBtnSearch" title="Mode de visualització">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -1032,6 +1062,7 @@
                     <h3><i class="fas fa-heart" style="color:#FFB300;"></i> <span id="favoritesTitle">Preferits</span></h3>
                     <p style="font-size:12px; color:var(--md-on-surface-variant); margin-top:4px;" id="favoritesSortLabel">Ordena els preferits</p>
                     <div class="favorites-actions">
+                        <button class="fab-btn secondary" id="viewToggleFavBtn" style="flex:0; padding:8px 12px; margin-right:4px;"><i class="fas fa-list"></i></button>
                         <button class="fab-btn secondary" id="favoritesSortBtn" style="flex:0; padding:8px 12px;">
                             <i class="fas fa-sliders-h"></i> <span id="favoritesSortBtnLabel">Ordenar</span>
                         </button>
@@ -1201,6 +1232,21 @@
                         <i class="fas fa-exclamation-triangle"></i> Desactivar l'agrupació pot causar lag o mal funcionament amb molts pins.
                     </div>
                 </div>
+            </div>
+
+            <!-- SEARCH SETTINGS -->
+            <div id="settingsSearch" class="settings-subpage">
+                <div class="sub-header">
+                    <button class="back-btn settings-back"><i class="fas fa-arrow-left"></i></button>
+                    <h3 id="searchSettingsTitle">Cerca</h3>
+                </div>
+                <div class="card">
+                    <label style="font-size:15px; font-weight:500;" id="searchViewLabel">Vista de resultats</label>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="fab-btn secondary search-view-option" data-view="grid" style="flex:1; justify-content:center; padding:12px;"><i class="fas fa-th-large"></i> Mosaico</button>
+                        <button class="fab-btn secondary search-view-option" data-view="list" style="flex:1; justify-content:center; padding:12px;"><i class="fas fa-list"></i> Lista</button>
+                    </div>
+                </div>
                 <div class="card">
                     <label style="font-size:15px; font-weight:500;" id="showTownInSearchLabelText">Mostrar població del pin en els resultats de cerca si el municipi del pin no és el preferit</label>
                     <div class="slider-toggle" id="showTownInSearchToggle" style="margin-top:8px;">
@@ -1323,7 +1369,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.13.1</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.14</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -1348,7 +1394,7 @@
                         <h3 id="noTownsLabel">No hi ha poblacions</h3>
                         <p id="noTownsDesc">Crea la teva primera població</p>
                     </div>
-                    <button class="link-btn" id="assignFavoriteTownBtn" style="margin-top:12px;"><i class="fas fa-magic"></i> <span id="assignFavoriteTownLabel">Asignar a los pines sin población asignada la población favorita</span></button>
+                    <button class="link-btn" id="assignFavoriteTownBtn" style="margin-top:12px;"><i class="fas fa-magic"></i> <span id="assignFavoriteTownLabel">Assignar als pins sense població assignada la població preferida</span></button>
                 </div>
             </div>
 
@@ -1357,6 +1403,7 @@
                 <div class="detail-header">
                     <button class="back-btn" id="detailBackBtn"><i class="fas fa-arrow-left"></i></button>
                     <span style="font-weight:600; flex:1; font-size:17px;" id="detailTitle">Detall</span>
+                    <button class="more-info-btn" id="detailMoreInfoBtn" style="display:none;"><i class="fas fa-info-circle"></i></button>
                     <button class="fav-btn" id="detailFavBtn"><i class="far fa-heart"></i></button>
                     <button class="back-btn" id="detailEditBtn"><i class="fas fa-edit"></i></button>
                     <button class="back-btn" id="detailDeletePinBtn" style="color:var(--md-on-surface-variant);"><i class="fas fa-trash"></i></button>
@@ -1385,7 +1432,6 @@
                         <button class="fab-btn secondary" id="detailMapBtn"><i class="fas fa-map-marker-alt"></i> <span id="detailMapLabel">Veure al mapa</span></button>
                         <button class="fab-btn secondary" id="detailGoFromBtn"><i class="fas fa-route"></i> <span id="detailGoFromLabel">Ir desde</span></button>
                         <button class="fab-btn secondary" id="detailSeeAlsoBtn" style="display:none;"><i class="fas fa-layer-group"></i> <span id="detailSeeAlsoLabel">Vegeu també</span></button>
-                        <button class="fab-btn secondary" id="detailMoreInfoBtn" style="display:none;"><i class="fas fa-info-circle"></i> <span id="detailMoreInfoLabel">Més informació</span></button>
                     </div>
                     <!-- REVIEW CARD - MOVED TO BOTTOM (before related pins) -->
                     <div id="reviewCard" class="review-card" style="display:none;">
@@ -1528,6 +1574,13 @@
                 <input type="checkbox" id="isTransportStop">
                 <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
                 <label for="isTransportStop" id="transportLabel" style="margin:0; font-size:15px; cursor:pointer;">És una parada de transport públic</label>
+            </div>
+
+            <!-- NEW: Bike station checkbox (shown when transport is checked) -->
+            <div class="checkbox-row" id="bikeStationRow" style="display:none;" onclick="toggleCheckbox('isBikeStation')">
+                <input type="checkbox" id="isBikeStation">
+                <span class="custom-checkbox"><span class="check-icon"><i class="fas fa-check"></i></span></span>
+                <label for="isBikeStation" id="bikeStationLabel" style="margin:0; font-size:15px; cursor:pointer;">És una estació de bicicletes</label>
             </div>
 
             <div class="checkbox-row" onclick="toggleCheckbox('isOutsideEnvironment')">
@@ -1803,8 +1856,8 @@
             '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.13.1';
-        const DEFAULT_AVATAR = null; // Ya no usamos una imagen por defecto
+        const APP_VERSION = '1.14';
+        const DEFAULT_AVATAR = null;
 
         const WELCOME_TRANSLATIONS = {
             ca: { title: 'LibrePin', subtitle: 'Et donem la benvinguda al teu nou mapa!', nameLabel: "Nom d'usuari", startLabel: 'Start' },
@@ -1826,7 +1879,8 @@
             editingLineId: null, linesVisible: true, sortMode: 'recent', currentSearchQuery: '',
             currentGroupId: null, groupSortMode: 'recent', noCluster: false, editingQuickMarkId: null,
             quickMarkPosition: 'end', isFirstLaunch: true, pendingImportData: null, importTimerInterval: null,
-            appLaunchCount: 0, townFilter: null, showTownInSearch: true, townFilterSearch: ''
+            appLaunchCount: 0, townFilter: null, showTownInSearch: true, townFilterSearch: '',
+            searchView: 'grid', favoritesView: 'grid'
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -1940,9 +1994,19 @@
                 filterByTown: "Filtrar per població", showAll: "Mostrar totes", close: "Tancar",
                 moreInfoTitle: "Més informació", townFiltered: "Filtrat per població",
                 showTownInSearch: "Mostrar població del pin en els resultats de cerca si el municipi del pin no és el preferit",
-                assignFavoriteTown: "Asignar a los pines sin población asignada la población favorita",
+                assignFavoriteTown: "Assignar als pins sense població assignada la població preferida",
                 assignFavoriteTownConfirm: "Segur que vols assignar la població favorita a tots els pins sense població assignada?",
-                searchTown: "Cercar població..."
+                searchTown: "Cercar població...",
+                bikeStation: "És una estació de bicicletes",
+                scheduleBikeBtn: "Consultar disponibilitat",
+                searchSettings: "Cerca",
+                searchViewLabel: "Vista de resultats",
+                gridView: "Quadricula",
+                listView: "Llista",
+                viewToggle: "Canviar vista",
+                noResultsFor: "No hi ha resultats per a",
+                pressEnterToOpen: "Prem Enter per obrir el primer resultat",
+                bikeStationShort: "Estació de bicicletes"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Configuración", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2055,7 +2119,17 @@
                 showTownInSearch: "Mostrar población del pin en los resultados de búsqueda si el municipio del pin no es el preferido",
                 assignFavoriteTown: "Asignar a los pines sin población asignada la población favorita",
                 assignFavoriteTownConfirm: "¿Seguro que quieres asignar la población favorita a todos los pins sin población asignada?",
-                searchTown: "Buscar población..."
+                searchTown: "Buscar población...",
+                bikeStation: "Es una estación de bicicletas",
+                scheduleBikeBtn: "Consultar disponibilidad",
+                searchSettings: "Búsqueda",
+                searchViewLabel: "Vista de resultados",
+                gridView: "Mosaico",
+                listView: "Lista",
+                viewToggle: "Cambiar vista",
+                noResultsFor: "No hay resultados para",
+                pressEnterToOpen: "Pulsa Enter para abrir el primer resultado",
+                bikeStationShort: "Estación de bicicletas"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2168,7 +2242,17 @@
                 showTownInSearch: "Show pin's municipality in search results if the pin's municipality is not the preferred one",
                 assignFavoriteTown: "Assign preferred municipality to pins without an assigned municipality",
                 assignFavoriteTownConfirm: "Are you sure you want to assign the preferred municipality to all pins without an assigned municipality?",
-                searchTown: "Search municipality..."
+                searchTown: "Search municipality...",
+                bikeStation: "Is a bike station",
+                scheduleBikeBtn: "Check availability",
+                searchSettings: "Search",
+                searchViewLabel: "Results view",
+                gridView: "Grid",
+                listView: "List",
+                viewToggle: "Toggle view",
+                noResultsFor: "No results for",
+                pressEnterToOpen: "Press Enter to open the first result",
+                bikeStationShort: "Bike station"
             }
         };
 
@@ -2274,6 +2358,8 @@
                     if (data.appLaunchCount !== undefined) state.appLaunchCount = data.appLaunchCount;
                     if (data.townFilter !== undefined) state.townFilter = data.townFilter;
                     if (data.showTownInSearch !== undefined) state.showTownInSearch = data.showTownInSearch;
+                    if (data.searchView) state.searchView = data.searchView;
+                    if (data.favoritesView) state.favoritesView = data.favoritesView;
                 }
             } catch (e) {}
             if (state.services.length === 0) {
@@ -2331,7 +2417,8 @@
                 darkMode: state.darkMode, mapStyle: state.mapStyle, viewMode: state.viewMode, lang: state.lang,
                 sortMode: state.sortMode, groupSortMode: state.groupSortMode, mapStartLocation: state.mapStartLocation,
                 profile: state.profile, noCluster: state.noCluster, isFirstLaunch: state.isFirstLaunch,
-                appLaunchCount: state.appLaunchCount, townFilter: state.townFilter, showTownInSearch: state.showTownInSearch
+                appLaunchCount: state.appLaunchCount, townFilter: state.townFilter, showTownInSearch: state.showTownInSearch,
+                searchView: state.searchView, favoritesView: state.favoritesView
             }));
         }
 
@@ -2821,6 +2908,78 @@
             return sorted;
         }
 
+        // ---------- VIEW TOGGLE LOGIC ----------
+        function updateViewToggleIcons() {
+            const searchBtn = document.getElementById('viewToggleSearchBtn');
+            if (searchBtn) {
+                searchBtn.innerHTML = state.searchView === 'grid' ? '<i class="fas fa-list"></i>' : '<i class="fas fa-th-large"></i>';
+                searchBtn.title = state.searchView === 'grid' ? t('listView') : t('gridView');
+            }
+            const favBtn = document.getElementById('viewToggleFavBtn');
+            if (favBtn) {
+                favBtn.innerHTML = state.favoritesView === 'grid' ? '<i class="fas fa-list"></i>' : '<i class="fas fa-th-large"></i>';
+                favBtn.title = state.favoritesView === 'grid' ? t('listView') : t('gridView');
+            }
+        }
+
+        function toggleSearchView() {
+            state.searchView = state.searchView === 'grid' ? 'list' : 'grid';
+            saveData();
+            updateViewToggleIcons();
+            renderSearchResults(state.currentSearchQuery || '');
+            renderFavorites();
+            const label = state.searchView === 'grid' ? t('gridView') : t('listView');
+            showToast(label);
+        }
+
+        function toggleFavoritesView() {
+            state.favoritesView = state.favoritesView === 'grid' ? 'list' : 'grid';
+            saveData();
+            updateViewToggleIcons();
+            renderSearchResults(state.currentSearchQuery || '');
+            renderFavorites();
+            const label = state.favoritesView === 'grid' ? t('gridView') : t('listView');
+            showToast(label);
+        }
+
+        // ---------- RENDER LIST VIEW ----------
+        function renderPinList(container, pins, showDistance = false) {
+            container.innerHTML = '';
+            const list = document.createElement('div');
+            list.className = 'pin-list';
+            pins.forEach(pin => {
+                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
+                const isFav = isFavorite(pin.id);
+                const distanceHtml = showDistance && state.userLocation ? (() => {
+                    const d = Math.sqrt(Math.pow(pin.lat - state.userLocation[0], 2) + Math.pow(pin.lng - state.userLocation[1], 2));
+                    return `<span class="list-distance">${t('distanceLabel')}${(d * 111).toFixed(1)} km</span>`;
+                })() : '';
+                const tagsHtml = pin.tags && pin.tags.length > 0 ? `<div class="list-tags">${pin.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}${pin.tags.length > 3 ? `<span class="tag" style="font-size:8px;">+${pin.tags.length - 3}</span>` : ''}</div>` : '';
+                const servicesHtml = pin.services && pin.services.length > 0 ? `<div class="list-services">${pin.services.slice(0, 4).map(sid => { const svc = state.services.find(s => s.id === sid); return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 4 ? `<span style="font-size:10px; color:var(--md-on-surface-variant);">+${pin.services.length - 4}</span>` : ''}</div>` : '';
+                const item = document.createElement('div');
+                item.className = 'pin-list-item';
+                item.dataset.id = pin.id;
+                item.innerHTML = `
+                    <img class="list-img" src="${pin.imageUrl || 'https://via.placeholder.com/48/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/48/7C4DFF/FFFFFF?text=📍'">
+                    <div class="list-info">
+                        <div class="list-name">${escapeHtml(pin.name)}</div>
+                        ${pin.subtitle ? `<div class="list-subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
+                        <div class="list-meta">
+                            ${stars ? `<span class="list-stars">${stars}</span>` : ''}
+                            ${distanceHtml}
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                    ${servicesHtml}
+                    ${isFav ? `<div class="list-fav"><i class="fas fa-heart"></i></div>` : ''}
+                `;
+                item.onclick = () => openPinDetail(pin.id);
+                list.appendChild(item);
+            });
+            container.appendChild(list);
+        }
+
+        // ---------- RENDER FUNCTIONS WITH VIEW SUPPORT ----------
         function renderFavorites() {
             const container = document.getElementById('favoritesGrid');
             const empty = document.getElementById('favoritesEmpty');
@@ -2833,13 +2992,18 @@
                 return;
             }
             empty.style.display = 'none';
-            container.innerHTML = favPins.map((pin, index) => {
-                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
-                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
-                return `<div class="pin-card" data-id="${pin.id}" data-index="${index}"><div class="fav-indicator"><i class="fas fa-heart"></i></div><img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant);">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
-            }).join('');
-            container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
+            container.className = state.favoritesView === 'grid' ? 'pin-grid' : 'pin-list';
+            if (state.favoritesView === 'grid') {
+                container.innerHTML = favPins.map((pin, index) => {
+                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
+                    const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
+                    const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
+                    return `<div class="pin-card" data-id="${pin.id}" data-index="${index}"><div class="fav-indicator"><i class="fas fa-heart"></i></div><img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant);">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
+                }).join('');
+                container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
+            } else {
+                renderPinList(container, favPins, false);
+            }
         }
 
         function updateFavoriteUI() {
@@ -2867,7 +3031,7 @@
             empty.style.display = 'none';
             container.innerHTML = recent.map(pin => {
                 const time = pin.lastAccessed ? new Date(pin.lastAccessed).toLocaleString() : '';
-                return `<div class="recent-item" data-id="${pin.id}"><img src="${pin.imageUrl || 'https://via.placeholder.com/36/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/36/7C4DFF/FFFFFF?text=📍'"><div class="info"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}<div class="time">${time}</div></div></div>`;
+                return `<div class="recent-item" data-id="${pin.id}"><img src="${pin.imageUrl || 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/3840px-Blank_Square.svg.png?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=thumbnail'}" alt="${pin.name}" onerror="this.src='https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/3840px-Blank_Square.svg.png?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=thumbnail'"><div class="info"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}<div class="time">${time}</div></div></div>`;
             }).join('');
             container.querySelectorAll('.recent-item').forEach(el => {
                 el.onclick = () => { hideSettingsSubpage(); openPinDetail(el.dataset.id); };
@@ -3248,23 +3412,37 @@
 
         function renderScheduleLinks(pin) {
             const scheduleBtn = document.getElementById('detailScheduleBtn');
-            if (!pin.scheduleLinks || pin.scheduleLinks.length === 0) { scheduleBtn.style.display = 'none'; return; }
+            const isBike = pin.isBikeStation === true;
+            const iconClass = isBike ? 'fa-bicycle' : 'fa-clock';
+            const label = isBike ? t('scheduleBikeBtn') : t('scheduleBtn');
+
+            if (!pin.scheduleLinks || pin.scheduleLinks.length === 0) { 
+                if (isBike) {
+                    // For bike stations without schedule links, still show button with bike icon
+                    scheduleBtn.style.display = 'flex';
+                    scheduleBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${label}`;
+                    scheduleBtn.onclick = () => showToast(t('noScheduleLinks'));
+                } else {
+                    scheduleBtn.style.display = 'none'; 
+                }
+                return; 
+            }
             scheduleBtn.style.display = 'flex';
             if (pin.scheduleLinks.length === 1) {
                 scheduleBtn.onclick = () => window.open(pin.scheduleLinks[0].url, '_blank');
-                scheduleBtn.innerHTML = `<i class="fas fa-clock"></i> ${t('scheduleBtn')}`;
+                scheduleBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${label}`;
                 return;
             }
             scheduleBtn.onclick = () => {
                 const overlay = document.createElement('div');
                 overlay.className = 'dialog-overlay active schedule-popup';
                 overlay.style.display = 'flex';
-                overlay.innerHTML = `<div class="dialog-card" style="max-height:70vh; overflow-y:auto;"><h3 style="margin-bottom:12px;"><i class="fas fa-clock"></i> ${t('scheduleOptions')}</h3><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pin.scheduleLinks.map(link => `<button class="fab-btn secondary" style="justify-content:flex-start; padding:12px 16px; text-align:left; width:100%;" data-url="${link.url}">${link.icon ? (link.icon.startsWith('http') ? `<img src="${link.icon}" style="width:24px;height:24px;object-fit:contain;margin-right:8px;">` : `<i class="fas ${link.icon}" style="margin-right:8px;width:24px;text-align:center;"></i>`) : `<i class="fas fa-link" style="margin-right:8px;width:24px;text-align:center;"></i>`}<span>${link.title}</span></button>`).join('')}</div><button class="fab-btn secondary" onclick="this.closest('.dialog-overlay').remove()">${t('cancel')}</button></div>`;
+                overlay.innerHTML = `<div class="dialog-card" style="max-height:70vh; overflow-y:auto;"><h3 style="margin-bottom:12px;"><i class="fas ${iconClass}"></i> ${t('scheduleOptions')}</h3><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pin.scheduleLinks.map(link => `<button class="fab-btn secondary" style="justify-content:flex-start; padding:12px 16px; text-align:left; width:100%;" data-url="${link.url}">${link.icon ? (link.icon.startsWith('http') ? `<img src="${link.icon}" style="width:24px;height:24px;object-fit:contain;margin-right:8px;">` : `<i class="fas ${link.icon}" style="margin-right:8px;width:24px;text-align:center;"></i>`) : `<i class="fas ${iconClass}" style="margin-right:8px;width:24px;text-align:center;"></i>`}<span>${link.title}</span></button>`).join('')}</div><button class="fab-btn secondary" onclick="this.closest('.dialog-overlay').remove()">${t('cancel')}</button></div>`;
                 document.body.appendChild(overlay);
                 overlay.querySelectorAll('[data-url]').forEach(btn => { btn.onclick = () => { window.open(btn.dataset.url, '_blank'); overlay.remove(); }; });
                 overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
             };
-            scheduleBtn.innerHTML = `<i class="fas fa-clock"></i> ${t('scheduleBtn')}`;
+            scheduleBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${label}`;
         }
 
         function renderReviewCard(pin) {
@@ -3322,7 +3500,7 @@
                     const isCurrent = pin.id === currentPin.id;
                     const fav = isFavorite(pin.id);
                     const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                    return `<div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" data-id="${pin.id}" style="display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:${isCurrent ? 'var(--md-primary-container)' : 'var(--md-surface-dim)'}; cursor:${isCurrent ? 'default' : 'pointer'}; transition:0.2s; opacity:${isCurrent ? '0.6' : '1'};"><img src="${pin.imageUrl || 'https://via.placeholder.com/36/7C4DFF/FFFFFF?text=📍'}" style="width:36px;height:36px;border-radius:var(--radius-sm);object-fit:cover;background:var(--md-surface);"><div style="flex:1; min-width:0;"><div style="font-weight:500;font-size:14px;">${escapeHtml(pin.name)} ${isCurrent ? '(actual)' : ''}</div>${pin.subtitle ? `<div style="font-size:12px;color:var(--md-on-surface-variant);">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px;margin-top:2px;">${stars}</div>` : ''}</div>${fav ? `<div style="color:#FFB300; font-size:18px;"><i class="fas fa-heart"></i></div>` : ''}</div>`;
+                    return `<div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" data-id="${pin.id}" style="display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:${isCurrent ? 'var(--md-primary-container)' : 'var(--md-surface-dim)'}; cursor:${isCurrent ? 'default' : 'pointer'}; transition:0.2s; opacity:${isCurrent ? '0.6' : '1'};"><img src="${pin.imageUrl || 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/3840px-Blank_Square.svg.png?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=thumbnail'}" style="width:36px;height:36px;border-radius:var(--radius-sm);object-fit:cover;background:var(--md-surface);"><div style="flex:1; min-width:0;"><div style="font-weight:500;font-size:14px;">${escapeHtml(pin.name)} ${isCurrent ? '(actual)' : ''}</div>${pin.subtitle ? `<div style="font-size:12px;color:var(--md-on-surface-variant);">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px;margin-top:2px;">${stars}</div>` : ''}</div>${fav ? `<div style="color:#FFB300; font-size:18px;"><i class="fas fa-heart"></i></div>` : ''}</div>`;
                 }).join('');
                 list.querySelectorAll('.go-from-item').forEach(el => {
                     const id = el.dataset.id;
@@ -3457,7 +3635,6 @@
             if (pin.imageUrl && pin.imageUrl.trim()) { imgEl.src = pin.imageUrl; imgEl.style.display = 'block'; }
             else imgEl.style.display = 'none';
             document.getElementById('detailName').innerText = pin.name;
-            // NEVER show town in subtitle
             document.getElementById('detailSubtitle').innerText = pin.subtitle || '';
             document.getElementById('detailSubtitle').style.display = pin.subtitle ? 'block' : 'none';
             document.getElementById('detailDesc').innerText = pin.description || '';
@@ -3501,8 +3678,7 @@
             const hasSchedule = pin.schedule && pin.schedule.trim().length > 0;
             const hasTown = pin.townId && state.towns.some(t => t.id === pin.townId);
             if (hasAddress || hasSchedule || hasTown) {
-                moreInfoBtn.style.display = 'flex';
-                document.getElementById('detailMoreInfoLabel').innerText = t('moreInfo');
+                moreInfoBtn.style.display = 'inline-flex';
                 moreInfoBtn.onclick = () => openMoreInfoPopup(pin);
             } else moreInfoBtn.style.display = 'none';
             updateFavoriteUI();
@@ -3529,13 +3705,22 @@
             const empty = document.getElementById('searchEmpty');
             const sortBtn = document.getElementById('sortBtnSearch');
             const modeBtn = document.getElementById('modeBtnSearch');
+            const viewToggleBtn = document.getElementById('viewToggleSearchBtn');
             state.currentSearchQuery = filter;
             const trimmedFilter = filter.trim();
             const visible = trimmedFilter.length >= 2 || state.townFilter !== null;
-            if (visible) { sortBtn.classList.add('visible'); modeBtn.classList.add('visible'); }
-            else { sortBtn.classList.remove('visible'); modeBtn.classList.remove('visible'); }
+            if (visible) { 
+                sortBtn.classList.add('visible'); 
+                modeBtn.classList.add('visible'); 
+                viewToggleBtn.classList.add('visible');
+            } else { 
+                sortBtn.classList.remove('visible'); 
+                modeBtn.classList.remove('visible'); 
+                viewToggleBtn.classList.remove('visible');
+            }
             if (trimmedFilter.length < 2 && !state.townFilter) {
                 container.innerHTML = '';
+                container.className = 'pin-grid';
                 empty.style.display = 'block';
                 document.getElementById('noPinsLabel').innerText = state.lang === 'ca' ? 'Introdueix almenys 2 caràcters' : state.lang === 'es' ? 'Introduce al menos 2 caracteres' : 'Enter at least 2 characters';
                 document.getElementById('addFirstPinLabel').innerText = '';
@@ -3556,6 +3741,7 @@
             const hasMore = end < totalResults;
             if (totalResults === 0) {
                 container.innerHTML = '';
+                container.className = 'pin-grid';
                 empty.style.display = 'block';
                 document.getElementById('noPinsLabel').innerText = t('noResults');
                 document.getElementById('addFirstPinLabel').innerText = '';
@@ -3564,24 +3750,32 @@
             empty.style.display = 'none';
             const resultsToShow = filtered.slice(0, end);
             const isDistanceMode = state.sortMode === 'distance';
-            container.innerHTML = resultsToShow.map(pin => {
-                const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                const isFav = isFavorite(pin.id);
-                const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
-                const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
-                const tagsHtml = pin.tags && pin.tags.length > 0 ? `<div class="pin-tags">${pin.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}${pin.tags.length > 3 ? `<span class="tag" style="font-size:8px;">+${pin.tags.length - 3}</span>` : ''}</div>` : '';
-                let distanceHtml = '';
-                if (isDistanceMode && state.userLocation) {
-                    const d = Math.sqrt(Math.pow(pin.lat - state.userLocation[0], 2) + Math.pow(pin.lng - state.userLocation[1], 2));
-                    distanceHtml = `<div class="pin-distance">${t('distanceLabel')}${(d * 111).toFixed(1)} km</div>`;
-                }
-                let townBadgeCard = '';
-                if (state.showTownInSearch && pin.townId && pin.townId !== state.profile.preferredTown) {
-                    const town = state.towns.find(t => t.id === pin.townId);
-                    if (town) townBadgeCard = `<div style="font-size:10px;color:var(--md-on-surface-variant);background:var(--md-primary-container);border-radius:12px;padding:2px 8px;display:inline-block;margin-top:4px;"><img src="${town.flag}" style="width:16px;height:11px;border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:4px;">${escapeHtml(town.name)}</div>`;
-                }
-                return `<div class="pin-card" data-id="${pin.id}">${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}<img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${distanceHtml}${tagsHtml}${townBadgeCard}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
-            }).join('');
+
+            container.className = state.searchView === 'grid' ? 'pin-grid' : 'pin-list';
+            if (state.searchView === 'grid') {
+                container.innerHTML = resultsToShow.map(pin => {
+                    const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
+                    const isFav = isFavorite(pin.id);
+                    const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
+                    const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
+                    const tagsHtml = pin.tags && pin.tags.length > 0 ? `<div class="pin-tags">${pin.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}${pin.tags.length > 3 ? `<span class="tag" style="font-size:8px;">+${pin.tags.length - 3}</span>` : ''}</div>` : '';
+                    let distanceHtml = '';
+                    if (isDistanceMode && state.userLocation) {
+                        const d = Math.sqrt(Math.pow(pin.lat - state.userLocation[0], 2) + Math.pow(pin.lng - state.userLocation[1], 2));
+                        distanceHtml = `<div class="pin-distance">${t('distanceLabel')}${(d * 111).toFixed(1)} km</div>`;
+                    }
+                    let townBadgeCard = '';
+                    if (state.showTownInSearch && pin.townId && pin.townId !== state.profile.preferredTown) {
+                        const town = state.towns.find(t => t.id === pin.townId);
+                        if (town) townBadgeCard = `<div style="font-size:10px;color:var(--md-on-surface-variant);background:var(--md-primary-container);border-radius:12px;padding:2px 8px;display:inline-block;margin-top:4px;"><img src="${town.flag}" style="width:16px;height:11px;border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:4px;">${escapeHtml(town.name)}</div>`;
+                    }
+                    return `<div class="pin-card" data-id="${pin.id}">${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}<img src="${pin.imageUrl || 'https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'}" alt="${pin.name}" onerror="this.src='https://via.placeholder.com/56/7C4DFF/FFFFFF?text=📍'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${distanceHtml}${tagsHtml}${townBadgeCard}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); return svc?.icon ? `<img src="${svc.icon}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
+                }).join('');
+                container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
+            } else {
+                renderPinList(container, resultsToShow, isDistanceMode);
+            }
+
             const existingLoadMore = container.querySelector('.load-more-btn');
             if (existingLoadMore) existingLoadMore.remove();
             if (hasMore) {
@@ -3592,7 +3786,6 @@
                 loadMoreDiv.querySelector('button').onclick = () => { state.searchLimit += 25; renderSearchResults(filter); };
                 container.appendChild(loadMoreDiv);
             }
-            container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
         }
 
         function openSortDialog() {
@@ -3681,6 +3874,7 @@
             document.getElementById('pinLatInput').value = pinData?.lat !== undefined ? pinData.lat : '';
             document.getElementById('pinLngInput').value = pinData?.lng !== undefined ? pinData.lng : '';
             document.getElementById('isTransportStop').checked = pinData?.isTransportStop || false;
+            document.getElementById('isBikeStation').checked = pinData?.isBikeStation || false;
             document.getElementById('isOutsideEnvironment').checked = pinData?.isOutsideEnvironment || false;
             document.getElementById('mp3UrlInput').value = pinData?.mp3Url || '';
             document.getElementById('pinAddressInput').value = pinData?.address || '';
@@ -3712,15 +3906,30 @@
             if (pinData?.customButtons && pinData.customButtons.length > 0) pinData.customButtons.forEach(btn => addCustomButtonRow(btn.label, btn.url));
             else addCustomButtonRow();
             state.editingPinId = pinData?.id || null;
-            document.getElementById('transportServicesContainer').style.display = document.getElementById('isTransportStop').checked ? 'block' : 'none';
+
+            // Transport checkbox logic
             const transportCheckbox = document.getElementById('isTransportStop');
             const transportCustom = transportCheckbox.parentElement.querySelector('.custom-checkbox');
-            transportCheckbox.addEventListener('change', function() {
-                if (this.checked) { transportCustom.style.background = 'var(--md-primary)'; transportCustom.style.borderColor = 'var(--md-primary)'; transportCustom.querySelector('.check-icon').style.opacity = '1'; transportCustom.querySelector('.check-icon').style.transform = 'scale(1)'; }
+            const bikeRow = document.getElementById('bikeStationRow');
+            function updateTransportUI() {
+                const isTransport = transportCheckbox.checked;
+                document.getElementById('transportServicesContainer').style.display = isTransport ? 'block' : 'none';
+                bikeRow.style.display = isTransport ? 'flex' : 'none';
+                // Update checkbox visual
+                if (isTransport) { transportCustom.style.background = 'var(--md-primary)'; transportCustom.style.borderColor = 'var(--md-primary)'; transportCustom.querySelector('.check-icon').style.opacity = '1'; transportCustom.querySelector('.check-icon').style.transform = 'scale(1)'; }
                 else { transportCustom.style.background = 'var(--md-surface-dim)'; transportCustom.style.borderColor = 'var(--md-outline)'; transportCustom.querySelector('.check-icon').style.opacity = '0'; transportCustom.querySelector('.check-icon').style.transform = 'scale(0)'; }
-                document.getElementById('transportServicesContainer').style.display = this.checked ? 'block' : 'none';
-            });
+                // Update bike checkbox visual
+                const bikeCheckbox = document.getElementById('isBikeStation');
+                const bikeCustom = bikeCheckbox.parentElement.querySelector('.custom-checkbox');
+                if (bikeCheckbox.checked) { bikeCustom.style.background = 'var(--md-primary)'; bikeCustom.style.borderColor = 'var(--md-primary)'; bikeCustom.querySelector('.check-icon').style.opacity = '1'; bikeCustom.querySelector('.check-icon').style.transform = 'scale(1)'; }
+                else { bikeCustom.style.background = 'var(--md-surface-dim)'; bikeCustom.style.borderColor = 'var(--md-outline)'; bikeCustom.querySelector('.check-icon').style.opacity = '0'; bikeCustom.querySelector('.check-icon').style.transform = 'scale(0)'; }
+            }
+            transportCheckbox.addEventListener('change', updateTransportUI);
+            document.getElementById('isBikeStation').addEventListener('change', updateTransportUI);
+            // Initialize
             transportCheckbox.dispatchEvent(new Event('change'));
+            updateTransportUI();
+
             const outsideCheckbox = document.getElementById('isOutsideEnvironment');
             const outsideCustom = outsideCheckbox.parentElement.querySelector('.custom-checkbox');
             outsideCheckbox.addEventListener('change', function() {
@@ -3728,6 +3937,7 @@
                 else { outsideCustom.style.background = 'var(--md-surface-dim)'; outsideCustom.style.borderColor = 'var(--md-outline)'; outsideCustom.querySelector('.check-icon').style.opacity = '0'; outsideCustom.querySelector('.check-icon').style.transform = 'scale(0)'; }
             });
             outsideCheckbox.dispatchEvent(new Event('change'));
+
             document.querySelectorAll('.stars-selector .star').forEach(el => {
                 el.onclick = function(e) {
                     e.stopPropagation();
@@ -3827,6 +4037,7 @@
             if (!isEditing && isPinDuplicate(name, lat, lng, null)) { showToast('A pin with this name and coordinates already exists.', true); return; }
             if (isEditing && isPinDuplicate(name, lat, lng, state.editingPinId)) { showToast('A pin with this name and coordinates already exists.', true); return; }
             const isTransport = document.getElementById('isTransportStop').checked;
+            const isBike = isTransport && document.getElementById('isBikeStation').checked;
             const services = isTransport ? state.tempServices : [];
             const scheduleLinks = getScheduleLinks();
             const isOutside = document.getElementById('isOutsideEnvironment').checked;
@@ -3844,6 +4055,7 @@
                 tags: tags.length > 0 ? tags : null,
                 imageUrl: document.getElementById('pinImageInput').value.trim(),
                 customButtons: getCustomButtons(), isTransportStop: isTransport, services: services,
+                isBikeStation: isBike,
                 scheduleLinks: scheduleLinks.length > 0 ? scheduleLinks : null,
                 mp3Url: document.getElementById('mp3UrlInput').value.trim() || null,
                 rating: selectedRating > 0 ? selectedRating : null,
@@ -4030,7 +4242,8 @@
                 darkMode: state.darkMode, mapStyle: state.mapStyle, viewMode: state.viewMode, lang: state.lang,
                 sortMode: state.sortMode, groupSortMode: state.groupSortMode, mapStartLocation: state.mapStartLocation,
                 profile: state.profile, noCluster: state.noCluster, isFirstLaunch: state.isFirstLaunch,
-                appLaunchCount: state.appLaunchCount, townFilter: state.townFilter, showTownInSearch: state.showTownInSearch
+                appLaunchCount: state.appLaunchCount, townFilter: state.townFilter, showTownInSearch: state.showTownInSearch,
+                searchView: state.searchView, favoritesView: state.favoritesView
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -4112,6 +4325,8 @@
             if (data.appLaunchCount !== undefined) state.appLaunchCount = data.appLaunchCount;
             if (data.townFilter !== undefined) state.townFilter = data.townFilter;
             if (data.showTownInSearch !== undefined) state.showTownInSearch = data.showTownInSearch;
+            if (data.searchView) state.searchView = data.searchView;
+            if (data.favoritesView) state.favoritesView = data.favoritesView;
             saveData();
             applyAccentColor();
             applyTheme();
@@ -4133,6 +4348,7 @@
             updateTownFilterUI();
             updateShowTownInSearchUI();
             document.getElementById('noClusterCheckbox').checked = state.noCluster;
+            updateViewToggleIcons();
             showToast(t('importSuccess'));
             showReloadSplash();
         }
@@ -4149,6 +4365,7 @@
                 state.profile = { name: 'User', avatar: null, pronouns: '', preferredTown: null };
                 state.profileLoaded = false; state.noCluster = false; state.isFirstLaunch = true;
                 state.appLaunchCount = 0; state.townFilter = null; state.showTownInSearch = true;
+                state.searchView = 'grid'; state.favoritesView = 'grid';
                 saveData();
                 applyAccentColor();
                 applyTheme();
@@ -4173,6 +4390,7 @@
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
                 if (state.map) state.map.setView(BARCELONA_CENTER, 13);
+                updateViewToggleIcons();
                 showToast(t('clearSuccess'));
                 showReloadSplash();
             }
@@ -4188,9 +4406,9 @@
                 greetingAvatar.src = p.avatar;
                 greetingAvatar.style.display = 'block';
             } else {
-                avatarImg.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+                avatarImg.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#9a398d"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#9a398d"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#9a398d"/></svg>`);
                 avatarImg.style.display = 'block';
-                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#9a398d"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#9a398d"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#9a398d"/></svg>`);
                 greetingAvatar.style.display = 'block';
             }
             document.getElementById('profileName').innerText = p.name || 'User';
@@ -4252,7 +4470,7 @@
             if (state.profile.avatar) {
                 greetingAvatar.src = state.profile.avatar;
             } else {
-                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#7C4DFF"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#7C4DFF"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#7C4DFF"/></svg>`);
+                greetingAvatar.src = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#9a398d"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#9a398d"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#9a398d"/></svg>`);
             }
         }
 
@@ -4277,11 +4495,12 @@
                 { key: 'profile', icon: 'fa-user', label: 'profile' },
                 { key: 'map', icon: 'fa-map-marked-alt', label: 'mapSettings' },
                 { key: 'appearance', icon: 'fa-palette', label: 'appearanceBtn' },
+                { key: 'search', icon: 'fa-search', label: 'searchSettings' },
                 { key: 'language', icon: 'fa-globe', label: 'langBtn' },
                 { key: 'services', icon: 'fa-bus', label: 'servicesBtn' },
                 { key: 'towns', icon: 'fa-city', label: 'towns' },
-                { key: 'recent', icon: 'fa-clock', label: 'recent' },
                 { key: 'lines', icon: 'fa-draw-polygon', label: 'lines' },
+                { key: 'recent', icon: 'fa-clock', label: 'recent' },
                 { key: 'reload', icon: 'fa-sync-alt', label: 'reloadApp' },
                 { key: 'about', icon: 'fa-info-circle', label: 'aboutBtn' }
             ];
@@ -4338,7 +4557,7 @@
             document.getElementById('tutorialYesBtn').innerHTML = t('tutorialYes');
             document.getElementById('tutorialNoBtn').innerHTML = t('tutorialNo');
             updateSliderUI();
-            const menuLabels = { profile: 'profile', map: 'mapSettings', appearance: 'appearanceBtn', language: 'langBtn', services: 'servicesBtn', towns: 'towns', recent: 'recent', lines: 'lines', reload: 'reloadApp', about: 'aboutBtn' };
+            const menuLabels = { profile: 'profile', map: 'mapSettings', appearance: 'appearanceBtn', search: 'searchSettings', language: 'langBtn', services: 'servicesBtn', towns: 'towns', recent: 'recent', lines: 'lines', reload: 'reloadApp', about: 'aboutBtn' };
             Object.keys(menuLabels).forEach(key => { const el = document.getElementById(`settingsLabel_${key}`); if (el) el.innerText = t(menuLabels[key]); });
             document.getElementById('profileTitle').innerText = t('profile');
             document.getElementById('editProfileLabel').innerText = t('editProfile');
@@ -4401,6 +4620,7 @@
             document.getElementById('buttonsLabel').innerText = t('buttons');
             document.getElementById('addBtnLabel').innerText = t('addBtn');
             document.getElementById('transportLabel').innerText = t('transport');
+            document.getElementById('bikeStationLabel').innerText = t('bikeStation');
             document.getElementById('servicesLabel').innerText = t('services');
             document.getElementById('servicesSelectorLabel').innerText = t('selectServices');
             document.getElementById('scheduleLinksLabel').innerText = t('schedule');
@@ -4444,7 +4664,6 @@
             document.getElementById('groupPinsSearchInput').placeholder = t('searchPins');
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
             document.getElementById('detailSeeAlsoLabel').innerText = t('seeAlso');
-            document.getElementById('detailMoreInfoLabel').innerText = t('moreInfo');
             document.getElementById('outsideEnvMain').innerText = t('outsideEnvLabel');
             document.getElementById('outsideEnvSub').innerText = t('outsideEnvSub');
             document.getElementById('modePageTitle').innerText = t('modePageTitle');
@@ -4484,6 +4703,13 @@
             document.getElementById('townFilterCloseLabel').innerText = t('close');
             document.getElementById('showTownInSearchLabelText').innerText = t('showTownInSearch');
             document.getElementById('assignFavoriteTownLabel').innerText = t('assignFavoriteTown');
+            document.getElementById('searchSettingsTitle').innerText = t('searchSettings');
+            document.getElementById('searchViewLabel').innerText = t('searchViewLabel');
+            // Update search view option buttons
+            document.querySelectorAll('.search-view-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.view === state.searchView) btn.classList.add('active');
+            });
             updateSidebarGreeting();
             const aboutCard = document.querySelector('#settingsAbout .card');
             if (aboutCard) {
@@ -4498,6 +4724,7 @@
             updateMapStyleButtons();
             updateSortUI();
             updateShowTownInSearchUI();
+            updateViewToggleIcons();
             renderSearchResults(document.getElementById('globalSearchInput')?.value || '');
             renderServicesList(document.getElementById('settingsServiceSearch')?.value || '');
             renderFavorites();
@@ -4659,6 +4886,18 @@
                 const visible = input.value.trim().length >= 2 || state.townFilter !== null;
                 document.getElementById('sortBtnSearch').classList.toggle('visible', visible);
                 document.getElementById('modeBtnSearch').classList.toggle('visible', visible);
+                document.getElementById('viewToggleSearchBtn').classList.toggle('visible', visible);
+            });
+            // Handle Enter key to open first result
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const results = document.querySelectorAll('#searchResults .pin-card, #searchResults .pin-list-item');
+                    if (results.length > 0) {
+                        const firstId = results[0].dataset.id;
+                        if (firstId) openPinDetail(firstId);
+                    }
+                }
             });
             clearBtn.addEventListener('click', () => {
                 input.value = '';
@@ -4666,6 +4905,7 @@
                 renderSearchResults('');
                 document.getElementById('sortBtnSearch').classList.remove('visible');
                 document.getElementById('modeBtnSearch').classList.remove('visible');
+                document.getElementById('viewToggleSearchBtn').classList.remove('visible');
                 input.focus();
             });
         }
@@ -4935,7 +5175,7 @@
             empty.style.display = 'none';
             container.innerHTML = towns.map((town, index) => {
                 const isPreferred = state.profile.preferredTown === town.id;
-                return `<div class="town-item-line" data-id="${town.id}" data-index="${index}"><img src="${town.flag}" style="width:32px;height:21px;border-radius:3px;object-fit:cover;flex-shrink:0;"><span class="town-name">${escapeHtml(town.name)} ${isPreferred ? '⭐' : ''}</span><button class="edit-btn edit-town-btn" data-id="${town.id}"><i class="fas fa-edit"></i></button><button class="remove-btn remove-town-btn" data-id="${town.id}"><i class="fas fa-trash"></i></button></div>`;
+                return `<div class="town-item-line" data-id="${town.id}" data-index="${index}"><img src="${town.flag}" style="width:32px;height:21px;border-radius:3px;object-fit:cover;flex-shrink:0;"><span class="town-name">${escapeHtml(town.name)} ${isPreferred ? '★' : ''}</span><button class="edit-btn edit-town-btn" data-id="${town.id}"><i class="fas fa-edit"></i></button><button class="remove-btn remove-town-btn" data-id="${town.id}"><i class="fas fa-trash"></i></button></div>`;
             }).join('');
             container.querySelectorAll('.remove-town-btn').forEach(btn => { btn.onclick = () => deleteTown(btn.dataset.id); });
             container.querySelectorAll('.edit-town-btn').forEach(btn => { btn.onclick = () => openEditTownDialog(btn.dataset.id); });
@@ -5108,6 +5348,7 @@
             updateAllTexts();
             updateModeUI();
             setupSearchClear();
+            updateViewToggleIcons();
             window.addEventListener('popstate', handlePopState);
             if (!window.location.hash || window.location.hash === '#') pushHistory('map');
             else {
@@ -5129,6 +5370,8 @@
             document.getElementById('modeTransportCard').addEventListener('click', () => setViewMode('transport'));
             document.getElementById('sortBtnSearch').addEventListener('click', cycleSort);
             document.getElementById('modeBtnSearch').addEventListener('click', () => switchTab('mode'));
+            document.getElementById('viewToggleSearchBtn').addEventListener('click', toggleSearchView);
+            document.getElementById('viewToggleFavBtn').addEventListener('click', toggleFavoritesView);
             document.getElementById('townFilterMapBtn').addEventListener('click', () => openTownFilterPopup());
             document.getElementById('townFilterClear').addEventListener('click', () => setTownFilter(null));
             document.getElementById('townFilterClose').addEventListener('click', closeTownFilterPopup);
@@ -5202,7 +5445,7 @@
             document.getElementById('addCustomBtnRow').onclick = () => addCustomButtonRow();
             document.getElementById('addScheduleLinkBtn').onclick = () => addScheduleLinkRow();
             document.getElementById('isTransportStop').onchange = () => {
-                document.getElementById('transportServicesContainer').style.display = document.getElementById('isTransportStop').checked ? 'block' : 'none';
+                // handled in openPinDialog
             };
             document.getElementById('servicesSelectorBtn').onclick = openServicesSelector;
             document.getElementById('servicesSelectorCancel').onclick = closeServicesSelector;
@@ -5276,6 +5519,20 @@
             document.getElementById('addLineBtn').onclick = () => openLineDialog(null);
             document.getElementById('lineDialogCancel').onclick = closeLineDialog;
             document.getElementById('lineDialogSave').onclick = saveLineFromDialog;
+
+            // Search view settings buttons
+            document.querySelectorAll('.search-view-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    state.searchView = this.dataset.view;
+                    saveData();
+                    document.querySelectorAll('.search-view-option').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    updateViewToggleIcons();
+                    renderSearchResults(state.currentSearchQuery || '');
+                    showToast(this.dataset.view === 'grid' ? t('gridView') : t('listView'));
+                });
+            });
+
             document.querySelectorAll('.dialog-overlay').forEach(dialog => {
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
