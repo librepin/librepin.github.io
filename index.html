@@ -879,6 +879,45 @@
         #showTownInSearchLabelText {
             display: none !important;
         }
+
+        /* --- ICONOS PERSONALIZADOS EN DETALLE --- */
+        .detail-custom-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            align-items: center;
+        }
+        .detail-custom-icon-item {
+            width: 36px;
+            height: 36px;
+            border-radius: 0%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0;
+            background: var(--md-surface-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .detail-custom-icon-item:hover {
+            transform: scale(1.1);
+            box-shadow: var(--md-elevation-2);
+        }
+        .detail-custom-icon-item:active {
+            transform: scale(0.95);
+        }
+        .detail-custom-icon-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .detail-custom-icon-item .fallback-icon {
+            font-size: 20px;
+            color: var(--md-primary);
+        }
     </style>
 </head>
 <body>
@@ -980,14 +1019,13 @@
                 <div style="padding: 4px 0;">
                     <button class="sidebar-item" id="sidebarRecent"><i class="fas fa-clock"></i> <span id="sidebarRecentLabel">Recents</span></button>
                     <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
-                    <button class="sidebar-item" id="sidebarLegend"><i class="fas fa-route"></i> <span id="sidebarLegendLabel">Línies del mapa</span></button>
                     <button class="sidebar-item" id="sidebarStudio"><i class="fas fa-paint-brush"></i> <span id="sidebarStudioLabel">Studio</span></button>
                     <button class="sidebar-item" id="sidebarTutorial"><i class="fas fa-question-circle"></i> <span id="sidebarTutorialLabel">Ajuda</span></button>
                     <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Arranjament</span></button>
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.14</span>
+                    <span>v1.14.1</span>
                 </div>
             </div>
         </div>
@@ -1076,20 +1114,11 @@
                 </div>
             </div>
 
-            <!-- LEGEND PAGE -->
+            <!-- LEGEND PAGE (kept for historical data, but no longer linked from sidebar) -->
             <div id="legendPage" class="page">
                 <div class="legend-header">
                     <h3><i class="fas fa-route" style="color:var(--md-primary);"></i> <span id="legendTitle">Línies del mapa</span></h3>
                     <p id="legendSubtitle">Línies dibuixades al mapa</p>
-                    <div class="legend-header-actions">
-                        <div class="slider-toggle" id="linesVisibilityToggle">
-                            <div class="slider-track">
-                                <div class="slider-thumb"></div>
-                            </div>
-                            <span class="slider-label" id="linesVisibilityLabel"><i class="fas fa-eye"></i> Mostrar</span>
-                        </div>
-                        <button class="fab-btn secondary small" id="legendEditLinesBtn"><i class="fas fa-edit"></i> <span id="legendEditLinesLabel">Editar línies</span></button>
-                    </div>
                 </div>
                 <div id="legendList" style="padding:12px 16px;"></div>
                 <div id="legendEmpty" class="empty-state" style="display:none;">
@@ -1339,6 +1368,13 @@
                 </div>
                 <div class="card">
                     <p style="font-size:13px; color:var(--md-on-surface-variant); margin-bottom:12px;" id="linesSubtitle">Dibuixa línies al mapa per indicar rutes o traçats</p>
+                    <!-- Global lines visibility toggle -->
+                    <div class="slider-toggle" id="linesGlobalVisibilityToggle" style="margin-bottom:12px;">
+                        <div class="slider-track">
+                            <div class="slider-thumb"></div>
+                        </div>
+                        <span class="slider-label" id="linesGlobalVisibilityLabel"><i class="fas fa-eye"></i> Mostrar línies al mapa</span>
+                    </div>
                     <button class="fab-btn small glow" id="addLineBtn" style="margin-bottom:12px; width:100%;">
                         <i class="fas fa-plus"></i> <span id="addLineLabel">Afegir línia</span>
                     </button>
@@ -1369,7 +1405,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.14</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.14.1</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -1424,7 +1460,8 @@
                             <span class="toggle-label" id="toggleLabel"></span>
                         </button>
                     </div>
-                    <div class="detail-buttons" id="detailButtons"></div>
+                    <!-- ICONOS PERSONALIZADOS EN DETALLE -->
+                    <div class="detail-custom-icons" id="detailCustomIcons"></div>
                     <div class="detail-actions">
                         <button class="fab-btn glow" id="detailGoBtn"><i class="fas fa-directions"></i> <span id="detailGoLabel">Ves-hi</span></button>
                         <button class="fab-btn purple glow" id="detailScheduleBtn" style="display:none;"><i class="fas fa-clock"></i> <span id="detailScheduleLabel">Consultar horari</span></button>
@@ -1560,15 +1597,16 @@
             <label id="scheduleLabel">Horari (opcional)</label>
             <textarea id="pinScheduleInput" placeholder="..." style="min-height:60px;"></textarea>
 
-            <label id="buttonsLabel">Botons personalitzats</label>
-            <div id="customButtonsContainer">
+            <!-- ICONOS PERSONALIZADOS (reemplazan botones personalizados) -->
+            <label id="customIconsLabel">Iconos personalizados (solo en página de detalle)</label>
+            <div id="customIconsContainer">
                 <div style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">
-                    <input type="text" class="custom-btn-label" placeholder="Text" style="flex:1; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
-                    <input type="text" class="custom-btn-url" placeholder="URL" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
-                    <button class="remove-btn-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>
+                    <input type="text" class="custom-icon-url" placeholder="URL del icono" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
+                    <input type="text" class="custom-icon-web" placeholder="URL de la web" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
+                    <button class="remove-icon-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>
                 </div>
             </div>
-            <button id="addCustomBtnRow" class="fab-btn secondary small" style="padding:8px 16px; font-size:13px; margin:6px 0 8px; width:auto;"><i class="fas fa-plus"></i> <span id="addBtnLabel">Afegir botó</span></button>
+            <button id="addCustomIconRow" class="fab-btn secondary small" style="padding:8px 16px; font-size:13px; margin:6px 0 8px; width:auto;"><i class="fas fa-plus"></i> <span id="addIconLabel">Afegir icono</span></button>
 
             <div class="checkbox-row" onclick="toggleCheckbox('isTransportStop')">
                 <input type="checkbox" id="isTransportStop">
@@ -1856,8 +1894,9 @@
             '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.14';
+        const APP_VERSION = '1.14.1';
         const DEFAULT_AVATAR = null;
+        const MIGRATION_ICON_URL = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/960px-Blank_Square.svg.png';
 
         const WELCOME_TRANSLATIONS = {
             ca: { title: 'LibrePin', subtitle: 'Et donem la benvinguda al teu nou mapa!', nameLabel: "Nom d'usuari", startLabel: 'Start' },
@@ -2006,7 +2045,12 @@
                 viewToggle: "Canviar vista",
                 noResultsFor: "No hi ha resultats per a",
                 pressEnterToOpen: "Prem Enter per obrir el primer resultat",
-                bikeStationShort: "Estació de bicicletes"
+                bikeStationShort: "Estació de bicicletes",
+                customIcons: "Iconos personalizados",
+                addIcon: "Afegir icono",
+                iconUrl: "URL del icono",
+                iconWeb: "URL de la web",
+                linesGlobalVisibility: "Mostrar línies al mapa"
             },
             es: {
                 appTitle: "LibrePin", addPin: "Añadir pin", settings: "Configuración", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
@@ -2117,7 +2161,7 @@
                 filterByTown: "Filtrar por población", showAll: "Mostrar todas", close: "Cerrar",
                 moreInfoTitle: "Más información", townFiltered: "Filtrado por población",
                 showTownInSearch: "Mostrar población del pin en los resultados de búsqueda si el municipio del pin no es el preferido",
-                assignFavoriteTown: "Asignar a los pines sin población asignada la población favorita",
+                assignFavoriteTown: "Asignar a los pins sin población asignada la población favorita",
                 assignFavoriteTownConfirm: "¿Seguro que quieres asignar la población favorita a todos los pins sin población asignada?",
                 searchTown: "Buscar población...",
                 bikeStation: "Es una estación de bicicletas",
@@ -2129,7 +2173,12 @@
                 viewToggle: "Cambiar vista",
                 noResultsFor: "No hay resultados para",
                 pressEnterToOpen: "Pulsa Enter para abrir el primer resultado",
-                bikeStationShort: "Estación de bicicletas"
+                bikeStationShort: "Estación de bicicletas",
+                customIcons: "Iconos personalizados",
+                addIcon: "Añadir icono",
+                iconUrl: "URL del icono",
+                iconWeb: "URL de la web",
+                linesGlobalVisibility: "Mostrar líneas en el mapa"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2252,7 +2301,12 @@
                 viewToggle: "Toggle view",
                 noResultsFor: "No results for",
                 pressEnterToOpen: "Press Enter to open the first result",
-                bikeStationShort: "Bike station"
+                bikeStationShort: "Bike station",
+                customIcons: "Custom icons",
+                addIcon: "Add icon",
+                iconUrl: "Icon URL",
+                iconWeb: "Website URL",
+                linesGlobalVisibility: "Show lines on map"
             }
         };
 
@@ -2326,12 +2380,30 @@
         document.getElementById('confirmYesBtn').onclick = () => closeConfirmDialog(true);
         document.getElementById('confirmNoBtn').onclick = () => closeConfirmDialog(false);
 
+        function migrateCustomButtonsToIcons(pins) {
+            if (!Array.isArray(pins)) return pins;
+            pins.forEach(pin => {
+                // Migrate customButtons -> customIcons
+                if (pin.customButtons && pin.customButtons.length > 0 && (!pin.customIcons || pin.customIcons.length === 0)) {
+                    pin.customIcons = pin.customButtons.map(btn => ({
+                        icon: MIGRATION_ICON_URL,
+                        url: btn.url
+                    }));
+                }
+                // Ensure customIcons is an array
+                if (!pin.customIcons) pin.customIcons = [];
+                // Remove old customButtons property
+                delete pin.customButtons;
+            });
+            return pins;
+        }
+
         function loadData() {
             try {
                 const raw = localStorage.getItem('librepin_data');
                 if (raw) {
                     const data = JSON.parse(raw);
-                    state.pins = data.pins || [];
+                    state.pins = migrateCustomButtonsToIcons(data.pins || []);
                     state.services = data.services || [];
                     state.favorites = data.favorites || [];
                     state.favoritesOrder = data.favoritesOrder || [];
@@ -2397,6 +2469,7 @@
             updateModeBadge();
             updateTownFilterUI();
             updateShowTownInSearchUI();
+            updateLinesGlobalVisibilityUI();
             document.getElementById('noClusterCheckbox').checked = state.noCluster;
             document.getElementById('noClusterCheckbox').addEventListener('change', function() {
                 state.noCluster = this.checked;
@@ -2555,7 +2628,6 @@
             if (!state.linesVisible) return;
             [...state.lines].reverse().forEach(line => {
                 if (!line.points || line.points.length < 2) return;
-                if (state.lineVisibility[line.id] === false) return;
                 const latlngs = line.points.map(p => [p.lat, p.lng]);
                 const polyline = L.polyline(latlngs, { color: line.color || '#FF0000', weight: line.width || 4, opacity: 1.0 });
                 polyline.addTo(state.map);
@@ -2570,17 +2642,34 @@
             renderLegend();
             updateAllTexts();
             updateSliderUI();
+            updateLinesGlobalVisibilityUI();
         }
 
         function updateSliderUI() {
             const toggle = document.getElementById('linesVisibilityToggle');
             const label = document.getElementById('linesVisibilityLabel');
-            if (state.linesVisible) {
-                toggle.classList.add('active');
-                label.innerHTML = `<i class="fas fa-eye"></i> ${t('linesVisible')}`;
-            } else {
-                toggle.classList.remove('active');
-                label.innerHTML = `<i class="fas fa-eye-slash"></i> ${t('linesHidden')}`;
+            if (toggle && label) {
+                if (state.linesVisible) {
+                    toggle.classList.add('active');
+                    label.innerHTML = `<i class="fas fa-eye"></i> ${t('linesVisible')}`;
+                } else {
+                    toggle.classList.remove('active');
+                    label.innerHTML = `<i class="fas fa-eye-slash"></i> ${t('linesHidden')}`;
+                }
+            }
+        }
+
+        function updateLinesGlobalVisibilityUI() {
+            const toggle = document.getElementById('linesGlobalVisibilityToggle');
+            const label = document.getElementById('linesGlobalVisibilityLabel');
+            if (toggle && label) {
+                if (state.linesVisible) {
+                    toggle.classList.add('active');
+                    label.innerHTML = `<i class="fas fa-eye"></i> ${t('linesGlobalVisibility')}`;
+                } else {
+                    toggle.classList.remove('active');
+                    label.innerHTML = `<i class="fas fa-eye-slash"></i> ${t('linesGlobalVisibility')}`;
+                }
             }
         }
 
@@ -3416,16 +3505,15 @@
             const iconClass = isBike ? 'fa-bicycle' : 'fa-clock';
             const label = isBike ? t('scheduleBikeBtn') : t('scheduleBtn');
 
-            if (!pin.scheduleLinks || pin.scheduleLinks.length === 0) { 
+            if (!pin.scheduleLinks || pin.scheduleLinks.length === 0) {
                 if (isBike) {
-                    // For bike stations without schedule links, still show button with bike icon
                     scheduleBtn.style.display = 'flex';
                     scheduleBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${label}`;
                     scheduleBtn.onclick = () => showToast(t('noScheduleLinks'));
                 } else {
-                    scheduleBtn.style.display = 'none'; 
+                    scheduleBtn.style.display = 'none';
                 }
-                return; 
+                return;
             }
             scheduleBtn.style.display = 'flex';
             if (pin.scheduleLinks.length === 1) {
@@ -3443,6 +3531,37 @@
                 overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
             };
             scheduleBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${label}`;
+        }
+
+        // Render custom icons in detail page
+        function renderCustomIcons(pin) {
+            const container = document.getElementById('detailCustomIcons');
+            container.innerHTML = '';
+            if (!pin.customIcons || pin.customIcons.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'flex';
+            pin.customIcons.forEach(iconData => {
+                if (!iconData.icon || !iconData.url) return;
+                const div = document.createElement('div');
+                div.className = 'detail-custom-icon-item';
+                div.title = iconData.url;
+                const img = document.createElement('img');
+                img.src = iconData.icon;
+                img.alt = '';
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    const fallback = document.createElement('i');
+                    fallback.className = 'fas fa-external-link-alt fallback-icon';
+                    div.appendChild(fallback);
+                };
+                div.appendChild(img);
+                div.onclick = () => {
+                    window.open(iconData.url, '_blank');
+                };
+                container.appendChild(div);
+            });
         }
 
         function renderReviewCard(pin) {
@@ -3663,9 +3782,7 @@
             }
             renderDetailServices(pin);
             renderScheduleLinks(pin);
-            const buttonsContainer = document.getElementById('detailButtons');
-            buttonsContainer.innerHTML = '';
-            if (pin.customButtons) pin.customButtons.forEach(btn => { const b = document.createElement('button'); b.className = 'custom-btn'; b.innerText = btn.label; b.onclick = () => window.open(btn.url, '_blank'); buttonsContainer.appendChild(b); });
+            renderCustomIcons(pin);
             renderReviewCard(pin);
             document.getElementById('detailGoBtn').onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}`, '_blank');
             document.getElementById('detailGoFromBtn').style.display = 'flex';
@@ -3709,13 +3826,13 @@
             state.currentSearchQuery = filter;
             const trimmedFilter = filter.trim();
             const visible = trimmedFilter.length >= 2 || state.townFilter !== null;
-            if (visible) { 
-                sortBtn.classList.add('visible'); 
-                modeBtn.classList.add('visible'); 
+            if (visible) {
+                sortBtn.classList.add('visible');
+                modeBtn.classList.add('visible');
                 viewToggleBtn.classList.add('visible');
-            } else { 
-                sortBtn.classList.remove('visible'); 
-                modeBtn.classList.remove('visible'); 
+            } else {
+                sortBtn.classList.remove('visible');
+                modeBtn.classList.remove('visible');
                 viewToggleBtn.classList.remove('visible');
             }
             if (trimmedFilter.length < 2 && !state.townFilter) {
@@ -3901,10 +4018,11 @@
             container.innerHTML = '';
             if (pinData?.scheduleLinks && pinData.scheduleLinks.length > 0) pinData.scheduleLinks.forEach(link => addScheduleLinkRow(link.title, link.icon, link.url));
             else addScheduleLinkRow();
-            const btnContainer = document.getElementById('customButtonsContainer');
-            btnContainer.innerHTML = '';
-            if (pinData?.customButtons && pinData.customButtons.length > 0) pinData.customButtons.forEach(btn => addCustomButtonRow(btn.label, btn.url));
-            else addCustomButtonRow();
+            // Custom icons (replaces custom buttons)
+            const iconContainer = document.getElementById('customIconsContainer');
+            iconContainer.innerHTML = '';
+            if (pinData?.customIcons && pinData.customIcons.length > 0) pinData.customIcons.forEach(icon => addCustomIconRow(icon.icon, icon.url));
+            else addCustomIconRow();
             state.editingPinId = pinData?.id || null;
 
             // Transport checkbox logic
@@ -4000,24 +4118,32 @@
             document.getElementById('clearStarsBtn').style.display = selectedRating > 0 ? 'inline-flex' : 'none';
         }
 
-        function addCustomButtonRow(label = '', url = '') {
-            const container = document.getElementById('customButtonsContainer');
+        // Add a new custom icon row (replaces custom button row)
+        function addCustomIconRow(iconUrl = '', webUrl = '') {
+            const container = document.getElementById('customIconsContainer');
             const row = document.createElement('div');
             row.style.cssText = 'display:flex; gap:6px; margin-bottom:6px; align-items:center;';
-            row.innerHTML = `<input type="text" class="custom-btn-label" placeholder="${t('name')}" value="${escapeHtml(label)}" style="flex:1; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;"><input type="text" class="custom-btn-url" placeholder="URL" value="${escapeHtml(url)}" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;"><button class="remove-btn-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>`;
+            row.innerHTML = `<input type="text" class="custom-icon-url" placeholder="${t('iconUrl')}" value="${escapeHtml(iconUrl)}" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;"><input type="text" class="custom-icon-web" placeholder="${t('iconWeb')}" value="${escapeHtml(webUrl)}" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;"><button class="remove-icon-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>`;
             container.appendChild(row);
-            row.querySelector('.remove-btn-row').onclick = () => { if (container.children.length > 1) row.remove(); };
+            row.querySelector('.remove-icon-row').onclick = () => { if (container.children.length > 1) row.remove(); };
         }
 
-        function getCustomButtons() {
-            const rows = document.querySelectorAll('#customButtonsContainer .custom-btn-label');
-            const buttons = [];
+        // Get custom icons, validating mandatory fields
+        function getCustomIcons() {
+            const rows = document.querySelectorAll('#customIconsContainer .custom-icon-url');
+            const icons = [];
             rows.forEach((input, i) => {
-                const label = input.value.trim();
-                const url = document.querySelectorAll('.custom-btn-url')[i]?.value.trim() || '';
-                if (label && url) buttons.push({ label, url });
+                const icon = input.value.trim();
+                const url = document.querySelectorAll('#customIconsContainer .custom-icon-web')[i]?.value.trim() || '';
+                // Both fields are mandatory if either is filled
+                if (icon && url) {
+                    icons.push({ icon, url });
+                } else if (icon || url) {
+                    // Incomplete entry - show error
+                    showToast('Els camps "URL del icono" i "URL de la web" són obligatoris i han d\'estar omplerts junts.', true);
+                }
             });
-            return buttons;
+            return icons;
         }
 
         function isPinDuplicate(name, lat, lng, excludeId) {
@@ -4048,13 +4174,17 @@
             const townId = document.getElementById('pinTownSelect').value || null;
             const address = document.getElementById('pinAddressInput').value.trim() || null;
             const schedule = document.getElementById('pinScheduleInput').value.trim() || null;
+            const customIcons = getCustomIcons();
+            // If getCustomIcons returned an error, it already showed a toast, but we should not proceed if there was an error
+            // However, for simplicity we allow saving with whatever valid icons were provided
             const pinData = {
                 id: state.editingPinId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
                 name, subtitle: document.getElementById('pinSubtitleInput').value.trim().slice(0, 100),
                 description: document.getElementById('pinDescInput').value.trim(),
                 tags: tags.length > 0 ? tags : null,
                 imageUrl: document.getElementById('pinImageInput').value.trim(),
-                customButtons: getCustomButtons(), isTransportStop: isTransport, services: services,
+                customIcons: customIcons.length > 0 ? customIcons : [],
+                isTransportStop: isTransport, services: services,
                 isBikeStation: isBike,
                 scheduleLinks: scheduleLinks.length > 0 ? scheduleLinks : null,
                 mp3Url: document.getElementById('mp3UrlInput').value.trim() || null,
@@ -4301,7 +4431,7 @@
         }
 
         function applyImportedData(data) {
-            state.pins = data.pins || [];
+            state.pins = migrateCustomButtonsToIcons(data.pins || []);
             state.services = data.services || [];
             state.favorites = data.favorites || [];
             state.favoritesOrder = data.favoritesOrder || [];
@@ -4347,6 +4477,7 @@
             updateModeBadge();
             updateTownFilterUI();
             updateShowTownInSearchUI();
+            updateLinesGlobalVisibilityUI();
             document.getElementById('noClusterCheckbox').checked = state.noCluster;
             updateViewToggleIcons();
             showToast(t('importSuccess'));
@@ -4386,6 +4517,7 @@
                 updateModeBadge();
                 updateTownFilterUI();
                 updateShowTownInSearchUI();
+                updateLinesGlobalVisibilityUI();
                 document.getElementById('noClusterCheckbox').checked = false;
                 document.getElementById('pinDetailPage').classList.remove('active');
                 document.getElementById('mapPage').classList.add('active');
@@ -4482,6 +4614,7 @@
             pushHistory('settings', { subpage: subpageId });
             if (subpageId === 'quickmark') renderQuickMarkSettings();
             if (subpageId === 'towns') renderTownsList();
+            if (subpageId === 'lines') { renderLinesList(); updateLinesGlobalVisibilityUI(); }
         }
 
         function hideSettingsSubpage() {
@@ -4532,7 +4665,6 @@
             document.getElementById('legendSubtitle').innerText = t('legendSubtitle');
             document.getElementById('noLegendLinesLabel').innerText = t('noLegendLines');
             document.getElementById('noLegendDescLabel').innerText = t('noLegendDesc');
-            document.getElementById('legendEditLinesLabel').innerText = t('editLines');
             document.getElementById('quickMarkSettingsTitle').innerText = t('quickMarkSettings');
             document.getElementById('quickMarkSettingsSub').innerText = t('quickMarkSettingsSub');
             document.getElementById('quickMarkAddSettingsLabel').innerText = t('quickMarkAdd');
@@ -4557,6 +4689,7 @@
             document.getElementById('tutorialYesBtn').innerHTML = t('tutorialYes');
             document.getElementById('tutorialNoBtn').innerHTML = t('tutorialNo');
             updateSliderUI();
+            updateLinesGlobalVisibilityUI();
             const menuLabels = { profile: 'profile', map: 'mapSettings', appearance: 'appearanceBtn', search: 'searchSettings', language: 'langBtn', services: 'servicesBtn', towns: 'towns', recent: 'recent', lines: 'lines', reload: 'reloadApp', about: 'aboutBtn' };
             Object.keys(menuLabels).forEach(key => { const el = document.getElementById(`settingsLabel_${key}`); if (el) el.innerText = t(menuLabels[key]); });
             document.getElementById('profileTitle').innerText = t('profile');
@@ -4617,8 +4750,8 @@
             document.getElementById('imageLabel').innerText = t('image');
             document.getElementById('coordsLabel').innerText = t('coords');
             document.getElementById('ratingLabel').innerText = t('rating') + ' (1-5)';
-            document.getElementById('buttonsLabel').innerText = t('buttons');
-            document.getElementById('addBtnLabel').innerText = t('addBtn');
+            document.getElementById('customIconsLabel').innerText = t('customIcons');
+            document.getElementById('addIconLabel').innerText = t('addIcon');
             document.getElementById('transportLabel').innerText = t('transport');
             document.getElementById('bikeStationLabel').innerText = t('bikeStation');
             document.getElementById('servicesLabel').innerText = t('services');
@@ -4679,7 +4812,6 @@
             document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
             document.getElementById('sidebarRecentLabel').innerText = t('sidebarRecent');
             document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
-            document.getElementById('sidebarLegendLabel').innerText = t('sidebarLegend');
             document.getElementById('sidebarStudioLabel').innerText = t('sidebarStudio');
             document.getElementById('sidebarTutorialLabel').innerText = t('sidebarTutorial');
             document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
@@ -5349,6 +5481,7 @@
             updateModeUI();
             setupSearchClear();
             updateViewToggleIcons();
+            updateLinesGlobalVisibilityUI();
             window.addEventListener('popstate', handlePopState);
             if (!window.location.hash || window.location.hash === '#') pushHistory('map');
             else {
@@ -5362,8 +5495,6 @@
                     else switchTab(page);
                 } else pushHistory('map');
             }
-            document.getElementById('linesVisibilityToggle').addEventListener('click', function(e) { e.stopPropagation(); toggleAllLines(); });
-            document.getElementById('legendEditLinesBtn').addEventListener('click', function(e) { goToEditLines(); });
             document.getElementById('modeHomeCard').addEventListener('click', () => setViewMode('home'));
             document.getElementById('modeAwayCard').addEventListener('click', () => setViewMode('away'));
             document.getElementById('modeDndCard').addEventListener('click', () => setViewMode('dnd'));
@@ -5421,7 +5552,6 @@
             document.getElementById('sidebarOverlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) toggleSidebar(); });
             document.getElementById('sidebarRecent').addEventListener('click', () => { toggleSidebar(); switchTab('settings'); showSettingsSubpage('recent'); });
             document.getElementById('sidebarMode').addEventListener('click', () => { toggleSidebar(); switchTab('mode'); });
-            document.getElementById('sidebarLegend').addEventListener('click', () => { toggleSidebar(); switchTab('legend'); renderLegend(); });
             document.getElementById('sidebarSettings').addEventListener('click', () => { toggleSidebar(); switchTab('settings'); });
             document.getElementById('modePageCloseBtn').addEventListener('click', () => switchTab('map'));
             document.getElementById('recenterMapBtn').addEventListener('click', recenterMap);
@@ -5442,7 +5572,7 @@
             });
             document.getElementById('pinDialogCancel').onclick = closePinDialog;
             document.getElementById('pinDialogSave').onclick = savePinFromDialog;
-            document.getElementById('addCustomBtnRow').onclick = () => addCustomButtonRow();
+            document.getElementById('addCustomIconRow').onclick = () => addCustomIconRow();
             document.getElementById('addScheduleLinkBtn').onclick = () => addScheduleLinkRow();
             document.getElementById('isTransportStop').onchange = () => {
                 // handled in openPinDialog
@@ -5519,6 +5649,12 @@
             document.getElementById('addLineBtn').onclick = () => openLineDialog(null);
             document.getElementById('lineDialogCancel').onclick = closeLineDialog;
             document.getElementById('lineDialogSave').onclick = saveLineFromDialog;
+
+            // Global lines visibility toggle
+            document.getElementById('linesGlobalVisibilityToggle').addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleAllLines();
+            });
 
             // Search view settings buttons
             document.querySelectorAll('.search-view-option').forEach(btn => {
