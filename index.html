@@ -775,7 +775,7 @@
             <div class="map-style-option" data-style="simple" id="mapStyleSimpleOption">
                 <div class="map-style-icon"><i class="fas fa-road"></i></div>
                 <div class="map-style-info">
-                    <div class="map-style-name">Sencillo</div>
+                    <div class="map-style-name">Senzill</div>
                     <div class="map-style-desc">Esri World Street Map</div>
                 </div>
                 <div class="map-style-check"><i class="fas fa-check-circle"></i></div>
@@ -783,7 +783,7 @@
             <div class="map-style-option" data-style="satellite" id="mapStyleSatelliteOption">
                 <div class="map-style-icon"><i class="fas fa-satellite"></i></div>
                 <div class="map-style-info">
-                    <div class="map-style-name">Satélite</div>
+                    <div class="map-style-name">Satèl·lit</div>
                     <div class="map-style-desc">Esri World Imagery</div>
                 </div>
                 <div class="map-style-check"><i class="fas fa-check-circle"></i></div>
@@ -842,7 +842,7 @@
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.14.2.beta</span>
+                    <span>v1.15.1</span>
                 </div>
             </div>
         </div>
@@ -1213,7 +1213,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.14.2.beta</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.15.1</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -2102,9 +2102,9 @@
                 mapStyleTitle: "Estil del mapa",
                 mapStyleNormal: "Normal",
                 mapStyleNormalDesc: "OpenStreetMap estàndard",
-                mapStyleSimple: "Sencillo",
+                mapStyleSimple: "Senzill",
                 mapStyleSimpleDesc: "Esri World Street Map",
-                mapStyleSatellite: "Satélite",
+                mapStyleSatellite: "Satèl·lit",
                 mapStyleSatelliteDesc: "Esri World Imagery"
             },
             es: {
@@ -2995,7 +2995,7 @@
             } else {
                 const newLine = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, color, width, points };
                 if (icon) { const ref = addImageToPool(icon); newLine.iconRef = ref; }
-                state.lines.unshift(newLine);
+                state.lines.push(newLine);
                 state.lineVisibility[newLine.id] = true;
                 showToast(t('lineAdded'));
             }
