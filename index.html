@@ -28,12 +28,16 @@
             --splash-color: var(--md-primary); --sidebar-width: 280px; --bottom-nav-height: 60px;
             --star-color-1: #E30613; --star-color-2: #FF8C00; --star-color-3: #FFB300;
             --star-color-4: #66BB6A; --star-color-5: #2E7D32;
+            --skeleton-base: #e0e0e0;
+            --skeleton-shine: #f0f0f0;
         }
         [data-theme="dark"] {
             --md-primary: #9a398d; --md-primary-container: #9a398d; --md-surface: #1C1B1F;
             --md-surface-dim: #2C2A2E; --md-background: #0F0F14; --md-on-surface: #E6E1E5;
             --md-on-surface-variant: #CAC4D0; --md-outline: #938F99;
             --nav-active-bg: rgba(124,77,255,0.15);
+            --skeleton-base: #3a3a3c;
+            --skeleton-shine: #4a4a4c;
         }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--md-background); color: var(--md-on-surface); height: 100%; overflow: hidden; }
         ::-webkit-scrollbar { width: 0; height: 0; }
@@ -134,7 +138,7 @@
         .nav-item:active { transform: scale(0.95); }
         .pages-container { flex: 1; overflow: hidden; position: relative; min-height: 0; }
         .page { display: none; height: 100%; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
-        .page.active { display: block; animation: scaleIn 0.25s ease; }
+        .page.active { display: block; animation: pageScaleIn 0.3s ease; }
         #mapPage { padding: 0; background: var(--md-background); position: relative; }
         .map-container { height: 100%; width: 100%; position: relative; z-index: 1; }
         #mainMap { height: 100%; width: 100%; background: var(--md-background); position: relative; z-index: 1; }
@@ -147,10 +151,12 @@
         .recenter-btn { position: absolute; bottom: 100px; left: 16px; z-index: 1000; background: var(--md-surface); border: none; border-radius: 50%; width: 44px; height: 44px; box-shadow: var(--md-elevation-3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--md-on-surface); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .recenter-btn:active { transform: scale(0.9); }
         .recenter-btn:hover { background: var(--md-surface-dim); }
-        .town-filter-map-btn { position: absolute; bottom: 160px; left: 16px; z-index: 1000; background: var(--md-surface); border: none; border-radius: 50%; width: 44px; height: 44px; box-shadow: var(--md-elevation-3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--md-on-surface); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
-        .town-filter-map-btn:active { transform: scale(0.9); }
-        .town-filter-map-btn:hover { background: var(--md-surface-dim); }
-        .town-filter-map-btn img { width: 26px; height: 17px; border-radius: 3px; object-fit: cover; }
+        .map-options-btn { position: absolute; bottom: 160px; left: 16px; z-index: 1000; background: var(--md-surface); border: none; border-radius: 50%; width: 44px; height: 44px; box-shadow: var(--md-elevation-3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--md-on-surface); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
+        .map-options-btn:active { transform: scale(0.9); }
+        .map-options-btn:hover { background: var(--md-surface-dim); }
+        .transport-search-btn { position: absolute; bottom: 220px; left: 16px; z-index: 1000; background: var(--md-surface); border: none; border-radius: 50%; width: 44px; height: 44px; box-shadow: var(--md-elevation-3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--md-on-surface); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .transport-search-btn:active { transform: scale(0.9); }
+        .transport-search-btn:hover { background: var(--md-surface-dim); }
         .card { background: var(--md-surface); border-radius: var(--radius-lg); padding: 20px 18px; box-shadow: var(--md-elevation-1); margin-bottom: 16px; animation: scaleIn 0.3s ease; }
         .fab-btn { background: var(--md-primary); border: none; border-radius: 60px; padding: 14px 24px; font-size: 16px; font-weight: 600; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; text-decoration: none; }
         .fab-btn:active { transform: scale(0.95); }
@@ -178,7 +184,15 @@
         .search-wrapper .header-btn:active { transform: scale(0.9); background: var(--md-surface-dim); }
         @keyframes searchBtnAppear { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
         .pin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 14px 18px; }
-        .pin-card { background: var(--md-surface); border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; cursor: pointer; box-shadow: var(--md-elevation-1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-top: 4px solid var(--md-primary); position: relative; }
+        .pin-card { background: var(--md-surface); border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; cursor: pointer; box-shadow: var(--md-elevation-1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-top: 4px solid var(--md-primary); position: relative; animation: cardFadeInUp 0.35s ease backwards; }
+        .pin-card:nth-child(1) { animation-delay: 0.02s; }
+        .pin-card:nth-child(2) { animation-delay: 0.04s; }
+        .pin-card:nth-child(3) { animation-delay: 0.06s; }
+        .pin-card:nth-child(4) { animation-delay: 0.08s; }
+        .pin-card:nth-child(5) { animation-delay: 0.1s; }
+        .pin-card:nth-child(6) { animation-delay: 0.12s; }
+        .pin-card:nth-child(7) { animation-delay: 0.14s; }
+        .pin-card:nth-child(8) { animation-delay: 0.16s; }
         .pin-card:active { transform: scale(0.96); }
         .pin-card:hover { box-shadow: var(--md-elevation-2); }
         .pin-card .fav-indicator { position: absolute; top: 6px; right: 8px; color: #FFB300; font-size: 16px; animation: scaleIn 0.3s ease; }
@@ -193,7 +207,12 @@
         .pin-card .pin-services { display: flex; justify-content: center; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
         .pin-card .pin-services img { width: 22px; height: 22px; border-radius: 0px; object-fit: cover; }
         .pin-list { display: flex; flex-direction: column; padding: 8px 16px; }
-        .pin-list-item { display: flex; align-items: center; gap: 14px; padding: 12px 8px; border-bottom: 1px solid rgba(128,128,128,0.08); cursor: pointer; transition: background 0.2s ease; border-radius: var(--radius-sm); }
+        .pin-list-item { display: flex; align-items: center; gap: 14px; padding: 12px 8px; border-bottom: 1px solid rgba(128,128,128,0.08); cursor: pointer; transition: background 0.2s ease; border-radius: var(--radius-sm); animation: listFadeInUp 0.35s ease backwards; }
+        .pin-list-item:nth-child(1) { animation-delay: 0.02s; }
+        .pin-list-item:nth-child(2) { animation-delay: 0.04s; }
+        .pin-list-item:nth-child(3) { animation-delay: 0.06s; }
+        .pin-list-item:nth-child(4) { animation-delay: 0.08s; }
+        .pin-list-item:nth-child(5) { animation-delay: 0.1s; }
         .pin-list-item:hover { background: var(--md-surface-dim); }
         .pin-list-item .list-img { width: 48px; height: 48px; border-radius: var(--radius-sm); object-fit: cover; background: var(--md-surface-dim); flex-shrink: 0; }
         .pin-list-item .list-info { flex: 1; min-width: 0; }
@@ -220,7 +239,11 @@
         #groupsPage .groups-header h3 { font-size: 18px; font-weight: 600; }
         #groupsPage .groups-header p { font-size: 12px; color: var(--md-on-surface-variant); margin-top: 4px; }
         .groups-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 14px; }
-        .group-card { background: var(--md-surface); border-radius: var(--radius-md); padding: 16px 14px; box-shadow: var(--md-elevation-1); cursor: pointer; border-top: 4px solid var(--md-primary); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .group-card { background: var(--md-surface); border-radius: var(--radius-md); padding: 16px 14px; box-shadow: var(--md-elevation-1); cursor: pointer; border-top: 4px solid var(--md-primary); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; animation: cardFadeInUp 0.35s ease backwards; }
+        .group-card:nth-child(1) { animation-delay: 0.02s; }
+        .group-card:nth-child(2) { animation-delay: 0.04s; }
+        .group-card:nth-child(3) { animation-delay: 0.06s; }
+        .group-card:nth-child(4) { animation-delay: 0.08s; }
         .group-card:active { transform: scale(0.96); }
         .group-card .group-header { display: flex; align-items: center; gap: 10px; }
         .group-card .group-icon { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--md-surface-dim); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -250,7 +273,7 @@
         #pinDetailPage .detail-header { background: var(--md-surface); padding: 14px 18px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(128,128,128,0.1); position: sticky; top: 0; z-index: 5; min-height: 60px; animation: fadeInDown 0.3s ease; }
         #pinDetailPage .detail-header .back-btn { background: none; border: none; font-size: 26px; color: var(--md-on-surface); cursor: pointer; padding: 8px; border-radius: 40px; transition: background 0.2s ease; }
         #pinDetailPage .detail-header .back-btn:active { background: rgba(128,128,128,0.15); transform: scale(0.9); }
-        #pinDetailPage .detail-content { padding: 18px; overflow-y: auto; animation: scaleIn 0.3s ease; }
+        #pinDetailPage .detail-content { padding: 18px; overflow-y: auto; animation: pageScaleIn 0.3s ease; }
         .detail-avatar { width: 80px; height: 80px; border-radius: var(--radius-sm); object-fit: cover; background: var(--md-surface-dim); margin-bottom: 14px; border: 3px solid var(--md-primary); transition: transform 0.3s ease; }
         .detail-avatar:hover { transform: scale(1.03); }
         .detail-name { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
@@ -371,7 +394,7 @@
         .reload-overlay .icon { font-size: 64px; margin-bottom: 16px; color: #FFB300; }
         .reload-overlay h2 { font-size: 24px; margin-bottom: 8px; }
         .reload-overlay p { font-size: 16px; opacity: 0.8; max-width: 400px; }
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--md-on-surface-variant); animation: scaleIn 0.3s ease; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--md-on-surface-variant); animation: pageScaleIn 0.3s ease; }
         .empty-state i { font-size: 56px; margin-bottom: 16px; opacity: 0.3; }
         .empty-state h3 { margin-bottom: 6px; font-size: 18px; }
         .empty-state p { font-size: 14px; }
@@ -383,7 +406,7 @@
         .settings-section-btn .left i { font-size: 22px; width: 28px; color: var(--md-primary); }
         .settings-section-btn .arrow { color: var(--md-on-surface-variant); font-size: 18px; transition: transform 0.3s ease; }
         .settings-section-btn:active .arrow { transform: translateX(4px); }
-        .settings-subpage { display: none; height: 100%; overflow-y: auto; padding: 12px 16px; animation: scaleIn 0.25s ease; }
+        .settings-subpage { display: none; height: 100%; overflow-y: auto; padding: 12px 16px; animation: pageScaleIn 0.25s ease; }
         .settings-subpage.active { display: block; }
         .settings-subpage .sub-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(128,128,128,0.1); }
         .settings-subpage .sub-header .back-btn { background: none; border: none; font-size: 24px; color: var(--md-on-surface); cursor: pointer; padding: 4px; border-radius: 40px; transition: all 0.2s ease; }
@@ -515,8 +538,8 @@
             .group-card .group-name { font-size: 14px; }
             .group-card .group-icon { width: 34px; height: 34px; font-size: 15px; }
             .recenter-btn { bottom: 80px; width: 40px; height: 40px; font-size: 18px; left: 12px; }
-            .town-filter-map-btn { bottom: 130px; width: 40px; height: 40px; font-size: 18px; left: 12px; }
-            .town-filter-map-btn img { width: 22px; height: 14px; }
+            .map-options-btn { bottom: 130px; width: 40px; height: 40px; font-size: 18px; left: 12px; }
+            .transport-search-btn { bottom: 180px; width: 40px; height: 40px; font-size: 18px; left: 12px; }
             .mode-popup { padding: 18px 16px 22px; }
             .mode-popup .mode-option { padding: 10px 12px; }
             .mode-popup .mode-option .mode-icon { font-size: 22px; width: 36px; }
@@ -559,6 +582,9 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pageScaleIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        @keyframes cardFadeInUp { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes listFadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
         @keyframes schedulePopupIn { 0% { opacity: 0; transform: scale(0.92) translateY(8px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         .schedule-popup .dialog-card { animation: schedulePopupIn 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
@@ -701,6 +727,67 @@
         .map-style-popup .map-style-option .map-style-info .map-style-desc { font-size: 12px; color: var(--md-on-surface-variant); }
         .map-style-popup .map-style-option .map-style-check { font-size: 20px; color: var(--md-primary); opacity: 0; transition: all 0.3s ease; }
         .map-style-popup .map-style-option.active .map-style-check { opacity: 1; }
+
+        /* --- NEW: MAP OPTIONS POPUP --- */
+        #mapOptionsPopup .map-option-item { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: var(--radius-sm); background: var(--md-surface-dim); margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; border-left: 4px solid transparent; }
+        #mapOptionsPopup .map-option-item:active { transform: scale(0.97); }
+        #mapOptionsPopup .map-option-item:hover { background: var(--md-primary-container); }
+        #mapOptionsPopup .map-option-item .option-icon { font-size: 24px; width: 44px; text-align: center; color: var(--md-primary); flex-shrink: 0; }
+        #mapOptionsPopup .map-option-item .option-info { flex: 1; }
+        #mapOptionsPopup .map-option-item .option-info .option-name { font-weight: 600; font-size: 16px; }
+        #mapOptionsPopup .map-option-item .option-info .option-value { font-size: 13px; color: var(--md-on-surface-variant); margin-top: 2px; }
+        #mapOptionsPopup .map-option-item .option-arrow { color: var(--md-on-surface-variant); font-size: 18px; }
+
+        /* --- NEW: TRANSPORT SEARCH POPUP --- */
+        #transportSearchPopup .transport-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        #transportSearchPopup .transport-filter-btn { padding: 8px 16px; border-radius: 40px; border: 2px solid var(--md-outline); background: var(--md-surface-dim); color: var(--md-on-surface); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+        #transportSearchPopup .transport-filter-btn:active { transform: scale(0.95); }
+        #transportSearchPopup .transport-filter-btn.active { border-color: var(--md-primary); background: var(--md-primary-container); color: var(--md-primary); }
+        #transportSearchPopup .transport-stops-list { display: flex; flex-direction: column; gap: 8px; }
+        #transportSearchPopup .transport-stop-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--md-surface-dim); cursor: pointer; transition: all 0.2s ease; }
+        #transportSearchPopup .transport-stop-item:active { transform: scale(0.97); }
+        #transportSearchPopup .transport-stop-item:hover { background: var(--md-primary-container); }
+        #transportSearchPopup .transport-stop-item img.pin-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); object-fit: cover; background: var(--md-surface); flex-shrink: 0; }
+        #transportSearchPopup .transport-stop-item .stop-services { display: flex; gap: 2px; flex-shrink: 0; }
+        #transportSearchPopup .transport-stop-item .stop-services img { width: 22px; height: 22px; border-radius: 0; object-fit: cover; }
+        #transportSearchPopup .transport-stop-item .stop-name { flex: 1; font-weight: 500; font-size: 15px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #transportSearchPopup .transport-stop-item .stop-distance { font-size: 12px; color: var(--md-on-surface-variant); white-space: nowrap; flex-shrink: 0; }
+
+        /* --- NEW: IMAGE CAROUSEL --- */
+        .image-carousel-container { position: relative; margin: 16px 0; }
+        .image-carousel { display: flex; overflow-x: auto; gap: 8px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+        .image-carousel::-webkit-scrollbar { height: 4px; }
+        .image-carousel img { width: 100%; max-width: 280px; height: 180px; object-fit: cover; border-radius: var(--radius-sm); scroll-snap-align: start; flex-shrink: 0; cursor: pointer; transition: transform 0.2s ease; background: var(--md-surface-dim); }
+        .image-carousel img:active { transform: scale(0.97); }
+        .image-carousel-nav { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
+        .image-carousel-nav .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--md-outline); opacity: 0.4; transition: all 0.3s ease; }
+        .image-carousel-nav .dot.active { opacity: 1; background: var(--md-primary); width: 20px; border-radius: 4px; }
+
+        /* --- NEW: FULLSCREEN IMAGE VIEWER --- */
+        .fullscreen-image-viewer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+        .fullscreen-image-viewer .image-wrapper { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .fullscreen-image-viewer .image-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.3s ease; user-select: none; -webkit-user-drag: none; }
+        .fullscreen-image-viewer .close-btn { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 40px; padding: 12px 32px; font-size: 16px; font-weight: 500; cursor: pointer; z-index: 10; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; font-family: inherit; }
+        .fullscreen-image-viewer .close-btn:active { transform: translateX(-50%) scale(0.95); }
+        .fullscreen-image-viewer .close-btn:hover { background: rgba(255,255,255,0.3); }
+        .fullscreen-image-viewer .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; transition: all 0.2s ease; }
+        .fullscreen-image-viewer .nav-btn:active { transform: translateY(-50%) scale(0.9); }
+        .fullscreen-image-viewer .nav-btn:hover { background: rgba(255,255,255,0.25); }
+        .fullscreen-image-viewer .nav-btn.prev { left: 16px; }
+        .fullscreen-image-viewer .nav-btn.next { right: 16px; }
+
+        /* --- NEW: SKELETON LOADING --- */
+        .skeleton-img { position: relative; overflow: hidden; background: var(--skeleton-base) !important; }
+        .skeleton-img::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent); animation: skeletonShine 1.5s infinite; }
+        @keyframes skeletonShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .skeleton-hidden { opacity: 0; transition: opacity 0.3s ease; }
+        .skeleton-loaded { opacity: 1; transition: opacity 0.3s ease; }
+
+        /* --- NEW: TRANSPORT STOPS ACTIONS --- */
+        .transport-filter-container { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .transport-filter-chip { padding: 6px 14px; border-radius: 40px; font-size: 13px; font-weight: 500; border: 2px solid var(--md-outline); background: var(--md-surface-dim); color: var(--md-on-surface); cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+        .transport-filter-chip:active { transform: scale(0.95); }
+        .transport-filter-chip.active { border-color: var(--md-primary); background: var(--md-primary-container); color: var(--md-primary); }
     </style>
 </head>
 <body>
@@ -794,6 +881,69 @@
         </div>
     </div>
 
+    <!-- MAP OPTIONS POPUP (NEW) -->
+    <div id="mapOptionsPopup" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3><i class="fas fa-cog" style="color:var(--md-primary);"></i> <span id="mapOptionsTitle">Opcions del mapa</span></h3>
+            <div class="map-option-item" id="mapOptionStyle">
+                <div class="option-icon"><i class="fas fa-map"></i></div>
+                <div class="option-info">
+                    <div class="option-name">Estil del mapa</div>
+                    <div class="option-value" id="mapOptionStyleValue">Normal</div>
+                </div>
+                <div class="option-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="map-option-item" id="mapOptionTown">
+                <div class="option-icon"><i class="fas fa-city"></i></div>
+                <div class="option-info">
+                    <div class="option-name">Filtro por población</div>
+                    <div class="option-value" id="mapOptionTownValue">Totes les poblacions</div>
+                </div>
+                <div class="option-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="map-option-item" id="mapOptionMode">
+                <div class="option-icon"><i class="fas fa-eye"></i></div>
+                <div class="option-info">
+                    <div class="option-name">Mode de visualización</div>
+                    <div class="option-value" id="mapOptionModeValue">El meu entorn</div>
+                </div>
+                <div class="option-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="dialog-actions" style="margin-top:16px;">
+                <button class="fab-btn secondary" id="mapOptionsClose"><span id="mapOptionsCloseLabel">Tancar</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSPORT SEARCH POPUP (NEW) -->
+    <div id="transportSearchPopup" class="dialog-overlay">
+        <div class="dialog-card">
+            <h3><i class="fas fa-bus" style="color:var(--md-primary);"></i> <span id="transportSearchTitle">Buscar transporte</span></h3>
+            <div class="transport-filters" id="transportFilters">
+                <button class="transport-filter-btn active" data-filter="all" id="transportFilterAll">Tots</button>
+                <button class="transport-filter-btn" data-filter="metro" id="transportFilterMetro">Metro</button>
+                <button class="transport-filter-btn" data-filter="bus" id="transportFilterBus">Bus</button>
+                <button class="transport-filter-btn" data-filter="tram" id="transportFilterTram">Tramvia</button>
+                <button class="transport-filter-btn" data-filter="train" id="transportFilterTrain">Tren</button>
+                <button class="transport-filter-btn" data-filter="bike" id="transportFilterBike">Bici</button>
+            </div>
+            <div class="transport-stops-list" id="transportStopsList"></div>
+            <div class="dialog-actions" style="margin-top:16px;">
+                <button class="fab-btn secondary" id="transportSearchClose"><span id="transportSearchCloseLabel">Tancar</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN IMAGE VIEWER (NEW) -->
+    <div id="fullscreenImageViewer" class="fullscreen-image-viewer" style="display:none;">
+        <div class="image-wrapper" id="fullscreenImageWrapper">
+            <img id="fullscreenImage" src="" alt="">
+        </div>
+        <button class="nav-btn prev" id="fullscreenPrevBtn" style="display:none;"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn next" id="fullscreenNextBtn" style="display:none;"><i class="fas fa-chevron-right"></i></button>
+        <button class="close-btn" id="fullscreenCloseBtn"><i class="fas fa-arrow-left"></i> <span id="fullscreenCloseLabel">Tornar</span></button>
+    </div>
+
     <div class="app-container">
         <!-- TOP BAR -->
         <div class="top-bar" id="mainTopBar">
@@ -831,18 +981,16 @@
                     </div>
                     <div id="quickMarkList"></div>
                 </div>
-                <!-- Map style button (above Recents) -->
+                <!-- Removed map style and mode buttons -->
                 <div style="padding: 4px 0;">
-                    <button class="sidebar-item" id="sidebarMapStyle"><i class="fas fa-map"></i> <span id="sidebarMapStyleLabel">Estil del mapa</span></button>
                     <button class="sidebar-item" id="sidebarRecent"><i class="fas fa-clock"></i> <span id="sidebarRecentLabel">Recents</span></button>
-                    <button class="sidebar-item" id="sidebarMode"><i class="fas fa-eye"></i> <span id="sidebarModeLabel">Mode de visualització</span></button>
                     <button class="sidebar-item" id="sidebarStudio"><i class="fas fa-paint-brush"></i> <span id="sidebarStudioLabel">Studio</span></button>
                     <button class="sidebar-item" id="sidebarTutorial"><i class="fas fa-question-circle"></i> <span id="sidebarTutorialLabel">Ajuda</span></button>
                     <button class="sidebar-item" id="sidebarSettings"><i class="fas fa-sliders-h"></i> <span id="sidebarSettingsLabel">Arranjament</span></button>
                 </div>
                 <div class="sidebar-divider"></div>
                 <div class="sidebar-footer">
-                    <span>v1.15.1</span>
+                    <span>v1.16</span>
                 </div>
             </div>
         </div>
@@ -853,8 +1001,11 @@
             <div id="mapPage" class="page active">
                 <div class="map-container">
                     <div id="mainMap"></div>
-                    <button class="town-filter-map-btn" id="townFilterMapBtn" title="Filtrar per població">
-                        <i class="fas fa-city"></i>
+                    <button class="transport-search-btn" id="transportSearchBtn" title="Buscar transporte">
+                        <i class="fas fa-bus"></i>
+                    </button>
+                    <button class="map-options-btn" id="mapOptionsBtn" title="Opciones del mapa">
+                        <i class="fas fa-cog"></i>
                     </button>
                     <button class="recenter-btn" id="recenterMapBtn" title="Go to my location">
                         <i class="fas fa-crosshairs"></i>
@@ -1213,7 +1364,7 @@
                 </div>
                 <div class="card" style="text-align:center; font-size:15px; color:var(--md-on-surface-variant); padding:30px 20px;">
                     <div style="font-size:48px; margin-bottom:16px; color:var(--md-primary);"><i class="fas fa-map-pin"></i></div>
-                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.15.1</p>
+                    <p><strong style="font-size:18px; color:var(--md-on-surface);">LibrePin</strong> v1.16</p>
                     <p style="margin-top:8px;">Crea i gestiona els teus pins personalitzats al mapa.</p>
                     <p style="margin-top:4px;">© 2026</p>
                 </div>
@@ -1280,6 +1431,11 @@
                         <div class="review-stars" id="reviewStars"></div>
                         <div class="review-title" id="reviewTitle"></div>
                         <div class="review-text" id="reviewText"></div>
+                    </div>
+                    <!-- NEW: Image Carousel -->
+                    <div id="detailImageCarousel" class="image-carousel-container" style="display:none;">
+                        <div class="image-carousel" id="detailCarousel"></div>
+                        <div class="image-carousel-nav" id="detailCarouselNav"></div>
                     </div>
                     <div class="related-pins-section" id="relatedPinsSection" style="display:none;">
                         <h4><i class="fas fa-link" style="color:var(--md-primary);"></i> <span id="relatedPinsLabel">Pins relacionats</span></h4>
@@ -1419,6 +1575,15 @@
             <label id="relatedLabel" style="margin-top:12px;">Pins relacionats</label>
             <button id="relatedPinsDialogBtn" class="fab-btn secondary" style="width:100%; margin-top:4px; padding:10px;"><i class="fas fa-link"></i> <span id="relatedPinsDialogLabel">Assignar pins relacionats</span></button>
             <div id="selectedRelatedPins" style="margin-top:6px; display:flex; flex-wrap:wrap; gap:4px;"></div>
+            <!-- NEW: Pin Images (Gallery) -->
+            <label id="pinImagesLabel" style="margin-top:12px;">Añadir imágenes</label>
+            <div id="pinImagesContainer">
+                <div style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">
+                    <input type="text" class="pin-image-url" placeholder="URL de la imagen" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;">
+                    <button class="remove-image-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <button id="addPinImageRow" class="fab-btn secondary small" style="padding:8px 16px; font-size:13px; margin:6px 0 8px; width:auto;"><i class="fas fa-plus"></i> <span id="addPinImageLabel">Añadir imagen</span></button>
             <div class="dialog-actions">
                 <button id="pinDialogCancel" class="fab-btn secondary"><span id="cancelLabel">Cancel·lar</span></button>
                 <button id="pinDialogSave" class="fab-btn glow"><span id="saveLabel">Guardar</span></button>
@@ -1645,7 +1810,7 @@
             '#089bde', '#0173b6', '#6f82b6', '#bbb3d7', '#9a398d', '#c454a7'
         ];
         const BARCELONA_CENTER = [41.3851, 2.1734];
-        const APP_VERSION = '1.15.0';
+        const APP_VERSION = '1.16';
         const DEFAULT_AVATAR = null;
         const MIGRATION_ICON_URL = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Blank_Square.svg/960px-Blank_Square.svg.png';
         // Legacy default placeholder images used across the app
@@ -1658,17 +1823,12 @@
         const PLACEHOLDER_GROUP_48 = 'https://via.placeholder.com/48/7C4DFF/FFFFFF?text=📍';
 
         // ---------- IMAGE POOL (REFERENCES) ----------
-        // The image pool stores unique image URLs keyed by short IDs.
-        // Pins and groups store only "imageRef" (a short string) instead of full URLs.
-        // This dramatically reduces JSON size when the same URL is reused.
         function generateImageRef() {
             return 'i_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
         }
 
-        // ---------- IMAGE POOL HELPERS ----------
         function getImageRef(pinOrGroup) {
             if (!pinOrGroup) return null;
-            // Accept both objects and direct refs
             if (typeof pinOrGroup === 'string') return pinOrGroup;
             if (pinOrGroup.imageRef) return pinOrGroup.imageRef;
             return null;
@@ -1677,11 +1837,9 @@
         function getImageUrl(ref) {
             if (!ref) return null;
             if (typeof ref !== 'string') return null;
-            // Pool lookup
             if (state.imagePool && Object.prototype.hasOwnProperty.call(state.imagePool, ref)) {
                 return state.imagePool[ref];
             }
-            // Direct URL fallback (for legacy data not yet migrated)
             if (ref.startsWith('http://') || ref.startsWith('https://') || ref.startsWith('data:')) {
                 return ref;
             }
@@ -1692,9 +1850,8 @@
             if (!pin) return null;
             const ref = getImageRef(pin);
             let url = ref ? getImageUrl(ref) : null;
-            if (!url && pin.imageUrl) url = pin.imageUrl; // legacy fallback
+            if (!url && pin.imageUrl) url = pin.imageUrl;
             if (!url) {
-                // Default placeholder based on size
                 if (sizeKey === '48') return PLACEHOLDER_PIN_48;
                 if (sizeKey === '40') return PLACEHOLDER_PIN_40;
                 if (sizeKey === '28') return PLACEHOLDER_PIN_28;
@@ -1708,16 +1865,14 @@
             if (!group) return null;
             const ref = getImageRef(group);
             let url = ref ? getImageUrl(ref) : null;
-            if (!url && group.icon) url = group.icon; // legacy fallback
+            if (!url && group.icon) url = group.icon;
             if (!url) return PLACEHOLDER_GROUP_32;
             return url;
         }
 
-        // Add a URL to the pool (returns ref). If it already exists, reuse the existing ref.
         function addImageToPool(url) {
             if (!url) return null;
             if (!state.imagePool) state.imagePool = {};
-            // Check if this URL already has a ref
             for (const ref in state.imagePool) {
                 if (state.imagePool[ref] === url) return ref;
             }
@@ -1726,8 +1881,6 @@
             return ref;
         }
 
-        // Build pool from all URLs in the dataset, then rewrite pins/groups to use refs.
-        // Idempotent: if already migrated, it just rebuilds the pool and remaps refs safely.
         function migrateToImagePool(pins, groups, lines, quickMarks, services, towns, profile) {
             const pool = {};
             const urlToRef = {};
@@ -1739,12 +1892,10 @@
                 pool[ref] = url;
                 return ref;
             }
-            // Pins
             (pins || []).forEach(p => {
                 let url = null;
                 if (p.imageRef) {
-                    // Already a ref — keep it (pool merge below)
-                    if (!pool[p.imageRef]) pool[p.imageRef] = null; // placeholder, filled from old pool if available
+                    if (!pool[p.imageRef]) pool[p.imageRef] = null;
                 } else if (p.imageUrl) {
                     url = p.imageUrl;
                 }
@@ -1752,7 +1903,6 @@
                     p.imageRef = refFor(url);
                     delete p.imageUrl;
                 }
-                // Custom icons (icon URLs are small, but we can pool them too for consistency)
                 if (Array.isArray(p.customIcons)) {
                     p.customIcons.forEach(ic => {
                         if (ic && ic.icon && !ic.icon.startsWith('data:')) {
@@ -1761,7 +1911,6 @@
                         }
                     });
                 }
-                // Schedule link icons
                 if (Array.isArray(p.scheduleLinks)) {
                     p.scheduleLinks.forEach(l => {
                         if (l && l.icon && (l.icon.startsWith('http') || l.icon.startsWith('https'))) {
@@ -1771,7 +1920,6 @@
                     });
                 }
             });
-            // Groups
             (groups || []).forEach(g => {
                 let url = null;
                 if (g.imageRef) {
@@ -1784,51 +1932,43 @@
                     delete g.icon;
                 }
             });
-            // Lines
             (lines || []).forEach(l => {
                 if (l.icon && (l.icon.startsWith('http') || l.icon.startsWith('https'))) {
                     l.iconRef = refFor(l.icon);
                     delete l.icon;
                 }
             });
-            // Quick marks
             (quickMarks || []).forEach(q => {
                 if (q.icon && (q.icon.startsWith('http') || q.icon.startsWith('https'))) {
                     q.iconRef = refFor(q.icon);
                     delete q.icon;
                 }
             });
-            // Services
             (services || []).forEach(s => {
                 if (s.icon && (s.icon.startsWith('http') || s.icon.startsWith('https'))) {
                     s.iconRef = refFor(s.icon);
                     delete s.icon;
                 }
             });
-            // Towns (flags)
             (towns || []).forEach(t => {
                 if (t.flag && (t.flag.startsWith('http') || t.flag.startsWith('https'))) {
                     t.flagRef = refFor(t.flag);
                     delete t.flag;
                 }
             });
-            // Profile avatar
             if (profile && profile.avatar && (profile.avatar.startsWith('http') || profile.avatar.startsWith('https'))) {
                 profile.avatarRef = refFor(profile.avatar);
                 delete profile.avatar;
             }
-            // Merge with existing pool (if any) to preserve refs we couldn't reconstruct
             if (state.imagePool) {
                 for (const ref in state.imagePool) {
                     if (state.imagePool[ref] && !pool[ref]) pool[ref] = state.imagePool[ref];
                 }
             }
-            // Clean null entries
             for (const ref in pool) if (pool[ref] === null) delete pool[ref];
             return pool;
         }
 
-        // Accessor helpers for pooled things
         function getServiceIcon(svc) {
             if (!svc) return null;
             if (svc.iconRef) return getImageUrl(svc.iconRef) || (svc.icon || null);
@@ -1866,9 +2006,6 @@
         }
 
         // ---------- LINE POINTS COMPRESSION ----------
-        // Compress line points using delta-encoding + base64.
-        // Format: "v1|<base64>" where the decoded payload is an array of [dlat, dlng] deltas (integers, 1e5 scale).
-        // First point is stored as an absolute [lat,lng] pair (also 1e5 scale ints).
         function encodePoints(points) {
             if (!Array.isArray(points) || points.length < 1) return '';
             try {
@@ -1885,8 +2022,7 @@
                     deltas.push(lat - prevLat, lng - prevLng);
                     prevLat = lat; prevLng = lng;
                 }
-                // Pack as int32 array -> base64
-                const total = 2 + deltas.length; // 2 for first point
+                const total = 2 + deltas.length;
                 const buf = new ArrayBuffer(total * 4);
                 const view = new DataView(buf);
                 view.setInt32(0, firstLat, true);
@@ -1894,7 +2030,6 @@
                 for (let i = 0; i < deltas.length; i++) {
                     view.setInt32((i + 2) * 4, deltas[i], true);
                 }
-                // Convert to base64
                 let binary = '';
                 const bytes = new Uint8Array(buf);
                 for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
@@ -1934,7 +2069,6 @@
             }
         }
 
-        // Ensure a line has a decoded `points` array (auto-migrates from `pointsCompressed`)
         function ensureLinePoints(line) {
             if (!line) return;
             if (Array.isArray(line.points) && line.points.length > 0) return;
@@ -1967,7 +2101,10 @@
             currentGroupId: null, groupSortMode: 'recent', noCluster: false, editingQuickMarkId: null,
             quickMarkPosition: 'end', isFirstLaunch: true, pendingImportData: null, importTimerInterval: null,
             appLaunchCount: 0, townFilter: null, showTownInSearch: true, townFilterSearch: '',
-            searchView: 'grid', favoritesView: 'grid'
+            searchView: 'grid', favoritesView: 'grid',
+            tempPinImages: [], // For image gallery editing
+            carouselIndex: 0,
+            transportFilter: 'all'
         };
 
         // ---------- TRADUCCIONS COMPLETES ----------
@@ -2024,7 +2161,7 @@
                 gpsUnavailable: "No s'ha pogut obtenir la ubicació GPS.", groupActions: "Accions del grup",
                 editGroupAction: "Editar grup", deleteGroupAction: "Eliminar grup", closeGroupAction: "Tancar",
                 arrangePosition: "Arranjament de posició", mapPosition: "Posició del mapa", gpsPosition: "Utilitzar ubicació del GPS",
-                gpsSplashTitle: "Obtenint ubicació...", gpsSplashSub: "Si us plau, esperi...", gpsCancel: "Cancel·lar",
+                gpsSplashTitle: "Obtenint ubicació...", gpsSplashSub: "Si us plau, espereu...", gpsCancel: "Cancel·lar",
                 mapStyleLabel: "Estil del mapa", mapStyleLightLabel: "Clar", mapStyleDarkLabel: "Fosc", mapStyleColorLabel: "Color",
                 modePopupTitle: "Mode de visualització", modeHomeName: "El meu entorn",
                 modeHomeDesc: "Mostra només pins del teu entorn", modeAwayName: "Fora del meu entorn",
@@ -2105,17 +2242,35 @@
                 mapStyleSimple: "Senzill",
                 mapStyleSimpleDesc: "Esri World Street Map",
                 mapStyleSatellite: "Satèl·lit",
-                mapStyleSatelliteDesc: "Esri World Imagery"
+                mapStyleSatelliteDesc: "Esri World Imagery",
+                // NEW
+                mapOptionsTitle: "Opcions del mapa",
+                mapOptionStyle: "Estil del mapa",
+                mapOptionTown: "Filtre per població",
+                mapOptionMode: "Mode de visualització",
+                transportSearchTitle: "Buscar transporte",
+                transportFilterAll: "Tots",
+                transportFilterMetro: "Metro",
+                transportFilterBus: "Bus",
+                transportFilterTram: "Tramvia",
+                transportFilterTrain: "Tren",
+                transportFilterBike: "Bici",
+                noTransportStops: "No s'han trobat parades de transport",
+                locationUnavailable: "Ubicació no disponible. Activeu el GPS.",
+                pinImages: "Afegir imatges",
+                addPinImage: "Afegir imatge",
+                pinImageUrl: "URL de la imatge",
+                fullscreenClose: "Tornar"
             },
             es: {
-                appTitle: "LibrePin", addPin: "Añadir pin", settings: "Configuración", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
+                appTitle: "LibrePin", addPin: "Añadir pin", settings: "Parametrización", map: "Mapa", search: "Buscar", favorites: "Favoritos", recent: "Recientes",
                 name: "Nombre", subtitle: "Subtítulo", description: "Descripción", image: "URL de la imagen",
                 tags: "Etiquetas (separadas por comas)", buttons: "Botones personalizados", addBtn: "Añadir botón",
                 transport: "Es una parada de transporte público", services: "Servicios que circulan",
                 schedule: "Enlaces de consulta de horario", cancel: "Cancelar", save: "Aceptar",
                 edit: "Editar", delete: "Eliminar", back: "Volver",
                 export: "Exportar", import: "Importar", clear: "Borrar",
-                settingsTitle: "Configuración", servicesTitle: "Servicios de transporte",
+                settingsTitle: "Parametrización", servicesTitle: "Servicios de transporte",
                 dataTitle: "Datos", langTitle: "Idioma", accentTitle: "Color de acento",
                 confirmDelete: "¿Eliminar este pin?", confirmDeleteAll: "¿Borrar todos los datos? Esta acción no se puede deshacer.",
                 noPins: "No hay pins", addFirstPin: "Añade un pin desde el mapa", recycleTitle: "Reciclar imagen",
@@ -2169,7 +2324,7 @@
                 outsideEnvLabel: "Fuera de tu entorno", outsideEnvSub: " ",
                 modePageTitle: "Modo de visualización", modePageSubtitle: "Selecciona cómo quieres ver los pins",
                 sidebarRecent: "Recientes", sidebarMode: "Modo de visualización", sidebarLegend: "Líneas del mapa",
-                sidebarStudio: "Studio", sidebarTutorial: "Ayuda", sidebarSettings: "Configuración",
+                sidebarStudio: "Studio", sidebarTutorial: "Ayuda", sidebarSettings: "Parametrización",
                 greetingMorning: "Buenos días", greetingAfternoon: "Buenas tardes", greetingEvening: "Buenas noches",
                 greetingSub1: "¿Dónde vamos hoy?", greetingSub2: "¿Qué tienes en mente?", greetingSub3: "¿Con hambre?", greetingSub4: "¿Dónde has ido hoy?",
                 lines: "Líneas", linesTitle: "Líneas", linesSubtitle: "Dibuja líneas en el mapa para indicar rutas o trazados",
@@ -2240,7 +2395,25 @@
                 mapStyleSimple: "Sencillo",
                 mapStyleSimpleDesc: "Esri World Street Map",
                 mapStyleSatellite: "Satélite",
-                mapStyleSatelliteDesc: "Esri World Imagery"
+                mapStyleSatelliteDesc: "Esri World Imagery",
+                // NEW
+                mapOptionsTitle: "Opciones del mapa",
+                mapOptionStyle: "Estilo del mapa",
+                mapOptionTown: "Filtro por población",
+                mapOptionMode: "Modo de visualización",
+                transportSearchTitle: "Buscar transporte",
+                transportFilterAll: "Todos",
+                transportFilterMetro: "Metro",
+                transportFilterBus: "Bus",
+                transportFilterTram: "Tranvía",
+                transportFilterTrain: "Tren",
+                transportFilterBike: "Bici",
+                noTransportStops: "No se han encontrado paradas de transporte",
+                locationUnavailable: "Ubicación no disponible. Activa el GPS.",
+                pinImages: "Añadir imágenes",
+                addPinImage: "Añadir imagen",
+                pinImageUrl: "URL de la imagen",
+                fullscreenClose: "Volver"
             },
             en: {
                 appTitle: "LibrePin", addPin: "Add pin", settings: "Settings", map: "Map", search: "Search", favorites: "Favorites", recent: "Recent",
@@ -2375,7 +2548,25 @@
                 mapStyleSimple: "Simple",
                 mapStyleSimpleDesc: "Esri World Street Map",
                 mapStyleSatellite: "Satellite",
-                mapStyleSatelliteDesc: "Esri World Imagery"
+                mapStyleSatelliteDesc: "Esri World Imagery",
+                // NEW
+                mapOptionsTitle: "Map options",
+                mapOptionStyle: "Map style",
+                mapOptionTown: "Filter by municipality",
+                mapOptionMode: "View mode",
+                transportSearchTitle: "Search transport",
+                transportFilterAll: "All",
+                transportFilterMetro: "Metro",
+                transportFilterBus: "Bus",
+                transportFilterTram: "Tram",
+                transportFilterTrain: "Train",
+                transportFilterBike: "Bike",
+                noTransportStops: "No transport stops found",
+                locationUnavailable: "Location unavailable. Enable GPS.",
+                pinImages: "Add images",
+                addPinImage: "Add image",
+                pinImageUrl: "Image URL",
+                fullscreenClose: "Back"
             }
         };
 
@@ -2506,19 +2697,16 @@
                     state.quickMarks = data.quickMarks || [];
                     state.towns = data.towns || [];
                     state.imagePool = data.imagePool || {};
-                    // Lines: auto-decompress if needed
                     state.lines.forEach(l => ensureLinePoints(l));
-                    // Auto-migrate legacy image URLs to pool (invisible to user)
                     state.imagePool = migrateToImagePool(state.pins, state.groups, state.lines, state.quickMarks, state.services, state.towns, state.profile);
                     state.lineVisibility = data.lineVisibility || {};
                     state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
                     if (data.accentColor) state.accentColor = data.accentColor;
                     if (data.darkMode !== undefined) state.darkMode = data.darkMode;
                     if (data.mapStyle) {
-                        // Migrate old map style values (light/dark/color) to new (normal/simple/satellite)
                         const oldStyle = data.mapStyle;
                         if (oldStyle === 'light' || oldStyle === 'color') state.mapStyle = 'normal';
-                        else if (oldStyle === 'dark') state.mapStyle = 'normal'; // dark is now a theme, not a map style
+                        else if (oldStyle === 'dark') state.mapStyle = 'normal';
                         else if (['normal','simple','satellite'].includes(oldStyle)) state.mapStyle = oldStyle;
                         else state.mapStyle = 'normal';
                     }
@@ -2589,9 +2777,7 @@
             }
         }
 
-        // Build the serializable object (with pool) for saving
         function buildSerializableData() {
-            // Compress lines in-place
             const linesToSave = state.lines.map(l => {
                 if (Array.isArray(l.points) && l.points.length >= 2) {
                     const enc = encodePoints(l.points);
@@ -2599,9 +2785,6 @@
                 }
                 return { ...l, points: l.points };
             });
-            // Serialize pools and refs — we strip the decoded pools from output and keep refs
-            // Note: pins/groups already store imageRef; service/town/quickMark/line icons still use "icon"/"flag" until migrated
-            // To keep file small, we also pool those inline:
             const pool = { ...(state.imagePool || {}) };
             const urlToRef = {};
             for (const ref in pool) { if (pool[ref]) urlToRef[pool[ref]] = ref; }
@@ -2616,7 +2799,6 @@
             const servicesToSave = state.services.map(s => {
                 const copy = { ...s };
                 if (copy.icon && !copy.iconRef) { copy.iconRef = ensureRef(copy.icon); delete copy.icon; }
-                if (!copy.icon && copy.iconRef) { /* keep ref */ }
                 return copy;
             });
             const townsToSave = state.towns.map(tw => {
@@ -2796,15 +2978,18 @@
             drawAllLines();
         }
 
-        function updateMapStyleButtons() {
-            // (buttons removed from appearance page — kept for backwards compat)
-        }
+        function updateMapStyleButtons() {}
 
-        // Update the new map style popup to reflect current state
         function updateMapStyleUI() {
             document.querySelectorAll('#mapStylePopup .map-style-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.style === state.mapStyle);
             });
+            // Update map options popup value
+            const valEl = document.getElementById('mapOptionStyleValue');
+            if (valEl) {
+                const names = { normal: t('mapStyleNormal'), simple: t('mapStyleSimple'), satellite: t('mapStyleSatellite') };
+                valEl.innerText = names[state.mapStyle] || state.mapStyle;
+            }
         }
 
         function openMapStylePopup() {
@@ -2823,6 +3008,31 @@
             updateAllTexts();
             const names = { normal: t('mapStyleNormal'), simple: t('mapStyleSimple'), satellite: t('mapStyleSatellite') };
             showToast(names[style] || style);
+        }
+
+        // --- NEW: MAP OPTIONS POPUP ---
+        function openMapOptionsPopup() {
+            updateMapOptionsUI();
+            document.getElementById('mapOptionsPopup').classList.add('active');
+            updateAllTexts();
+        }
+        function closeMapOptionsPopup() {
+            document.getElementById('mapOptionsPopup').classList.remove('active');
+        }
+        function updateMapOptionsUI() {
+            // Style
+            const styleNames = { normal: t('mapStyleNormal'), simple: t('mapStyleSimple'), satellite: t('mapStyleSatellite') };
+            document.getElementById('mapOptionStyleValue').innerText = styleNames[state.mapStyle] || state.mapStyle;
+            // Town
+            let townName = t('allTowns');
+            if (state.townFilter) {
+                const town = state.towns.find(t => t.id === state.townFilter);
+                if (town) townName = town.name;
+            }
+            document.getElementById('mapOptionTownValue').innerText = townName;
+            // Mode
+            const modeNames = { home: t('modeHomeName'), away: t('modeAwayName'), dnd: t('modeDndName'), transport: t('modeTransportName') };
+            document.getElementById('mapOptionModeValue').innerText = modeNames[state.viewMode] || state.viewMode;
         }
 
         function drawAllLines() {
@@ -2988,7 +3198,7 @@
                         const ref = addImageToPool(icon);
                         updated.iconRef = ref; delete updated.icon;
                     } else { updated.iconRef = null; delete updated.icon; }
-                    delete updated.pointsCompressed; // force re-compression on save
+                    delete updated.pointsCompressed;
                     state.lines[idx] = updated;
                     showToast(t('lineUpdated'));
                 }
@@ -3084,6 +3294,7 @@
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             renderRecentPins();
             renderProfile();
+            updateMapOptionsUI();
         }
 
         function updateModeBadge() {}
@@ -3269,7 +3480,7 @@
                 item.className = 'pin-list-item';
                 item.dataset.id = pin.id;
                 item.innerHTML = `
-                    <img class="list-img" src="${getPinImageUrl(pin, '48')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_48}'">
+                    <img class="list-img skeleton-img" src="${getPinImageUrl(pin, '48')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_48}'" onload="this.classList.remove('skeleton-img')">
                     <div class="list-info">
                         <div class="list-name">${escapeHtml(pin.name)}</div>
                         ${pin.subtitle ? `<div class="list-subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}
@@ -3306,7 +3517,7 @@
                     const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
                     const subtitle = pin.subtitle ? `<div class="pin-subtitle">${escapeHtml(pin.subtitle)}</div>` : '';
                     const outsideBadge = pin.isOutsideEnvironment ? `<div style="font-size:10px; color:var(--md-on-surface-variant); background:var(--md-primary-container); border-radius:12px; padding:2px 8px; display:inline-block; margin-top:4px;"> ${t('outsideEnvLabel')}</div>` : '';
-                    return `<div class="pin-card" data-id="${pin.id}" data-index="${index}"><div class="fav-indicator"><i class="fas fa-heart"></i></div><img src="${getPinImageUrl(pin, '56')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_56}'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); const url = getServiceIcon(svc); return url ? `<img src="${url}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant);">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
+                    return `<div class="pin-card" data-id="${pin.id}" data-index="${index}"><div class="fav-indicator"><i class="fas fa-heart"></i></div><img class="skeleton-img" src="${getPinImageUrl(pin, '56')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_56}'" onload="this.classList.remove('skeleton-img')"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); const url = getServiceIcon(svc); return url ? `<img src="${url}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant);">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
                 }).join('');
                 container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
             } else {
@@ -3339,7 +3550,7 @@
             empty.style.display = 'none';
             container.innerHTML = recent.map(pin => {
                 const time = pin.lastAccessed ? new Date(pin.lastAccessed).toLocaleString() : '';
-                return `<div class="recent-item" data-id="${pin.id}"><img src="${getPinImageUrl(pin, 'recent')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_RECENT}'"><div class="info"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}<div class="time">${time}</div></div></div>`;
+                return `<div class="recent-item" data-id="${pin.id}"><img class="skeleton-img" src="${getPinImageUrl(pin, 'recent')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_RECENT}'" onload="this.classList.remove('skeleton-img')"><div class="info"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}<div class="time">${time}</div></div></div>`;
             }).join('');
             container.querySelectorAll('.recent-item').forEach(el => {
                 el.onclick = () => { hideSettingsSubpage(); openPinDetail(el.dataset.id); };
@@ -3365,7 +3576,7 @@
                 const pinCount = groupPins.length;
                 const color = group.color || state.accentColor;
                 const iconUrl = getGroupImageUrl(group);
-                return `<div class="group-card" data-id="${group.id}" style="border-top-color:${color};"><div class="group-header">${iconUrl ? `<img class="group-icon" src="${iconUrl}" onerror="this.style.display='none'">` : `<div class="group-icon" style="background:${color}20;color:${color};"><i class="fas fa-layer-group"></i></div>`}<div style="flex:1; min-width:0;"><div class="group-name" style="color:${color};">${escapeHtml(group.name)}</div>${group.description ? `<div class="group-subtitle">${escapeHtml(group.description)}</div>` : ''}<div class="group-pin-count">${pinCount}${t('groupPinCount')}</div></div></div></div>`;
+                return `<div class="group-card" data-id="${group.id}" style="border-top-color:${color};"><div class="group-header">${iconUrl ? `<img class="group-icon skeleton-img" src="${iconUrl}" onerror="this.style.display='none'" onload="this.classList.remove('skeleton-img')">` : `<div class="group-icon" style="background:${color}20;color:${color};"><i class="fas fa-layer-group"></i></div>`}<div style="flex:1; min-width:0;"><div class="group-name" style="color:${color};">${escapeHtml(group.name)}</div>${group.description ? `<div class="group-subtitle">${escapeHtml(group.description)}</div>` : ''}<div class="group-pin-count">${pinCount}${t('groupPinCount')}</div></div></div></div>`;
             }).join('');
             container.querySelectorAll('.group-card').forEach(el => { el.onclick = () => openGroupDetail(el.dataset.id); });
         }
@@ -3436,7 +3647,7 @@
                 const div = document.createElement('div');
                 div.className = 'group-pin-selector-item';
                 const checked = state.tempGroupPins.includes(p.id) ? 'checked' : '';
-                div.innerHTML = `<input type="checkbox" class="group-pin-selector-checkbox" value="${p.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span><img src="${getPinImageUrl(p, '28')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_28}'"><span class="name">${escapeHtml(p.name)}</span>${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}`;
+                div.innerHTML = `<input type="checkbox" class="group-pin-selector-checkbox" value="${p.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span><img class="skeleton-img" src="${getPinImageUrl(p, '28')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_28}'" onload="this.classList.remove('skeleton-img')"><span class="name">${escapeHtml(p.name)}</span>${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}`;
                 grid.appendChild(div);
                 const checkbox = div.querySelector('input[type="checkbox"]');
                 const customCheck = div.querySelector('.custom-checkbox-sm');
@@ -3546,7 +3757,7 @@
                 emptyMsg.style.display = 'none';
                 grid.innerHTML = pins.map(pin => {
                     const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                    return `<div class="group-detail-pin-item" data-id="${pin.id}"><img src="${getPinImageUrl(pin, '40')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_40}'"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px; margin-top:2px;">${stars}</div>` : ''}</div>`;
+                    return `<div class="group-detail-pin-item" data-id="${pin.id}"><img class="skeleton-img" src="${getPinImageUrl(pin, '40')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_40}'" onload="this.classList.remove('skeleton-img')"><div class="name">${escapeHtml(pin.name)}</div>${pin.subtitle ? `<div class="subtitle">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px; margin-top:2px;">${stars}</div>` : ''}</div>`;
                 }).join('');
                 grid.querySelectorAll('.group-detail-pin-item').forEach(el => {
                     el.onclick = () => { document.getElementById('groupDetailDialog').classList.remove('active'); openPinDetail(el.dataset.id); };
@@ -3568,7 +3779,7 @@
             section.style.display = 'block';
             grid.innerHTML = related.map(p => {
                 const stars = (p.rating && p.rating > 0) ? renderStarsHTML(p.rating) : '';
-                return `<div class="related-pin-item" data-id="${p.id}"><img src="${getPinImageUrl(p, '40')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_40}'"><div class="name">${escapeHtml(p.name)}</div>${p.subtitle ? `<div class="subtitle">${escapeHtml(p.subtitle)}</div>` : ''}${stars ? `<div style="font-size:11px; margin-top:2px;">${stars}</div>` : ''}</div>`;
+                return `<div class="related-pin-item" data-id="${p.id}"><img class="skeleton-img" src="${getPinImageUrl(p, '40')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_40}'" onload="this.classList.remove('skeleton-img')"><div class="name">${escapeHtml(p.name)}</div>${p.subtitle ? `<div class="subtitle">${escapeHtml(p.subtitle)}</div>` : ''}${stars ? `<div style="font-size:11px; margin-top:2px;">${stars}</div>` : ''}</div>`;
             }).join('');
             grid.querySelectorAll('.related-pin-item').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
         }
@@ -3581,7 +3792,7 @@
                 div.className = 'service-selector-item';
                 const checked = state.tempServices.includes(svc.id) ? 'checked' : '';
                 const url = getServiceIcon(svc);
-                div.innerHTML = `<input type="checkbox" class="service-selector-checkbox" value="${svc.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>${url ? `<img src="${url}">` : '<span style="width:28px;height:28px;border-radius:0px;background:var(--md-surface-dim);display:flex;align-items:center;justify-content:center;font-size:14px;">🚌</span>'}<span class="name">${svc.name}</span>`;
+                div.innerHTML = `<input type="checkbox" class="service-selector-checkbox" value="${svc.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span>${url ? `<img class="skeleton-img" src="${url}" onload="this.classList.remove('skeleton-img')">` : '<span style="width:28px;height:28px;border-radius:0px;background:var(--md-surface-dim);display:flex;align-items:center;justify-content:center;font-size:14px;">🚌</span>'}<span class="name">${svc.name}</span>`;
                 grid.appendChild(div);
                 const checkbox = div.querySelector('input[type="checkbox"]');
                 const customCheck = div.querySelector('.custom-checkbox-sm');
@@ -3654,7 +3865,7 @@
                 const div = document.createElement('div');
                 div.className = 'related-pin-selector-item';
                 const checked = state.tempRelatedPins.includes(p.id) ? 'checked' : '';
-                div.innerHTML = `<input type="checkbox" class="related-pin-selector-checkbox" value="${p.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span><img src="${getPinImageUrl(p, '28')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_28}'"><span class="name">${escapeHtml(p.name)}</span>${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}`;
+                div.innerHTML = `<input type="checkbox" class="related-pin-selector-checkbox" value="${p.id}" ${checked}><span class="custom-checkbox-sm"><span class="check-icon-sm"><i class="fas fa-check"></i></span></span><img class="skeleton-img" src="${getPinImageUrl(p, '28')}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_PIN_28}'" onload="this.classList.remove('skeleton-img')"><span class="name">${escapeHtml(p.name)}</span>${p.subtitle ? `<span class="subtitle">${escapeHtml(p.subtitle)}</span>` : ''}`;
                 grid.appendChild(div);
                 const checkbox = div.querySelector('input[type="checkbox"]');
                 const customCheck = div.querySelector('.custom-checkbox-sm');
@@ -3693,7 +3904,7 @@
                     const tag = document.createElement('span');
                     tag.className = 'detail-service-tag';
                     const url = getServiceIcon(svc);
-                    tag.innerHTML = `${url ? `<img src="${url}">` : ''} ${svc.name}`;
+                    tag.innerHTML = `${url ? `<img src="${url}" onload="this.classList.remove('skeleton-img')" class="skeleton-img">` : ''} ${svc.name}`;
                     return tag;
                 }
                 return null;
@@ -3765,7 +3976,7 @@
                     const icon = getScheduleLinkIcon(link);
                     let iconHtml = '';
                     if (icon) {
-                        if (icon.startsWith('http')) iconHtml = `<img src="${icon}" style="width:24px;height:24px;object-fit:contain;margin-right:8px;">`;
+                        if (icon.startsWith('http')) iconHtml = `<img src="${icon}" style="width:24px;height:24px;object-fit:contain;margin-right:8px;" class="skeleton-img" onload="this.classList.remove('skeleton-img')">`;
                         else iconHtml = `<i class="fas ${icon}" style="margin-right:8px;width:24px;text-align:center;"></i>`;
                     } else iconHtml = `<i class="fas ${iconClass}" style="margin-right:8px;width:24px;text-align:center;"></i>`;
                     return `<button class="fab-btn secondary" style="justify-content:flex-start; padding:12px 16px; text-align:left; width:100%;" data-url="${link.url}">${iconHtml}<span>${link.title}</span></button>`;
@@ -3794,6 +4005,8 @@
                 const img = document.createElement('img');
                 img.src = iconUrl;
                 img.alt = '';
+                img.className = 'skeleton-img';
+                img.onload = () => img.classList.remove('skeleton-img');
                 img.onerror = function() {
                     this.style.display = 'none';
                     const fallback = document.createElement('i');
@@ -3838,6 +4051,117 @@
             else { textEl.textContent = ''; textEl.style.display = 'none'; }
         }
 
+        // NEW: Render image carousel
+        function renderImageCarousel(pin) {
+            const container = document.getElementById('detailImageCarousel');
+            const carousel = document.getElementById('detailCarousel');
+            const nav = document.getElementById('detailCarouselNav');
+            if (!pin.images || pin.images.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'block';
+            carousel.innerHTML = pin.images.map((url, i) => 
+                `<img src="${url}" class="skeleton-img" onload="this.classList.remove('skeleton-img')" onclick="openFullscreenImage(${i})" alt="Image ${i+1}">`
+            ).join('');
+            nav.innerHTML = pin.images.map((_, i) => 
+                `<div class="dot${i === 0 ? ' active' : ''}" data-index="${i}"></div>`
+            ).join('');
+            // Update dots on scroll
+            carousel.onscroll = () => {
+                const scrollLeft = carousel.scrollLeft;
+                const width = carousel.offsetWidth;
+                const index = Math.round(scrollLeft / width);
+                nav.querySelectorAll('.dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+                state.carouselIndex = index;
+            };
+            // Click on dots
+            nav.querySelectorAll('.dot').forEach(dot => {
+                dot.onclick = () => {
+                    const i = parseInt(dot.dataset.index);
+                    carousel.scrollTo({ left: i * carousel.offsetWidth, behavior: 'smooth' });
+                };
+            });
+        }
+
+        // NEW: Fullscreen image viewer
+        let fullscreenImageIndex = 0;
+        let fullscreenImages = [];
+        let imageZoom = 1;
+
+        function openFullscreenImage(index) {
+            if (!state.detailPinId) return;
+            const pin = state.pins.find(p => p.id === state.detailPinId);
+            if (!pin || !pin.images || pin.images.length === 0) return;
+            fullscreenImages = pin.images;
+            fullscreenImageIndex = index;
+            const viewer = document.getElementById('fullscreenImageViewer');
+            const img = document.getElementById('fullscreenImage');
+            img.src = fullscreenImages[fullscreenImageIndex];
+            img.style.transform = 'scale(1)';
+            imageZoom = 1;
+            viewer.style.display = 'flex';
+            updateFullscreenNav();
+            // Close button
+            document.getElementById('fullscreenCloseBtn').onclick = closeFullscreenImage;
+            // Navigation
+            document.getElementById('fullscreenPrevBtn').onclick = () => {
+                if (fullscreenImageIndex > 0) {
+                    fullscreenImageIndex--;
+                    img.src = fullscreenImages[fullscreenImageIndex];
+                    img.style.transform = 'scale(1)';
+                    imageZoom = 1;
+                    updateFullscreenNav();
+                }
+            };
+            document.getElementById('fullscreenNextBtn').onclick = () => {
+                if (fullscreenImageIndex < fullscreenImages.length - 1) {
+                    fullscreenImageIndex++;
+                    img.src = fullscreenImages[fullscreenImageIndex];
+                    img.style.transform = 'scale(1)';
+                    imageZoom = 1;
+                    updateFullscreenNav();
+                }
+            };
+            // Double click to zoom
+            img.ondblclick = () => {
+                imageZoom = imageZoom === 1 ? 2 : 1;
+                img.style.transform = `scale(${imageZoom})`;
+            };
+            // Pinch to zoom (simplified)
+            let initialDistance = 0;
+            let initialZoom = 1;
+            viewer.ontouchstart = (e) => {
+                if (e.touches.length === 2) {
+                    initialDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                    initialZoom = imageZoom;
+                }
+            };
+            viewer.ontouchmove = (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const distance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                    const scale = initialZoom * (distance / initialDistance);
+                    imageZoom = Math.min(Math.max(scale, 1), 4);
+                    img.style.transform = `scale(${imageZoom})`;
+                }
+            };
+            viewer.onclick = (e) => { if (e.target === viewer) closeFullscreenImage(); };
+        }
+
+        function updateFullscreenNav() {
+            const prev = document.getElementById('fullscreenPrevBtn');
+            const next = document.getElementById('fullscreenNextBtn');
+            prev.style.display = fullscreenImageIndex > 0 ? 'flex' : 'none';
+            next.style.display = fullscreenImageIndex < fullscreenImages.length - 1 ? 'flex' : 'none';
+        }
+
+        function closeFullscreenImage() {
+            document.getElementById('fullscreenImageViewer').style.display = 'none';
+        }
+
         function openGoFromSelector() {
             const currentPin = state.pins.find(p => p.id === state.detailPinId);
             if (!currentPin) return;
@@ -3861,7 +4185,7 @@
                     const isCurrent = pin.id === currentPin.id;
                     const fav = isFavorite(pin.id);
                     const stars = (pin.rating && pin.rating > 0) ? renderStarsHTML(pin.rating) : '';
-                    return `<div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" data-id="${pin.id}" style="display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:${isCurrent ? 'var(--md-primary-container)' : 'var(--md-surface-dim)'}; cursor:${isCurrent ? 'default' : 'pointer'}; transition:0.2s; opacity:${isCurrent ? '0.6' : '1'};"><img src="${getPinImageUrl(pin, 'recent')}" style="width:36px;height:36px;border-radius:var(--radius-sm);object-fit:cover;background:var(--md-surface);"><div style="flex:1; min-width:0;"><div style="font-weight:500;font-size:14px;">${escapeHtml(pin.name)} ${isCurrent ? '(actual)' : ''}</div>${pin.subtitle ? `<div style="font-size:12px;color:var(--md-on-surface-variant);">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px;margin-top:2px;">${stars}</div>` : ''}</div>${fav ? `<div style="color:#FFB300; font-size:18px;"><i class="fas fa-heart"></i></div>` : ''}</div>`;
+                    return `<div class="${isCurrent ? 'go-from-item-current' : 'go-from-item'}" data-id="${pin.id}" style="display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:var(--radius-sm); background:${isCurrent ? 'var(--md-primary-container)' : 'var(--md-surface-dim)'}; cursor:${isCurrent ? 'default' : 'pointer'}; transition:0.2s; opacity:${isCurrent ? '0.6' : '1'};"><img class="skeleton-img" src="${getPinImageUrl(pin, 'recent')}" style="width:36px;height:36px;border-radius:var(--radius-sm);object-fit:cover;background:var(--md-surface);" onload="this.classList.remove('skeleton-img')"><div style="flex:1; min-width:0;"><div style="font-weight:500;font-size:14px;">${escapeHtml(pin.name)} ${isCurrent ? '(actual)' : ''}</div>${pin.subtitle ? `<div style="font-size:12px;color:var(--md-on-surface-variant);">${escapeHtml(pin.subtitle)}</div>` : ''}${stars ? `<div style="font-size:12px;margin-top:2px;">${stars}</div>` : ''}</div>${fav ? `<div style="color:#FFB300; font-size:18px;"><i class="fas fa-heart"></i></div>` : ''}</div>`;
                 }).join('');
                 list.querySelectorAll('.go-from-item').forEach(el => {
                     const id = el.dataset.id;
@@ -3888,7 +4212,7 @@
                 const town = state.towns.find(t => t.id === pin.townId);
                 if (town) {
                     const flag = getTownFlag(town);
-                    rows.push(`<div class="info-row"><div class="info-icon"><i class="fas fa-city"></i></div><div class="info-content"><span class="info-label">${t('town')}</span>${flag ? `<img src="${flag}" style="width:28px;height:19px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;">` : ''} ${escapeHtml(town.name)}</div></div>`);
+                    rows.push(`<div class="info-row"><div class="info-icon"><i class="fas fa-city"></i></div><div class="info-content"><span class="info-label">${t('town')}</span>${flag ? `<img src="${flag}" style="width:28px;height:19px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : ''} ${escapeHtml(town.name)}</div></div>`);
                 }
             }
             if (pin.address && pin.address.trim()) rows.push(`<div class="info-row"><div class="info-icon"><i class="fas fa-map-pin"></i></div><div class="info-content"><span class="info-label">${t('address')}</span>${escapeHtml(pin.address)}</div></div>`);
@@ -3939,7 +4263,7 @@
             list.innerHTML = towns.map(town => {
                 const isActive = state.townFilter === town.id;
                 const flag = getTownFlag(town);
-                let flagHtml = flag ? `<img src="${flag}" onerror="this.style.display='none'">` : `<span class="town-generic-icon"><i class="fas fa-city"></i></span>`;
+                let flagHtml = flag ? `<img src="${flag}" onerror="this.style.display='none'" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : `<span class="town-generic-icon"><i class="fas fa-city"></i></span>`;
                 return `<div class="town-filter-item ${isActive ? 'active' : ''}" data-id="${town.id}">${flagHtml}<span class="town-name">${escapeHtml(town.name)}</span><span class="town-check"><i class="fas fa-check-circle"></i></span></div>`;
             }).join('');
         }
@@ -3956,6 +4280,7 @@
             renderRecentPins();
             renderGroups(document.getElementById('groupsSearchInput')?.value || '');
             updateTownFilterUI();
+            updateMapOptionsUI();
             if (townId) {
                 const town = state.towns.find(t => t.id === townId);
                 showToast(`${t('townFiltered')}: ${town ? town.name : ''}`);
@@ -3963,13 +4288,8 @@
         }
 
         function updateTownFilterUI() {
-            const btn = document.getElementById('townFilterMapBtn');
-            if (state.townFilter) {
-                const town = state.towns.find(t => t.id === state.townFilter);
-                const flag = town ? getTownFlag(town) : null;
-                if (flag) btn.innerHTML = `<img src="${flag}" style="width:26px;height:17px;border-radius:3px;object-fit:cover;">`;
-                else btn.innerHTML = `<i class="fas fa-city"></i>`;
-            } else btn.innerHTML = `<i class="fas fa-city"></i>`;
+            const btn = document.getElementById('mapOptionsBtn');
+            // No direct icon change for the options button
         }
 
         function updateShowTownInSearchUI() {
@@ -4000,6 +4320,8 @@
             const imgUrl = getPinImageUrl(pin);
             if (imgUrl && !imgUrl.startsWith('https://via.placeholder.com') && !imgUrl.startsWith('https://thumb.wikimedia.org')) {
                 imgEl.src = imgUrl; imgEl.style.display = 'block';
+                imgEl.className = 'detail-avatar skeleton-img';
+                imgEl.onload = () => imgEl.classList.remove('skeleton-img');
             } else {
                 imgEl.style.display = 'none';
             }
@@ -4034,6 +4356,7 @@
             renderScheduleLinks(pin);
             renderCustomIcons(pin);
             renderReviewCard(pin);
+            renderImageCarousel(pin); // NEW
             document.getElementById('detailGoBtn').onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${pin.lat},${pin.lng}`, '_blank');
             document.getElementById('detailGoFromBtn').style.display = 'flex';
             document.getElementById('detailGoFromLabel').innerText = t('goFrom');
@@ -4136,10 +4459,10 @@
                         const town = state.towns.find(t => t.id === pin.townId);
                         if (town) {
                             const flag = getTownFlag(town);
-                            townBadgeCard = `<div style="font-size:10px;color:var(--md-on-surface-variant);background:var(--md-primary-container);border-radius:12px;padding:2px 8px;display:inline-block;margin-top:4px;">${flag ? `<img src="${flag}" style="width:16px;height:11px;border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:4px;">` : ''}${escapeHtml(town.name)}</div>`;
+                            townBadgeCard = `<div style="font-size:10px;color:var(--md-on-surface-variant);background:var(--md-primary-container);border-radius:12px;padding:2px 8px;display:inline-block;margin-top:4px;">${flag ? `<img src="${flag}" style="width:16px;height:11px;border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:4px;" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : ''}${escapeHtml(town.name)}</div>`;
                         }
                     }
-                    return `<div class="pin-card" data-id="${pin.id}">${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}<img src="${getPinImageUrl(pin, '56')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_56}'"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${distanceHtml}${tagsHtml}${townBadgeCard}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); const url = getServiceIcon(svc); return url ? `<img src="${url}" title="${svc.name}">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
+                    return `<div class="pin-card" data-id="${pin.id}">${isFav ? '<div class="fav-indicator"><i class="fas fa-heart"></i></div>' : ''}<img class="skeleton-img" src="${getPinImageUrl(pin, '56')}" alt="${pin.name}" onerror="this.src='${PLACEHOLDER_PIN_56}'" onload="this.classList.remove('skeleton-img')"><div class="pin-name">${escapeHtml(pin.name)}</div>${subtitle}${stars ? `<div class="pin-stars">${stars}</div>` : ''}${distanceHtml}${tagsHtml}${townBadgeCard}${outsideBadge}${pin.services && pin.services.length > 0 ? `<div class="pin-services">${pin.services.slice(0, 5).map(sid => { const svc = state.services.find(s => s.id === sid); const url = getServiceIcon(svc); return url ? `<img src="${url}" title="${svc.name}" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : ''; }).join('')}${pin.services.length > 5 ? `<span style="font-size:11px; color:var(--md-on-surface-variant); font-weight:500;">+${pin.services.length - 5}</span>` : ''}</div>` : ''}</div>`;
                 }).join('');
                 container.querySelectorAll('.pin-card').forEach(el => { el.onclick = () => openPinDetail(el.dataset.id); });
             } else {
@@ -4240,7 +4563,6 @@
             document.getElementById('pinSubtitleInput').value = pinData?.subtitle || '';
             document.getElementById('pinDescInput').value = pinData?.description || '';
             document.getElementById('pinTagsInput').value = pinData?.tags ? pinData.tags.join(', ') : '';
-            // Image URL: resolve from pool for editing
             let editImageUrl = '';
             if (pinData) {
                 editImageUrl = getPinImageUrl(pinData, '56');
@@ -4290,6 +4612,13 @@
                 addCustomIconRow(iconUrl, ic.url);
             });
             else addCustomIconRow();
+            // Pin images (NEW)
+            const pinImagesContainer = document.getElementById('pinImagesContainer');
+            pinImagesContainer.innerHTML = '';
+            if (pinData?.images && pinData.images.length > 0) pinData.images.forEach(url => {
+                addPinImageRow(url);
+            });
+            else addPinImageRow();
             state.editingPinId = pinData?.id || null;
 
             const transportCheckbox = document.getElementById('isTransportStop');
@@ -4396,13 +4725,32 @@
             rows.forEach((input, i) => {
                 const icon = input.value.trim();
                 const url = document.querySelectorAll('#customIconsContainer .custom-icon-web')[i]?.value.trim() || '';
-                if (icon && url) {
-                    icons.push({ icon, url });
-                } else if (icon || url) {
-                    showToast('Els camps "URL del icono" i "URL de la web" són obligatoris i han d\'estar omplerts junts.', true);
+                if (url) {
+                    // If icon URL is empty, use about:blank for default external link icon
+                    icons.push({ icon: icon || 'about:blank', url });
                 }
             });
             return icons;
+        }
+
+        // NEW: Pin image rows
+        function addPinImageRow(url = '') {
+            const container = document.getElementById('pinImagesContainer');
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex; gap:6px; margin-bottom:6px; align-items:center;';
+            row.innerHTML = `<input type="text" class="pin-image-url" placeholder="${t('pinImageUrl')}" value="${escapeHtml(url)}" style="flex:2; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--md-outline); background:var(--md-surface-dim); color:var(--md-on-surface); font-size:14px;"><button class="remove-image-row" style="background:none; border:none; color:var(--md-on-surface-variant); cursor:pointer; font-size:16px; padding:6px;"><i class="fas fa-times"></i></button>`;
+            container.appendChild(row);
+            row.querySelector('.remove-image-row').onclick = () => { if (container.children.length > 1) row.remove(); };
+        }
+
+        function getPinImages() {
+            const rows = document.querySelectorAll('#pinImagesContainer .pin-image-url');
+            const images = [];
+            rows.forEach(input => {
+                const url = input.value.trim();
+                if (url) images.push(url);
+            });
+            return images;
         }
 
         function isPinDuplicate(name, lat, lng, excludeId) {
@@ -4434,26 +4782,24 @@
             const address = document.getElementById('pinAddressInput').value.trim() || null;
             const schedule = document.getElementById('pinScheduleInput').value.trim() || null;
             const customIcons = getCustomIcons();
-            // Image URL -> ref
             const imageUrlInput = document.getElementById('pinImageInput').value.trim();
             let imageRef = null;
             if (imageUrlInput) {
                 imageRef = addImageToPool(imageUrlInput);
             }
-            // Custom icons: store URLs in pool, refs in data
             const customIconsFinal = customIcons.map(ic => {
                 const ref = addImageToPool(ic.icon);
                 return { iconRef: ref, url: ic.url };
             });
-            // Schedule links: icons that are URLs go in pool
             const scheduleLinksFinal = scheduleLinks.map(l => {
                 const copy = { title: l.title, url: l.url };
                 if (l.icon) {
                     if (l.icon.startsWith('http')) { copy.iconRef = addImageToPool(l.icon); }
-                    else { copy.icon = l.icon; } // font awesome class, keep as is
+                    else { copy.icon = l.icon; }
                 }
                 return copy;
             });
+            const images = getPinImages(); // NEW
             const pinData = {
                 id: state.editingPinId || Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
                 name, subtitle: document.getElementById('pinSubtitleInput').value.trim().slice(0, 100),
@@ -4469,7 +4815,8 @@
                 lastAccessed: Date.now(), relatedPins: state.tempRelatedPins,
                 lat: lat, lng: lng, isOutsideEnvironment: isOutside,
                 reviewTitle: reviewTitle || null, reviewText: reviewText || null,
-                townId: townId, address: address, schedule: schedule
+                townId: townId, address: address, schedule: schedule,
+                images: images.length > 0 ? images : null // NEW
             };
             if (isEditing) {
                 const idx = state.pins.findIndex(p => p.id === state.editingPinId);
@@ -4530,7 +4877,7 @@
                 div.draggable = true;
                 div.dataset.index = index;
                 const url = getServiceIcon(svc);
-                div.innerHTML = `<span class="drag-handle">⠿</span>${url ? `<img src="${url}">` : '<span style="width:28px;height:28px;border-radius:0px;background:var(--md-surface-dim);display:flex;align-items:center;justify-content:center;font-size:14px;">🚌</span>'}<span class="service-name">${svc.name}</span><button class="edit-btn edit-service-btn" data-id="${svc.id}"><i class="fas fa-pencil-alt"></i></button><button class="remove-btn remove-service-btn" data-id="${svc.id}"><i class="fas fa-trash"></i></button>`;
+                div.innerHTML = `<span class="drag-handle">⠿</span>${url ? `<img class="skeleton-img" src="${url}" onload="this.classList.remove('skeleton-img')">` : '<span style="width:28px;height:28px;border-radius:0px;background:var(--md-surface-dim);display:flex;align-items:center;justify-content:center;font-size:14px;">🚌</span>'}<span class="service-name">${svc.name}</span><button class="edit-btn edit-service-btn" data-id="${svc.id}"><i class="fas fa-pencil-alt"></i></button><button class="remove-btn remove-service-btn" data-id="${svc.id}"><i class="fas fa-trash"></i></button>`;
                 container.appendChild(div);
             });
             let dragItem = null;
@@ -4636,7 +4983,7 @@
                     const div = document.createElement('div');
                     div.style.cssText = 'cursor:pointer; border-radius:var(--radius-sm); overflow:hidden; border:2px solid transparent; transition:0.2s; aspect-ratio:1;';
                     div.dataset.url = url;
-                    div.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;background:var(--md-surface-dim);">`;
+                    div.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;background:var(--md-surface-dim);" class="skeleton-img" onload="this.classList.remove('skeleton-img')">`;
                     div.onclick = () => { document.getElementById('pinImageInput').value = url; document.getElementById('recycleDialog').classList.remove('active'); };
                     div.onmouseenter = () => div.style.borderColor = 'var(--md-primary)';
                     div.onmouseleave = () => div.style.borderColor = 'transparent';
@@ -4720,7 +5067,6 @@
             state.quickMarks = data.quickMarks || [];
             state.towns = data.towns || [];
             state.imagePool = data.imagePool || {};
-            // Auto-migrate legacy refs
             state.imagePool = migrateToImagePool(state.pins, state.groups, state.lines, state.quickMarks, state.services, state.towns, state.profile);
             state.lineVisibility = data.lineVisibility || {};
             state.linesVisible = data.linesVisible !== undefined ? data.linesVisible : true;
@@ -4826,8 +5172,12 @@
             if (avatarUrl) {
                 avatarImg.src = avatarUrl;
                 avatarImg.style.display = 'block';
+                avatarImg.className = 'profile-avatar skeleton-img';
+                avatarImg.onload = () => avatarImg.classList.remove('skeleton-img');
                 greetingAvatar.src = avatarUrl;
                 greetingAvatar.style.display = 'block';
+                greetingAvatar.className = 'greeting-avatar skeleton-img';
+                greetingAvatar.onload = () => greetingAvatar.classList.remove('skeleton-img');
             } else {
                 const svgAvatar = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#9a398d"><circle cx="50" cy="50" r="50" fill="#E8DEFF"/><circle cx="50" cy="38" r="18" fill="#9a398d"/><ellipse cx="50" cy="75" rx="28" ry="20" fill="#9a398d"/></svg>`);
                 avatarImg.src = svgAvatar;
@@ -4843,11 +5193,11 @@
                 const town = state.towns.find(t => t.id === p.preferredTown);
                 if (town) { prefTownText = town.name; prefTownFlag = getTownFlag(town); }
             }
-            document.getElementById('profileSubtitle').innerHTML = prefTownFlag ? `<img src="${prefTownFlag}" style="width:28px;height:19px;border-radius:3px;object-fit:cover;"> ${prefTownText}` : prefTownText;
+            document.getElementById('profileSubtitle').innerHTML = prefTownFlag ? `<img src="${prefTownFlag}" style="width:28px;height:19px;border-radius:3px;object-fit:cover;" class="skeleton-img" onload="this.classList.remove('skeleton-img')"> ${prefTownText}` : prefTownText;
             document.getElementById('pinCount').innerText = state.pins.length;
             const iconEl = document.getElementById('profileIconBtn');
             if (avatarUrl) {
-                iconEl.innerHTML = `<img src="${avatarUrl}" alt="Perfil"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
+                iconEl.innerHTML = `<img src="${avatarUrl}" alt="Perfil" class="skeleton-img" onload="this.classList.remove('skeleton-img')"><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
             } else {
                 iconEl.innerHTML = `<i class="fas fa-user"></i><span class="mode-dot ${state.viewMode === 'home' ? 'home' : state.viewMode === 'away' ? 'away' : state.viewMode === 'dnd' ? 'dnd' : 'transport'}" id="profileModeDot"></span>`;
             }
@@ -5106,7 +5456,6 @@
             document.querySelector('#modeTransportCard .mode-desc').innerText = t('modeTransportDesc');
             document.getElementById('modeCloseLabel').innerText = t('modeCloseLabel');
             document.getElementById('sidebarRecentLabel').innerText = t('sidebarRecent');
-            document.getElementById('sidebarModeLabel').innerText = t('sidebarMode');
             document.getElementById('sidebarStudioLabel').innerText = t('sidebarStudio');
             document.getElementById('sidebarTutorialLabel').innerText = t('sidebarTutorial');
             document.getElementById('sidebarSettingsLabel').innerText = t('sidebarSettings');
@@ -5141,7 +5490,28 @@
             document.querySelector('#mapStyleSimpleOption .map-style-desc').innerText = t('mapStyleSimpleDesc');
             document.querySelector('#mapStyleSatelliteOption .map-style-name').innerText = t('mapStyleSatellite');
             document.querySelector('#mapStyleSatelliteOption .map-style-desc').innerText = t('mapStyleSatelliteDesc');
-            document.getElementById('sidebarMapStyleLabel').innerText = t('mapStyleTitle');
+            // Map options popup (NEW)
+            document.getElementById('mapOptionsTitle').innerText = t('mapOptionsTitle');
+            document.getElementById('mapOptionStyle').querySelector('.option-name').innerText = t('mapOptionStyle');
+            document.getElementById('mapOptionTown').querySelector('.option-name').innerText = t('mapOptionTown');
+            document.getElementById('mapOptionMode').querySelector('.option-name').innerText = t('mapOptionMode');
+            document.getElementById('mapOptionsCloseLabel').innerText = t('close');
+            updateMapOptionsUI();
+            // Transport search popup (NEW)
+            document.getElementById('transportSearchTitle').innerText = t('transportSearchTitle');
+            document.getElementById('transportFilterAll').innerText = t('transportFilterAll');
+            document.getElementById('transportFilterMetro').innerText = t('transportFilterMetro');
+            document.getElementById('transportFilterBus').innerText = t('transportFilterBus');
+            document.getElementById('transportFilterTram').innerText = t('transportFilterTram');
+            document.getElementById('transportFilterTrain').innerText = t('transportFilterTrain');
+            document.getElementById('transportFilterBike').innerText = t('transportFilterBike');
+            document.getElementById('transportSearchCloseLabel').innerText = t('close');
+            // Pin images (NEW)
+            document.getElementById('pinImagesLabel').innerText = t('pinImages');
+            document.getElementById('addPinImageLabel').innerText = t('addPinImage');
+            document.querySelectorAll('#pinImagesContainer .pin-image-url').forEach(input => input.placeholder = t('pinImageUrl'));
+            // Fullscreen close (NEW)
+            document.getElementById('fullscreenCloseLabel').innerText = t('fullscreenClose');
             document.querySelectorAll('.search-view-option').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.view === state.searchView) btn.classList.add('active');
@@ -5176,6 +5546,7 @@
             updateGlowColors();
             updateModeBadge();
             updateTownFilterUI();
+            updateMapStyleUI();
         }
 
         function applyTheme() {
@@ -5370,7 +5741,7 @@
             }
             container.innerHTML = state.quickMarks.map(qm => {
                 const icon = getQuickMarkIcon(qm);
-                return `<button class="quick-mark-btn" data-id="${qm.id}">${icon ? `<img src="${icon}" onerror="this.style.display='none'">` : '<span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</span>'}<span class="quick-label">${escapeHtml(qm.title)}</span></button>`;
+                return `<button class="quick-mark-btn" data-id="${qm.id}">${icon ? `<img src="${icon}" onerror="this.style.display='none'" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : '<span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</span>'}<span class="quick-label">${escapeHtml(qm.title)}</span></button>`;
             }).join('');
             container.querySelectorAll('.quick-mark-btn').forEach(el => {
                 el.onclick = () => {
@@ -5401,7 +5772,7 @@
             empty.style.display = 'none';
             container.innerHTML = state.quickMarks.map((qm, index) => {
                 const icon = getQuickMarkIcon(qm);
-                return `<div class="line-item" style="border-left-color: var(--md-primary);" data-index="${index}"><div class="line-header"><span class="drag-handle-line" style="cursor:grab;">⠿</span>${icon ? `<img src="${icon}" style="width:24px;height:24px;border-radius:4px;object-fit:contain;">` : '<span style="font-size:18px;">⚡</span>'}<span class="line-name">${escapeHtml(qm.title)}</span><div class="line-actions"><button class="edit-quickmark-btn" data-id="${qm.id}"><i class="fas fa-edit"></i></button><button class="delete-quickmark-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button></div></div><div class="line-details"><span>${escapeHtml(qm.text)}</span></div></div>`;
+                return `<div class="line-item" style="border-left-color: var(--md-primary);" data-index="${index}"><div class="line-header"><span class="drag-handle-line" style="cursor:grab;">⠿</span>${icon ? `<img src="${icon}" style="width:24px;height:24px;border-radius:4px;object-fit:contain;" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : '<span style="font-size:18px;">⚡</span>'}<span class="line-name">${escapeHtml(qm.title)}</span><div class="line-actions"><button class="edit-quickmark-btn" data-id="${qm.id}"><i class="fas fa-edit"></i></button><button class="delete-quickmark-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button></div></div><div class="line-details"><span>${escapeHtml(qm.text)}</span></div></div>`;
             }).join('');
             container.querySelectorAll('.edit-quickmark-btn').forEach(btn => { btn.onclick = () => openQuickMarkDialog(btn.dataset.id); });
             container.querySelectorAll('.delete-quickmark-btn').forEach(btn => { btn.onclick = () => deleteQuickMark(btn.dataset.id); });
@@ -5522,7 +5893,7 @@
             }
             list.innerHTML = state.quickMarks.map(qm => {
                 const icon = getQuickMarkIcon(qm);
-                return `<div class="delete-qm-item"><div class="qm-info">${icon ? `<img src="${icon}" onerror="this.style.display='none'">` : '<span style="font-size:18px;">⚡</span>'}<span class="qm-name">${escapeHtml(qm.title)}</span></div><button class="delete-qm-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button></div>`;
+                return `<div class="delete-qm-item"><div class="qm-info">${icon ? `<img src="${icon}" onerror="this.style.display='none'" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : '<span style="font-size:18px;">⚡</span>'}<span class="qm-name">${escapeHtml(qm.title)}</span></div><button class="delete-qm-btn" data-id="${qm.id}"><i class="fas fa-trash"></i></button></div>`;
             }).join('');
             list.querySelectorAll('.delete-qm-btn').forEach(btn => {
                 btn.onclick = async () => {
@@ -5620,7 +5991,7 @@
             container.innerHTML = towns.map((town, index) => {
                 const isPreferred = state.profile.preferredTown === town.id;
                 const flag = getTownFlag(town);
-                return `<div class="town-item-line" data-id="${town.id}" data-index="${index}"><img src="${flag || PLACEHOLDER_PIN_28}" style="width:32px;height:21px;border-radius:3px;object-fit:cover;flex-shrink:0;" onerror="this.style.opacity=0"><span class="town-name">${escapeHtml(town.name)} ${isPreferred ? '★' : ''}</span><button class="edit-btn edit-town-btn" data-id="${town.id}"><i class="fas fa-edit"></i></button><button class="remove-btn remove-town-btn" data-id="${town.id}"><i class="fas fa-trash"></i></button></div>`;
+                return `<div class="town-item-line" data-id="${town.id}" data-index="${index}"><img src="${flag || PLACEHOLDER_PIN_28}" style="width:32px;height:21px;border-radius:3px;object-fit:cover;flex-shrink:0;" onerror="this.style.opacity=0" class="skeleton-img" onload="this.classList.remove('skeleton-img')"><span class="town-name">${escapeHtml(town.name)} ${isPreferred ? '★' : ''}</span><button class="edit-btn edit-town-btn" data-id="${town.id}"><i class="fas fa-edit"></i></button><button class="remove-btn remove-town-btn" data-id="${town.id}"><i class="fas fa-trash"></i></button></div>`;
             }).join('');
             container.querySelectorAll('.remove-town-btn').forEach(btn => { btn.onclick = () => deleteTown(btn.dataset.id); });
             container.querySelectorAll('.edit-town-btn').forEach(btn => { btn.onclick = () => openEditTownDialog(btn.dataset.id); });
@@ -5745,6 +6116,84 @@
             }
         }
 
+        // --- NEW: TRANSPORT SEARCH ---
+        function openTransportSearchPopup() {
+            state.transportFilter = 'all';
+            updateTransportFiltersUI();
+            renderTransportStops();
+            document.getElementById('transportSearchPopup').classList.add('active');
+            updateAllTexts();
+        }
+
+        function closeTransportSearchPopup() {
+            document.getElementById('transportSearchPopup').classList.remove('active');
+        }
+
+        function updateTransportFiltersUI() {
+            document.querySelectorAll('#transportFilters .transport-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === state.transportFilter);
+            });
+        }
+
+        function renderTransportStops() {
+            const list = document.getElementById('transportStopsList');
+            const userLoc = state.userLocation;
+            if (!userLoc) {
+                list.innerHTML = `<p style="text-align:center; color:var(--md-on-surface-variant); padding:16px;">${t('locationUnavailable')}</p>`;
+                return;
+            }
+            let stops = state.pins.filter(p => p.isTransportStop || p.isBikeStation);
+            // Apply filter
+            if (state.transportFilter !== 'all') {
+                if (state.transportFilter === 'bike') {
+                    stops = stops.filter(p => p.isBikeStation === true);
+                } else {
+                    // metro, bus, tram, train
+                    const tag = state.transportFilter;
+                    stops = stops.filter(p => p.isTransportStop && p.tags && p.tags.some(t => t.toLowerCase() === tag));
+                }
+            }
+            // Calculate distances
+            stops = stops.map(p => ({
+                ...p,
+                _distance: Math.sqrt(Math.pow(p.lat - userLoc[0], 2) + Math.pow(p.lng - userLoc[1], 2))
+            }));
+            stops.sort((a, b) => a._distance - b._distance);
+            const top5 = stops.slice(0, 5);
+            if (top5.length === 0) {
+                list.innerHTML = `<p style="text-align:center; color:var(--md-on-surface-variant); padding:16px;">${t('noTransportStops')}</p>`;
+                return;
+            }
+            list.innerHTML = top5.map(pin => {
+                const services = pin.services || [];
+                const serviceIcons = services.slice(0, 4).map(sid => {
+                    const svc = state.services.find(s => s.id === sid);
+                    const url = getServiceIcon(svc);
+                    return url ? `<img src="${url}" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : '';
+                }).join('');
+                const pinIcon = getPinImageUrl(pin, '40');
+                return `<div class="transport-stop-item" data-id="${pin.id}">
+                    <img class="pin-icon skeleton-img" src="${pinIcon}" onerror="this.src='${PLACEHOLDER_PIN_40}'" onload="this.classList.remove('skeleton-img')">
+                    <div class="stop-services">${serviceIcons}</div>
+                    <div class="stop-name">${escapeHtml(pin.name)}</div>
+                    <div class="stop-distance">${(pin._distance * 111).toFixed(1)} km</div>
+                </div>`;
+            }).join('');
+            list.querySelectorAll('.transport-stop-item').forEach(el => {
+                el.onclick = () => {
+                    const id = el.dataset.id;
+                    closeTransportSearchPopup();
+                    switchTab('map');
+                    const pin = state.pins.find(p => p.id === id);
+                    if (pin && state.map) {
+                        state.map.setView([pin.lat, pin.lng], 17);
+                        setTimeout(() => { if (state.markers[pin.id]) state.markers[pin.id].openPopup(); }, 300);
+                    }
+                };
+            });
+        }
+
+        // --- INIT ---
         function init() {
             if (localStorage.getItem('librepin_show_reload_overlay') === 'true') {
                 const savedLang = localStorage.getItem('librepin_lang') || 'ca';
@@ -5821,7 +6270,6 @@
             document.getElementById('modeBtnSearch').addEventListener('click', () => switchTab('mode'));
             document.getElementById('viewToggleSearchBtn').addEventListener('click', toggleSearchView);
             document.getElementById('viewToggleFavBtn').addEventListener('click', toggleFavoritesView);
-            document.getElementById('townFilterMapBtn').addEventListener('click', () => openTownFilterPopup());
             document.getElementById('townFilterClear').addEventListener('click', () => setTownFilter(null));
             document.getElementById('townFilterClose').addEventListener('click', closeTownFilterPopup);
             document.getElementById('townFilterPopup').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeTownFilterPopup(); });
@@ -5864,11 +6312,28 @@
             document.getElementById('moreInfoCloseBtn').addEventListener('click', closeMoreInfoPopup);
             document.getElementById('moreInfoPopup').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeMoreInfoPopup(); });
             // Map style popup
-            document.getElementById('sidebarMapStyle').addEventListener('click', () => { toggleSidebar(); openMapStylePopup(); });
             document.getElementById('mapStylePopupClose').addEventListener('click', closeMapStylePopup);
             document.getElementById('mapStylePopup').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeMapStylePopup(); });
             document.querySelectorAll('#mapStylePopup .map-style-option').forEach(opt => {
                 opt.addEventListener('click', () => setMapStyle(opt.dataset.style));
+            });
+            // Map options popup (NEW)
+            document.getElementById('mapOptionsBtn').addEventListener('click', openMapOptionsPopup);
+            document.getElementById('mapOptionsClose').addEventListener('click', closeMapOptionsPopup);
+            document.getElementById('mapOptionsPopup').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeMapOptionsPopup(); });
+            document.getElementById('mapOptionStyle').addEventListener('click', () => { closeMapOptionsPopup(); openMapStylePopup(); });
+            document.getElementById('mapOptionTown').addEventListener('click', () => { closeMapOptionsPopup(); openTownFilterPopup(); });
+            document.getElementById('mapOptionMode').addEventListener('click', () => { closeMapOptionsPopup(); switchTab('mode'); });
+            // Transport search popup (NEW)
+            document.getElementById('transportSearchBtn').addEventListener('click', openTransportSearchPopup);
+            document.getElementById('transportSearchClose').addEventListener('click', closeTransportSearchPopup);
+            document.getElementById('transportSearchPopup').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeTransportSearchPopup(); });
+            document.querySelectorAll('#transportFilters .transport-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.transportFilter = btn.dataset.filter;
+                    updateTransportFiltersUI();
+                    renderTransportStops();
+                });
             });
             setTimeout(() => updateGlowColors(), 100);
             setTimeout(hideSplash, 800);
@@ -5876,7 +6341,6 @@
             document.getElementById('sidebarClose').addEventListener('click', toggleSidebar);
             document.getElementById('sidebarOverlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) toggleSidebar(); });
             document.getElementById('sidebarRecent').addEventListener('click', () => { toggleSidebar(); switchTab('settings'); showSettingsSubpage('recent'); });
-            document.getElementById('sidebarMode').addEventListener('click', () => { toggleSidebar(); switchTab('mode'); });
             document.getElementById('sidebarSettings').addEventListener('click', () => { toggleSidebar(); switchTab('settings'); });
             document.getElementById('modePageCloseBtn').addEventListener('click', () => switchTab('map'));
             document.getElementById('recenterMapBtn').addEventListener('click', recenterMap);
@@ -5898,6 +6362,7 @@
             document.getElementById('pinDialogCancel').onclick = closePinDialog;
             document.getElementById('pinDialogSave').onclick = savePinFromDialog;
             document.getElementById('addCustomIconRow').onclick = () => addCustomIconRow();
+            document.getElementById('addPinImageRow').onclick = () => addPinImageRow();
             document.getElementById('addScheduleLinkBtn').onclick = () => addScheduleLinkRow();
             document.getElementById('isTransportStop').onchange = () => {
                 // handled in openPinDialog
@@ -5993,7 +6458,7 @@
                 dialog.addEventListener('click', (e) => {
                     if (e.target === dialog) {
                         const id = dialog.id;
-                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog' || id === 'quickMarkDialog' || id === 'deleteQuickMarkDialog' || id === 'tutorialDialog' || id === 'backupPopup' || id === 'moreInfoPopup' || id === 'townFilterPopup' || id === 'mapStylePopup') dialog.classList.remove('active');
+                        if (id === 'confirmDialog' || id === 'recycleDialog' || id === 'editServiceDialog' || id === 'groupDetailDialog' || id === 'lineDialog' || id === 'sortDialog' || id === 'quickMarkDialog' || id === 'deleteQuickMarkDialog' || id === 'tutorialDialog' || id === 'backupPopup' || id === 'moreInfoPopup' || id === 'townFilterPopup' || id === 'mapStylePopup' || id === 'mapOptionsPopup' || id === 'transportSearchPopup') dialog.classList.remove('active');
                     }
                 });
             });
@@ -6031,12 +6496,14 @@
                     const tag = document.createElement('span');
                     tag.style.cssText = 'display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:40px; background:var(--md-primary-container); font-size:12px;';
                     const url = getServiceIcon(svc);
-                    tag.innerHTML = `${url ? `<img src="${url}" style="width:16px;height:16px;border-radius:0px;object-fit:cover;vertical-align:middle;">` : ''} ${svc.name} <span style="cursor:pointer; margin-left:4px;" onclick="window.removeTempService('${id}')">✕</span>`;
+                    tag.innerHTML = `${url ? `<img src="${url}" style="width:16px;height:16px;border-radius:0px;object-fit:cover;vertical-align:middle;" class="skeleton-img" onload="this.classList.remove('skeleton-img')">` : ''} ${svc.name} <span style="cursor:pointer; margin-left:4px;" onclick="window.removeTempService('${id}')">✕</span>`;
                     container.appendChild(tag);
                 }
             });
         };
         document.getElementById('clearStarsBtn').addEventListener('click', function(e) { e.stopPropagation(); selectedRating = 0; updateStarsUI(); });
+        // Expose functions globally for carousel
+        window.openFullscreenImage = openFullscreenImage;
         init();
     </script>
 </body>
