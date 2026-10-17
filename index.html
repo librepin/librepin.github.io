@@ -6183,12 +6183,8 @@
                 el.onclick = () => {
                     const id = el.dataset.id;
                     closeTransportSearchPopup();
-                    switchTab('map');
-                    const pin = state.pins.find(p => p.id === id);
-                    if (pin && state.map) {
-                        state.map.setView([pin.lat, pin.lng], 17);
-                        setTimeout(() => { if (state.markers[pin.id]) state.markers[pin.id].openPopup(); }, 300);
-                    }
+                    switchTab('map'); // primero volvemos al mapa para que el historial sea coherente
+                    openPinDetail(id); // y abrimos la página de detalles del pin
                 };
             });
         }
